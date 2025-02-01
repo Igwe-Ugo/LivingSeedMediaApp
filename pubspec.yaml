@@ -1,0 +1,66 @@
+name: livingseed_media
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  go_router: ^14.2.3
+  provider: ^6.1.2
+  shared_preferences: ^2.2.3
+  loading_animation_widget: ^1.2.1
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+  choice: ^2.3.2
+  image_picker: ^1.1.2
+  percent_indicator: ^4.2.3
+  video_player: ^2.9.1
+  just_audio: ^0.9.39
+  rxdart: ^0.28.0
+  connectivity_plus: ^6.0.5
+  carousel_slider: ^5.0.0
+  dio: ^5.7.0
+  flutter_pdfview: ^1.3.4
+  iconsax: ^0.0.8
+  smart_auth: ^2.0.0
+  path_provider: ^2.1.5
+  pdf: ^3.11.1
+  syncfusion_flutter_pdfviewer: ^28.1.33
+  file_picker: ^8.1.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/json/
+    - assets/pdfs/
+
+  fonts:
+    - family: Satoshi
+      fonts:
+        - asset: assets/fonts/Satoshi-Regular.ttf
+        - asset: assets/fonts/Satoshi-Light.ttf
+    - family: Playfair
+      fonts:
+        - asset: assets/fonts/PlayfairDisplay-Black.ttf
+        - asset: assets/fonts/PlayfairDisplay-Black.ttf
+  
