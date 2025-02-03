@@ -58,9 +58,11 @@ class _BooksPageState extends State<BooksPage> {
   Widget _bookGridView(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        GoRouter.of(context).go(
+        if (widget.about_books != null){
+          GoRouter.of(context).go(
             '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
             extra: widget.about_books);
+        }
       },
       child: Container(
         margin: const EdgeInsets.all(2),

@@ -88,6 +88,8 @@ class _WriteReviewState extends State<WriteReview> {
                       horizontal: 120,
                     ),
                     child: Container(
+                      width: 130,
+                      height: 200,
                       decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(7)),
                           image: DecorationImage(

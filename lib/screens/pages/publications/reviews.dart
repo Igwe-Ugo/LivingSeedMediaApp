@@ -83,8 +83,13 @@ class _ReviewsState extends State<Reviews> {
                   ),
                 ),
                 IconButton(
-                  onPressed: () => GoRouter.of(context).go(
-                      '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}/${LivingSeedAppRouter.writeReviewPath}'),
+                  onPressed: () {
+                    if (widget.about_books != null) {
+                      GoRouter.of(context).go(
+                          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}/${LivingSeedAppRouter.writeReviewPath}',
+                          extra: widget.about_books);
+                    }
+                  },
                   icon: const Icon(Iconsax.edit_2),
                 ),
               ],
@@ -104,7 +109,7 @@ class _ReviewsState extends State<Reviews> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
+            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 17),
             child: Column(
               children: [
                 Row(

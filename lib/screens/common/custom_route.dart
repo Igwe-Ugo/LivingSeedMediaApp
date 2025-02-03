@@ -124,19 +124,31 @@ class LivingSeedAppRouter {
                         GoRoute(
                             path: aboutBookPath,
                             builder: (context, state) {
-                              final about_books = state.extra as AboutBooks;
-                              return AboutBook(
-                                about_books: about_books,
-                              );
+                              final about_books = state.extra as AboutBooks?;
+                              if (about_books != null) {
+                                return AboutBook(
+                                  about_books: about_books,
+                                );
+                              } else {
+                                return const Center(
+                                    child: Text("No book data available"));
+                              }
                             },
                             routes: [
                               GoRoute(
                                   path: reviewsPath,
                                   builder: (context, state) {
-                                    final about_books = state.extra as AboutBooks;
-                                    return Reviews(
-                                      about_books: about_books,
-                                    );
+                                    final about_books =
+                                        state.extra as AboutBooks?;
+                                    if (about_books != null) {
+                                      return Reviews(
+                                        about_books: about_books,
+                                      );
+                                    } else {
+                                      return const Center(
+                                          child:
+                                              Text("No book data available"));
+                                    }
                                   },
                                   routes: [
                                     GoRoute(

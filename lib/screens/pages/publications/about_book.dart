@@ -95,10 +95,11 @@ class _AboutBookState extends State<AboutBook> {
                   width: 130,
                   height: 200,
                   decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(7)),
                       image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage(widget.about_books.coverImage),
-                  )),
+                        fit: BoxFit.fill,
+                        image: AssetImage(widget.about_books.coverImage),
+                      )),
                 ),
               ),
               const SizedBox(height: 15),
@@ -238,9 +239,13 @@ class _AboutBookState extends State<AboutBook> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}',
-                          extra: widget.about_books),
+                      onPressed: () {
+                        if (widget.about_books != null) {
+                          GoRouter.of(context).go(
+                              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}',
+                              extra: widget.about_books);
+                        }
+                      },
                       child: Text(
                         'See Reviews',
                         style: TextStyle(
