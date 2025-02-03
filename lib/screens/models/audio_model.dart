@@ -17,14 +17,14 @@ class AudioMessage {
     AudioMessage(
       title: 'Two Levels of encountering the Word',
       audioImage: 'assets/images/audioImage.png',
-      audioUrl: 'assets/json/Two Levels Of Encoutering The Word.mp3',
+      audioUrl: 'assets/audios/Two Levels Of Encoutering The Word.mp3',
       audioDescription: 'audioDescription',
       speaker: 'Gbile Akanni'
     ),
     AudioMessage(
       title: 'Engaging your youthful years for kingdom exploits',
       audioImage: 'assets/images/audioImage.png',
-      audioUrl: 'assets/json/Engaging-Your-Youthful-Years-For-Kingdom-Exploits.mp3',
+      audioUrl: 'assets/audios/Engaging-Your-Youthful-Years-For-Kingdom-Exploits.mp3',
       audioDescription: 'audioDescription',
       speaker: 'Gbile Akanni'
     ),

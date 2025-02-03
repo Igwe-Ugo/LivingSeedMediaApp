@@ -37,6 +37,7 @@ dependencies:
   pdf: ^3.11.1
   syncfusion_flutter_pdfviewer: ^28.1.33
   file_picker: ^8.1.6
+  syncfusion_flutter_calendar: ^28.2.3
 
 dev_dependencies:
   flutter_test:

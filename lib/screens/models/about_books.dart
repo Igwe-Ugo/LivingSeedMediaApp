@@ -31,7 +31,7 @@ class AboutBooks {
   final String bookTitle;
   final String bookSubtitle;
   final String author;
-  final String amount;
+  final double amount;
   final String aboutPreface;
   final String aboutAuthor;
   final String aboutBook;

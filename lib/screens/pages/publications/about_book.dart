@@ -117,7 +117,7 @@ class _AboutBookState extends State<AboutBook> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      widget.about_books.amount,
+                      'N${widget.about_books.amount.toString()}',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 20.0,

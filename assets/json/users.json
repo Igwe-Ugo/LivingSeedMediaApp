@@ -1,0 +1,66 @@
+[
+    {
+        "fullname": "Nwamadi Elijah",
+        "emailAddress": "elijahnwamadi1@gmail.com",
+        "password":"passkey2000",
+        "telephone":"07085272812",
+        "gender":"Male",
+        "dateOfBirth":"21-Dec-2001",
+        "role":"Admin",
+        "cart":[
+            {
+                "bookTitle":"Becoming like Jesus",
+                "coverImage":"assets/images/becoming_like_jesus.png",
+                "bookAuthor":"Gbile Akanni",
+                "amount":1000
+            }
+        ],
+        "bookPurchased":[
+            {
+                "bookTitle":"Raising Agents of Transformation",
+                "coverImage":"assets/images/agents_of_transformation.png",
+                "bookAuthor":"Gbile Akanni"
+            }
+        ],
+        "downloads":[
+            {
+                "title": "Two Levels of encountering the Word",
+                "mediaImage": "assets/images/audioImage.png",
+                "mediaUrl":"assets/audios/Two Levels Of Encoutering The Word.mp3",
+                "speaker":"Gbile Akanni"
+            }
+        ]
+    },
+    {
+        "fullname": "Yakubu Hamzat",
+        "emailAddress": "hamzat300@yahoo.com",
+        "password":"password000",
+        "telephone":"09123512570",
+        "gender":"Female",
+        "dateOfBirth":"19-Feb-1987",
+        "role":"Regular",
+        "cart":[
+            {
+                "bookTitle":"Raising Agents of Transformation",
+                "coverImage":"assets/images/agents_of_transformation.png",
+                "bookAuthor":"Gbile Akanni",
+                "amount":800
+            }
+        ],
+        "bookPurchased":[
+            {
+                "bookTitle":"The Dignity of Manhood",
+                "coverImage":"assets/images/dignity_of_manhood.png",
+                "bookAuthor":"Gbile Akanni"
+            }
+        ],
+        "downloads":[
+            {
+                "title": "Engaging your youthful years for kingdom exploits",
+                "mediaImage": "assets/images/audioImage.png",
+                "mediaUrl":"assets/audios/Engaging-Your-Youthful-Years-For-Kingdom-Exploits.mp3",
+                "speaker":"Gbile Akanni"
+            }
+        ]
+    }
+]

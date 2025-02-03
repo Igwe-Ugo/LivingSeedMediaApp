@@ -105,7 +105,7 @@ class _BooksState extends State<Books> {
                           height: 8,
                         ),
                         Text(
-                          about_books.amount,
+                          'N${about_books.amount.toString()}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
                         ),
