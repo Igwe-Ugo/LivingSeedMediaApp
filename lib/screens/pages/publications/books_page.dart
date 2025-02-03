@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_route.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 
@@ -12,6 +13,43 @@ class BooksPage extends StatefulWidget {
 }
 
 class _BooksPageState extends State<BooksPage> {
+  late int allReviews;
+  Color filledColor = Colors.orange.withOpacity(0.7);
+  Color unfilledColor = Colors.grey;
+  double starSize = 12.0;
+  late Map<int, int> ratingCount;
+  late int totalReviews;
+  late List<int> ratings;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.about_books.ratingReviews.isNotEmpty) {
+      allReviews = widget.about_books.ratingReviews
+          .map((review) => review.reviewRating.toInt())
+          .reduce((a, b) => (a + b)); // sums all ratings
+      ratings = widget.about_books.ratingReviews
+          .map((rating) => rating.reviewRating.toInt())
+          .toList();
+    } else {
+      allReviews = 0;
+    }
+    _calculateRatings();
+  }
+
+  void _calculateRatings() {
+    // Initialize map to store counts for each star (1-5)
+    ratingCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+
+    // Count occurrences of each rating
+    for (int rating in ratings) {
+      ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+    }
+
+    // Get total number of reviews
+    totalReviews = widget.about_books.ratingReviews.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     return _bookGridView(context);
@@ -21,7 +59,8 @@ class _BooksPageState extends State<BooksPage> {
     return GestureDetector(
       onTap: () {
         GoRouter.of(context).go(
-            '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}', extra: widget.about_books);
+            '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+            extra: widget.about_books);
       },
       child: Container(
         margin: const EdgeInsets.all(2),
@@ -60,48 +99,47 @@ class _BooksPageState extends State<BooksPage> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Text(
-                            widget.about_books.rating.toString(),
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.deepOrange,
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.deepOrange,
-                            size: 12,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.deepOrange,
-                            size: 12,
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.deepOrange,
-                            size: 12,
-                          ),
-                          Icon(
-                            Icons.star_rate_sharp,
-                            color: Colors.deepOrange,
-                            size: 12,
-                          ),
-                          Icon(
-                            Icons.star_outline,
-                            color: Colors.deepOrange,
-                            size: 12,
-                          ),
-                        ],
+                      Text(
+                        (allReviews / widget.about_books.ratingReviews.length)
+                            .toStringAsFixed(2),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 10),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(5, (index) {
+                            if (index <
+                                (allReviews /
+                                        widget.about_books.ratingReviews.length)
+                                    .floor()) {
+                              // filled
+                              return Icon(
+                                Iconsax.star1,
+                                color: filledColor,
+                                size: starSize,
+                              );
+                            } else if (index <
+                                (allReviews /
+                                    widget.about_books.ratingReviews.length)) {
+                              // halffilled
+                              return Icon(
+                                Icons.star_half,
+                                color: filledColor,
+                                size: starSize,
+                              );
+                            } else {
+                              // unfilled
+                              return Icon(
+                                Iconsax.star1,
+                                color: unfilledColor,
+                                size: starSize,
+                              );
+                            }
+                          })),
                     ],
                   ),
                 ],

@@ -12,7 +12,6 @@
     "chapterNum":12,
     "pdfLink":"assets/pdfs/Bunyan_Grace_Abounding.pdf",
     "productionDate": 1999,
-    "rating": 4.8,
     "chapters":[
       {
         "index 1": "Dedication",
@@ -61,7 +60,6 @@
     "whoseAbout":"The author in a clear departure from popular perception of whom and what man is, provides an alternative view for us. This is a view that is based on the Word of God",
     "chapterNum":6,
     "productionDate": 2007,
-    "rating": 4.8,
     "pdfLink":"assets/pdfs/Bunyan_Grace_Abounding.pdf",
     "chapters":[
       {
@@ -90,6 +88,13 @@
         "reviewTitle":"What a powerful book",
         "reviewer": "Nwamadi Chisomaga",
         "reviewRating": 5
+      },
+      {
+        "reviewText":"Can't get any better manual to set one at pace to be a better dad, father and mentor to both the children and the wife. Thank God for this master piece",
+        "date":"Jan, 23, 2024",
+        "reviewTitle":"The dad's manual",
+        "reviewer": "Ayomide Tobiloba",
+        "reviewRating": 5
       }
     ]
   },
@@ -105,7 +110,6 @@
     "whoseAbout":"It is a manual for all those willing to engage in genuine Discipleship.",
     "chapterNum":13,
     "productionDate": 2013,
-    "rating": 5.0,
     "pdfLink":"assets/pdfs/Bunyan_Grace_Abounding.pdf",
     "chapters":[
       {

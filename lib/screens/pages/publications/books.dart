@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import '../../common/widget.dart';
 import '../../models/models.dart';
 import '../services/services.dart';
@@ -49,7 +50,8 @@ class _BooksState extends State<Books> {
       children: [
         InkWell(
           onTap: () => GoRouter.of(context).go(
-              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}'),
+              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+              extra: about_books),
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Padding(
@@ -98,46 +100,7 @@ class _BooksState extends State<Books> {
                         const SizedBox(
                           height: 8,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              about_books.rating.toString(),
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepOrange,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Icons.star,
-                              color: Colors.deepOrange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Icons.star,
-                              color: Colors.deepOrange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Icons.star,
-                              color: Colors.deepOrange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Icons.star,
-                              color: Colors.deepOrange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Icons.star_outline,
-                              color: Colors.deepOrange,
-                              size: 12,
-                            ),
-                          ],
-                        ),
+                        buildStarRating(about_books.ratingReviews),
                         const SizedBox(
                           height: 8,
                         ),
@@ -162,6 +125,61 @@ class _BooksState extends State<Books> {
         const Divider(
           thickness: 0.4,
         )
+      ],
+    );
+  }
+
+  Widget buildStarRating(List<RatingReview> ratingReviews) {
+    if (ratingReviews.isEmpty) {
+      return Row(
+        children: List.generate(
+          5,
+          (index) =>
+              const Icon(Icons.star_border, color: Colors.grey, size: 16),
+        ),
+      );
+    }
+
+    // Compute average rating
+    double averageRating =
+        ratingReviews.map((r) => r.reviewRating).reduce((a, b) => a + b) /
+            ratingReviews.length;
+
+    int fullStars = averageRating.floor(); // Full stars
+    bool hasHalfStar =
+        (averageRating - fullStars) >= 0.5; // Check for half star
+    int emptyStars =
+        5 - fullStars - (hasHalfStar ? 1 : 0); // Remaining empty stars
+
+    return Row(
+      children: [
+        Text(
+          averageRating.toStringAsFixed(2).toString(),
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: FontWeight.bold,
+            color: Colors.orange,
+          ),
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        // Filled Stars
+        ...List.generate(
+          fullStars,
+          (index) => const Icon(Iconsax.star1, color: Colors.orange, size: 16),
+        ),
+
+        // Half Star (if applicable)
+        if (hasHalfStar)
+          const Icon(Icons.star_half, color: Colors.orange, size: 16),
+
+        // Empty Stars
+        ...List.generate(
+          emptyStars,
+          (index) =>
+              const Icon(Icons.star_border, color: Colors.grey, size: 16),
+        ),
       ],
     );
   }

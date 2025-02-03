@@ -14,9 +14,43 @@ class AboutBook extends StatefulWidget {
 }
 
 class _AboutBookState extends State<AboutBook> {
-  List<bool> stars = [true, true, true, true, false];
-
   bool more = false;
+  late int allReviews;
+  Color filledColor = Colors.orange.withOpacity(0.7);
+  Color unfilledColor = Colors.grey;
+  double starSize = 30.0;
+  late Map<int, int> ratingCount;
+  late int totalReviews;
+  late List<int> ratings;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.about_books.ratingReviews.isNotEmpty) {
+      allReviews = widget.about_books.ratingReviews
+          .map((review) => review.reviewRating.toInt())
+          .reduce((a, b) => (a + b)); // sums all ratings
+      ratings = widget.about_books.ratingReviews
+          .map((rating) => rating.reviewRating.toInt())
+          .toList();
+    } else {
+      allReviews = 0;
+    }
+    _calculateRatings();
+  }
+
+  void _calculateRatings() {
+    // Initialize map to store counts for each star (1-5)
+    ratingCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+
+    // Count occurrences of each rating
+    for (int rating in ratings) {
+      ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+    }
+
+    // Get total number of reviews
+    totalReviews = widget.about_books.ratingReviews.length;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,19 +193,39 @@ class _AboutBookState extends State<AboutBook> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(5, (index) {
-                          return Icon(
-                            Iconsax.star1,
-                            color: stars[index]
-                                ? Colors.orange.withOpacity(0.5)
-                                : Colors.grey.withOpacity(0.2),
-                            size: 30,
-                          );
-                        }),
-                      ),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(5, (index) {
+                            if (index <
+                                (allReviews /
+                                        widget.about_books.ratingReviews.length)
+                                    .floor()) {
+                              // filled
+                              return Icon(
+                                Iconsax.star1,
+                                color: filledColor,
+                                size: starSize,
+                              );
+                            } else if (index <
+                                (allReviews /
+                                    widget.about_books.ratingReviews.length)) {
+                              // halffilled
+                              return Icon(
+                                Icons.star_half,
+                                color: filledColor,
+                                size: starSize,
+                              );
+                            } else {
+                              // unfilled
+                              return Icon(
+                                Iconsax.star1,
+                                color: unfilledColor,
+                                size: starSize,
+                              );
+                            }
+                          })),
                       Text(
-                        widget.about_books.rating.toString(),
+                        (allReviews / widget.about_books.ratingReviews.length)
+                            .toStringAsFixed(2),
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                         ),
@@ -185,7 +239,8 @@ class _AboutBookState extends State<AboutBook> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () => GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}', extra: widget.about_books),
+                          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}',
+                          extra: widget.about_books),
                       child: Text(
                         'See Reviews',
                         style: TextStyle(
@@ -245,8 +300,7 @@ class _AboutBookState extends State<AboutBook> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    widget.about_books.whoseAbout,
+                  Text(widget.about_books.whoseAbout,
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       )),
@@ -306,8 +360,7 @@ class _AboutBookState extends State<AboutBook> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    widget.about_books.aboutAuthor,
+                  Text(widget.about_books.aboutAuthor,
                       style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       )),
@@ -326,7 +379,9 @@ class _AboutBookState extends State<AboutBook> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          BooksPage(about_books: widget.about_books,),
+                          BooksPage(
+                            about_books: widget.about_books,
+                          ),
                           SizedBox(
                             width: 10,
                           ),

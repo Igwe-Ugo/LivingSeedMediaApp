@@ -135,7 +135,7 @@ class LivingSeedAppRouter {
                                   builder: (context, state) {
                                     final about_books = state.extra as AboutBooks;
                                     return Reviews(
-                                      reviewRating: about_books.ratingReviews,
+                                      about_books: about_books,
                                     );
                                   },
                                   routes: [

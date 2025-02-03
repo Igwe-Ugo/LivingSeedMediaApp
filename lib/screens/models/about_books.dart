@@ -39,7 +39,6 @@ class AboutBooks {
   final int chapterNum;
   final String pdfLink;
   final int productionDate;
-  final double rating;
   final List<String> chapters;
   final List<RatingReview> ratingReviews;
 
@@ -56,7 +55,6 @@ class AboutBooks {
       required this.chapterNum,
       required this.pdfLink,
       required this.productionDate,
-      required this.rating,
       required this.chapters,
       required this.ratingReviews});
 
@@ -87,7 +85,6 @@ class AboutBooks {
         chapterNum: json['chapterNum'],
         pdfLink: json['pdfLink'],
         productionDate: json['productionDate'],
-        rating: (json['rating'] as num).toDouble(),
         chapters: extractedChapters,
         ratingReviews: extractedReviews
       );

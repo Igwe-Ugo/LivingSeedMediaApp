@@ -6,8 +6,8 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class Reviews extends StatefulWidget {
-  final List<RatingReview> reviewRating;
-  const Reviews({super.key, required this.reviewRating});
+  final AboutBooks about_books;
+  const Reviews({super.key, required this.about_books});
 
   @override
   State<Reviews> createState() => _ReviewsState();
@@ -16,6 +16,42 @@ class Reviews extends StatefulWidget {
 class _ReviewsState extends State<Reviews> {
   List<bool> stars = [false, false, false, false, false];
   bool showWriteReviewTextField = false;
+  late int allReviews;
+  Color filledColor = Colors.orange.withOpacity(0.7);
+  Color unfilledColor = Colors.grey;
+  double starSize = 30.0;
+  late Map<int, int> ratingCount;
+  late int totalReviews;
+  late List<int> ratings;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.about_books.ratingReviews.isNotEmpty) {
+      allReviews = widget.about_books.ratingReviews
+          .map((review) => review.reviewRating.toInt())
+          .reduce((a, b) => (a + b)); // sums all ratings
+      ratings = widget.about_books.ratingReviews
+          .map((rating) => rating.reviewRating.toInt())
+          .toList();
+    } else {
+      allReviews = 0;
+    }
+    _calculateRatings();
+  }
+
+  void _calculateRatings() {
+    // Initialize map to store counts for each star (1-5)
+    ratingCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+
+    // Count occurrences of each rating
+    for (int rating in ratings) {
+      ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+    }
+
+    // Get total number of reviews
+    totalReviews = widget.about_books.ratingReviews.length;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,16 +90,30 @@ class _ReviewsState extends State<Reviews> {
               ],
             ),
           ),
+          SizedBox(
+            height: 10,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              widget.about_books.bookTitle,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontFamily: 'Playfair'),
+            ),
+          ),
           Padding(
-            padding: const EdgeInsets.all(30.0),
+            padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
             child: Column(
               children: [
                 Row(
                   children: [
-                    const Column(
+                    Column(
                       children: [
                         Text(
-                          '4.8',
+                          (allReviews / widget.about_books.ratingReviews.length)
+                              .toStringAsFixed(2),
                           style: TextStyle(
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
@@ -78,162 +128,46 @@ class _ReviewsState extends State<Reviews> {
                       ],
                     ),
                     const SizedBox(
-                      width: 10,
+                      width: 2,
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
+                      children: List.generate(5, (index) {
+                        int starValue =
+                            5 - index; // 5-star at top, 1-star at bottom
+                        int starCount = ratingCount[starValue] ?? 0;
+                        double iconSize = 12.0;
+                        double percentage =
+                            totalReviews > 0 ? starCount / totalReviews : 0.0;
+                        return Row(
                           children: [
                             const SizedBox(
                               width: 5,
                             ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
+                            ...List.generate(
+                                starValue,
+                                (index) => Icon(Iconsax.star1,
+                                    color: Colors.orange, size: iconSize)),
                             LinearPercentIndicator(
                               barRadius: const Radius.circular(2),
                               width: MediaQuery.of(context).size.width * .5,
                               lineHeight: 6.0,
-                              percent: 0.4,
+                              percent: percentage,
                               progressColor: Colors.black45,
+                              backgroundColor: Colors.grey[300],
                             ),
                           ],
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            LinearPercentIndicator(
-                              barRadius: const Radius.circular(2),
-                              width: MediaQuery.of(context).size.width * .5,
-                              lineHeight: 6.0,
-                              percent: 0.7,
-                              progressColor: Colors.black45,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            LinearPercentIndicator(
-                              barRadius: const Radius.circular(2),
-                              width: MediaQuery.of(context).size.width * .5,
-                              lineHeight: 6.0,
-                              percent: 0.6,
-                              progressColor: Colors.black45,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            LinearPercentIndicator(
-                              barRadius: const Radius.circular(2),
-                              width: MediaQuery.of(context).size.width * .5,
-                              lineHeight: 6.0,
-                              percent: 0.3,
-                              progressColor: Colors.black45,
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            const Icon(
-                              Iconsax.star1,
-                              color: Colors.orange,
-                              size: 12,
-                            ),
-                            LinearPercentIndicator(
-                              barRadius: const Radius.circular(2),
-                              width: MediaQuery.of(context).size.width * .5,
-                              lineHeight: 6.0,
-                              percent: 0.2,
-                              progressColor: Colors.black45,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                        );
+                      }),
+                    )
                   ],
                 ),
-                const Padding(
+                Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),
                   child: Align(
                     alignment: Alignment.centerRight,
-                    child: Text('2,706 Ratings',
+                    child: Text(
+                        '${widget.about_books.ratingReviews.length} Ratings',
                         style: TextStyle(
                             fontWeight: FontWeight.w300, fontSize: 12)),
                   ),
@@ -242,34 +176,47 @@ class _ReviewsState extends State<Reviews> {
                   height: 10,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(4, (index) {
-                        return IconButton(
-                          onPressed: null,
-                          icon: Icon(
-                            Iconsax.star1,
-                            color: Colors.orange.withOpacity(0.5),
-                            size: 30,
-                          ),
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      if (index <
+                          (allReviews / widget.about_books.ratingReviews.length)
+                              .floor()) {
+                        // filled
+                        return Icon(
+                          Iconsax.star1,
+                          color: filledColor,
+                          size: starSize,
                         );
-                      }),
-                    ),
-                    Icon(
-                      Icons.star_half,
-                      size: 30,
-                      color: Colors.orange.withOpacity(0.5),
-                    ),
-                  ],
-                ),
+                      } else if (index <
+                          (allReviews /
+                              widget.about_books.ratingReviews.length)) {
+                        // halffilled
+                        return Icon(
+                          Icons.star_half,
+                          color: filledColor,
+                          size: starSize,
+                        );
+                      } else {
+                        // unfilled
+                        return Icon(
+                          Iconsax.star1,
+                          color: unfilledColor,
+                          size: starSize,
+                        );
+                      }
+                    })),
                 Divider(
                   color: Theme.of(context).disabledColor,
                 ),
                 Column(
-                  children: widget.reviewRating.map((reviews) {
-                    return ReviewsWidget(context: context, reviewText: reviews.reviewText, date: reviews.date, reviewTitle: reviews.reviewTitle, reviewer: reviews.reviewer);
+                  children: widget.about_books.ratingReviews.map((reviews) {
+                    return ReviewsWidget(
+                        context: context,
+                        reviewText: reviews.reviewText,
+                        date: reviews.date,
+                        reviewTitle: reviews.reviewTitle,
+                        rating: reviews.reviewRating.toInt(),
+                        reviewer: reviews.reviewer);
                   }).toList(),
                 )
               ],
@@ -282,20 +229,27 @@ class _ReviewsState extends State<Reviews> {
 }
 
 class ReviewsWidget extends StatelessWidget {
-  const ReviewsWidget({
-    super.key,
-    required this.context,
-    required this.reviewText,
-    required this.date,
-    required this.reviewTitle,
-    required this.reviewer,
-  });
+  const ReviewsWidget(
+      {super.key,
+      required this.context,
+      required this.reviewText,
+      required this.date,
+      required this.reviewTitle,
+      required this.reviewer,
+      required this.rating,
+      this.filledColor = Colors.orange,
+      this.unfilledColor = Colors.grey,
+      this.starSize = 12.0});
 
   final BuildContext context;
   final String reviewText;
   final String date;
   final String reviewTitle;
   final String reviewer;
+  final int rating;
+  final double starSize;
+  final Color filledColor;
+  final Color unfilledColor;
 
   @override
   Widget build(BuildContext context) {
@@ -317,38 +271,30 @@ class ReviewsWidget extends StatelessWidget {
                   height: 8,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Icon(
-                      Iconsax.star1,
-                      color: Colors.orange,
-                      size: 12,
-                    ),
-                    const Icon(
-                      Iconsax.star1,
-                      color: Colors.orange,
-                      size: 12,
-                    ),
-                    const Icon(
-                      Iconsax.star1,
-                      color: Colors.orange,
-                      size: 12,
-                    ),
-                    const Icon(
-                      Iconsax.star1,
-                      color: Colors.orange,
-                      size: 12,
-                    ),
-                    Icon(
-                      Iconsax.star1,
-                      color: Colors.grey.withOpacity(0.3),
-                      size: 12,
-                    ),
-                  ],
-                ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(5, (index) {
+                      if (index < rating.floor()) {
+                        // filled
+                        return Icon(
+                          Iconsax.star1,
+                          color: filledColor.withOpacity(0.7),
+                          size: starSize,
+                        );
+                      } else if (index < rating) {
+                        // haflfilled
+                        return Icon(
+                          Icons.star_half,
+                          color: filledColor.withOpacity(0.7),
+                          size: starSize,
+                        );
+                      } else {
+                        return Icon(
+                          Iconsax.star1,
+                          color: unfilledColor,
+                          size: starSize,
+                        );
+                      }
+                    })),
                 const SizedBox(
                   height: 8,
                 ),
