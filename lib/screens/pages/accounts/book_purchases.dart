@@ -89,8 +89,14 @@ class _BooksPurchasedState extends State<BooksPurchased> {
                               author: item.bookAuthor))
                           .toList()
                       : [
-                          Center(
-                            child: Text('No Book has been purchased by you!'),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              SizedBox(height: 40,),
+                              Icon(Iconsax.book_saved, size: 100,),
+                              SizedBox(height: 20,),
+                              Text('No Book has been purchased by you!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                            ]
                           )
                         ],
             ),

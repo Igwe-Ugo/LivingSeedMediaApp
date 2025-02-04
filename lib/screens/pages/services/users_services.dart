@@ -40,8 +40,7 @@ class UsersAuthProvider extends ChangeNotifier {
 
   Future<void> _saveUserToLocal() async {
     final file = await _getUserFile();
-    String jsonData =
-        json.encode(_users.map((user) => user.toJson()).toList());
+    String jsonData = json.encode(_users.map((user) => user.toJson()).toList());
     await file.writeAsString(jsonData);
   }
 
@@ -88,7 +87,7 @@ class UsersAuthProvider extends ChangeNotifier {
   }
 
   // remove specific item from cart
-  void removeFromcART(String bookTitle) {
+  void removeFromCart(String bookTitle) {
     if (_currentUser != null) {
       _currentUser!.cart.removeWhere((item) => item.bookTitle == bookTitle);
       notifyListeners();

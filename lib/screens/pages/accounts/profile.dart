@@ -174,8 +174,11 @@ class _ProfileState extends State<Profile> {
                   child: TextButton(
                       onPressed: () => showDeleteDialog(context),
                       child: const Text(
-                        'Close Account',
-                        style: TextStyle(color: Colors.red),
+                        'Delete Account',
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold),
                       )))
             ],
           ),

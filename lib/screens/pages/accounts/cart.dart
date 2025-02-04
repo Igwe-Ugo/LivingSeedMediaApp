@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 import '../../models/models.dart';
 
 class Cart extends StatefulWidget {
@@ -174,29 +177,49 @@ class _CartState extends State<Cart> {
                               item.bookTitle, item.bookAuthor, item.amount))
                           .toList()
                       : [
-                          Center(
-                            child: Text('Cannot fetch cart informations'),
-                          )
+                          Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: const [
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Icon(
+                                  Icons.shopify_sharp,
+                                  size: 100,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'Nothing in Cart Session yet, please add book to cart',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ])
                         ],
                 ),
                 const SizedBox(
                   height: 30,
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: ListTile(
-                    onTap: () => showClearItemDialog(context),
-                    leading: const Icon(
-                      Iconsax.trash,
-                      color: Colors.red,
-                    ),
-                    title: const Text('Clear all items in cart',
-                        style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.red)),
-                  ),
-                ),
+                widget.user != null && widget.user.cart.isNotEmpty
+                    ? Align(
+                        alignment: Alignment.bottomCenter,
+                        child: ListTile(
+                          onTap: () => showClearItemDialog(context),
+                          leading: const Icon(
+                            Iconsax.trash,
+                            color: Colors.red,
+                          ),
+                          title: const Text('Clear all items in cart',
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.red)),
+                        ),
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
           ),
@@ -274,7 +297,7 @@ class _CartState extends State<Cart> {
                 ],
               ),
               ListTile(
-                onTap: () => showRemoveItemDialog(context),
+                onTap: () => showRemoveItemDialog(context, bookName),
                 leading: const Icon(Iconsax.trash),
                 title: const Text('Remove from cart',
                     style: TextStyle(
@@ -290,7 +313,7 @@ class _CartState extends State<Cart> {
   }
 }
 
-Future<void> showRemoveItemDialog(BuildContext context) {
+Future<void> showRemoveItemDialog(BuildContext context, String bookTitle) {
   return showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -315,8 +338,11 @@ Future<void> showRemoveItemDialog(BuildContext context) {
       ),
       actions: [
         TextButton(
-          onPressed: () async {
+          onPressed: () {
+            Provider.of<UsersAuthProvider>(context, listen: false)
+                .removeFromCart(bookTitle);
             Navigator.of(context).pop();
+            showMessage('One item removed from Cart', context);
           },
           child: Text(
             'Remove'.toUpperCase(),
@@ -362,8 +388,10 @@ Future<void> showClearItemDialog(BuildContext context) {
       ),
       actions: [
         TextButton(
-          onPressed: () async {
+          onPressed: () {
+            Provider.of<UsersAuthProvider>(context, listen: false).clearCart();
             Navigator.of(context).pop();
+            showMessage('Items cleared from Cart', context);
           },
           child: Text(
             'clear'.toUpperCase(),
