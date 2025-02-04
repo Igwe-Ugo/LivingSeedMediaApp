@@ -85,8 +85,8 @@ class _HomePageState extends State<HomePage> {
                             onTap: () => GoRouter.of(context)
                                 .go(LivingSeedAppRouter.dashboardPath),
                             child: CircleAvatar(
-                              radius: 20,
-                              child: Image.asset('assets/images/profile.png'),
+                              radius: 25,
+                              child: Image.asset('assets/images/avatar.png'),
                             ),
                           ),
                         ],
@@ -149,9 +149,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 10),
                         HorizontalList(about_books: snapshot.data!),
-
                         const SizedBox(height: 20),
-
                         // Videos Section
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,9 +166,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         const SizedBox(height: 10),
                         HorizontalList(about_books: snapshot.data!),
-
                         const SizedBox(height: 20),
-
                         // Songs Section
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,7 +232,8 @@ class HorizontalList extends StatelessWidget {
             ),
             child: InkWell(
               onTap: () => GoRouter.of(context).go(
-                  '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}', extra: about_books[index]),
+                  '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}',
+                  extra: about_books[index]),
               child: Container(
                 height: 170,
                 decoration: BoxDecoration(

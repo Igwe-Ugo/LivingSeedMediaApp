@@ -77,7 +77,7 @@ class AboutBooks {
         bookTitle: json['bookTitle'],
         bookSubtitle: json['bookSubtitle'],
         author: json['author'],
-        amount: json['amount'],
+        amount: (json['amount'] as num).toDouble(),
         aboutPreface: json['aboutPreface'],
         aboutAuthor: json['aboutAuthor'],
         aboutBook: json['aboutBook'],
@@ -86,8 +86,7 @@ class AboutBooks {
         pdfLink: json['pdfLink'],
         productionDate: json['productionDate'],
         chapters: extractedChapters,
-        ratingReviews: extractedReviews
-      );
+        ratingReviews: extractedReviews);
   }
 
   static List<AboutBooks> fromJsonList(String jsonString) {

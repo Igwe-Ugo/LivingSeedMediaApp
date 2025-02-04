@@ -4,7 +4,7 @@ class CartItems {
   final String bookTitle;
   final String coverImage;
   final String bookAuthor;
-  final double amount;
+  final int amount;
 
   CartItems({
     required this.bookTitle,
@@ -18,24 +18,24 @@ class CartItems {
       bookTitle: json['bookTitle'],
       coverImage: json['coverImage'],
       bookAuthor: json['bookAuthor'],
-      amount: (json['amount'] as num).toDouble(),
+      amount: (json['amount']),
     );
   }
 }
 
-class PurchasedBooks {
+class PurchasedBooksItems {
   final String bookTitle;
   final String coverImage;
   final String bookAuthor;
 
-  PurchasedBooks({
+  PurchasedBooksItems({
     required this.bookTitle,
     required this.coverImage,
     required this.bookAuthor,
   });
 
-  factory PurchasedBooks.fromJson(Map<String, dynamic> json) {
-    return PurchasedBooks(
+  factory PurchasedBooksItems.fromJson(Map<String, dynamic> json) {
+    return PurchasedBooksItems(
       bookTitle: json["bookTitle"],
       bookAuthor: json["bookAuthor"],
       coverImage: json["coverImage"],
@@ -43,21 +43,21 @@ class PurchasedBooks {
   }
 }
 
-class DownloadItems {
+class MediaItems {
   final String title;
   final String mediaImage;
   final String mediaUrl;
   final String speaker;
 
-  DownloadItems({
+  MediaItems({
     required this.title,
     required this.mediaImage,
     required this.mediaUrl,
     required this.speaker,
   });
 
-  factory DownloadItems.fromJson(Map<String, dynamic> json) {
-    return DownloadItems(
+  factory MediaItems.fromJson(Map<String, dynamic> json) {
+    return MediaItems(
         title: json["title"],
         mediaImage: json["mediaImage"],
         mediaUrl: json["mediaUrl"],
@@ -69,17 +69,19 @@ class Users {
   final String fullname;
   final String emailAddress;
   final String telephone;
+  final String userImage;
   final String password;
   final String gender;
   final String dateOfBirth;
   final String role;
   final List<CartItems> cart;
-  final List<PurchasedBooks> bookPurchased;
-  final List<DownloadItems> downloads;
+  final List<PurchasedBooksItems> bookPurchased;
+  final List<MediaItems> downloads;
 
   Users(
       {required this.fullname,
       required this.emailAddress,
+      required this.userImage,
       required this.telephone,
       required this.password,
       required this.gender,
@@ -92,24 +94,29 @@ class Users {
   factory Users.fromJson(Map<String, dynamic> json) {
     List<CartItems> extractedCart = [];
     if (json['cart'] != null && json['cart'] is List) {
-      extractedCart = (json['cart'][0] as List).map((e) => CartItems.fromJson(e as Map<String, dynamic>)).toList();
+      extractedCart = (json['cart'] as List)
+          .map((e) => CartItems.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
-    List<PurchasedBooks> extractedBookPurchased = [];
+    List<PurchasedBooksItems> extractedBookPurchased = [];
     if (json['bookPurchased'] != null && json['bookPurchased'] is List) {
-      extractedBookPurchased = (json['bookPurchased'] as List).map((e) => PurchasedBooks.fromJson(e as Map<String, dynamic>)).toList();
+      extractedBookPurchased = (json['bookPurchased'] as List)
+          .map((e) => PurchasedBooksItems.fromJson(e as Map<String, dynamic>))
+          .toList();
     }
 
-    List<DownloadItems> extractedDownloads = [];
+    List<MediaItems> extractedDownloads = [];
     if (json['downloads'] != null && json['downloads'] is List) {
       extractedDownloads = (json['downloads'] as List)
-          .map((item) => DownloadItems.fromJson(item as Map<String, dynamic>))
+          .map((item) => MediaItems.fromJson(item as Map<String, dynamic>))
           .toList();
     }
 
     return Users(
         fullname: json['fullname'],
         emailAddress: json['emailAddress'],
+        userImage: json['userImage'],
         telephone: json['telephone'],
         password: json['password'],
         gender: json['gender'],
@@ -120,8 +127,9 @@ class Users {
         bookPurchased: extractedBookPurchased);
   }
 
+  // Convert a JSON string (list) to a list of Users
   static List<Users> fromJsonList(String jsonString) {
-    final List<dynamic> jsonData = jsonDecode(jsonString);
-    return jsonData.map((item) => Users.fromJson(item)).toList();
+    List<dynamic> jsonList = json.decode(jsonString); // Ensure it's a list
+    return jsonList.map((json) => Users.fromJson(json)).toList();
   }
 }

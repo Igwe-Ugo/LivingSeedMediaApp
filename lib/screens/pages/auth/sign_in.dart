@@ -1,8 +1,13 @@
+// ignore_for_file: await_only_futures
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/common/custom_route.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:provider/provider.dart';
+import '../../common/widget.dart';
 
 class LivingSeedSignIn extends StatefulWidget {
   const LivingSeedSignIn({super.key});
@@ -16,6 +21,8 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
   final loginFormField = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String errorMessage = '';
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +34,7 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
               height: 180,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/image.png'),
+                    image: AssetImage('assets/images/livingseed.png'),
                     fit: BoxFit.fill),
               ),
             ),
@@ -197,8 +204,28 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                         height: 20,
                       ),
                       ElevatedButton(
-                        onPressed: () => GoRouter.of(context)
-                            .go(LivingSeedAppRouter.homePath),
+                        onPressed: () async {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          bool isAuthenticated =
+                              await Provider.of<UsersAuthProvider>(context,
+                                      listen: false)
+                                  .signIn(emailController.text,
+                                      passwordController.text);
+                          if (isAuthenticated) {
+                            GoRouter.of(context)
+                                .go(LivingSeedAppRouter.homePath);
+                          } else {
+                            setState(() {
+                              errorMessage = 'Invalid EmailAddress or password';
+                              showMessage(errorMessage, context);
+                            });
+                          }
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: Theme.of(context).primaryColor,
@@ -207,17 +234,20 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           ),
                           minimumSize: const Size(10, 50),
                         ),
-                        child: const Padding(
+                        child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 10.0),
                           child: Center(
-                            child: Text(
-                              'Sign In',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20.0,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: isLoading == false
+                                ? Text(
+                                    'Sign In',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 20.0,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : LoadingAnimationWidget.halfTriangleDot(
+                                    color: Colors.white, size: 20),
                           ),
                         ),
                       ),

@@ -93,7 +93,7 @@ class _AccountPageState extends State<AccountPage> {
             ListTile(
                 leading: CircleAvatar(
                   radius: 30,
-                  child: Image.asset('assets/images/profile.png'),
+                  child: Image.asset('assets/images/avatar.png'),
                 ),
                 title: Text(
                   'Nwamadi Elijah Chibuokem',

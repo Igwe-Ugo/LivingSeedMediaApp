@@ -28,7 +28,7 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
               height: 180,
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/image.png'),
+                    image: AssetImage('assets/images/livingseed.png'),
                     fit: BoxFit.fill),
               ),
             ),

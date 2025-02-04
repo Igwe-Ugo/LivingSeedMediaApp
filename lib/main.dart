@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livingseed_media/screens/pages/services/users_services.dart';
 import 'screens/common/widget.dart';
 import 'package:provider/provider.dart';
 
@@ -32,6 +33,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => themeChangeProvider),
+        ChangeNotifierProvider(create: (_) => UsersAuthProvider())
       ],
       child: Consumer<DarkThemeProvider>(
         builder: (context, themeData, child) {

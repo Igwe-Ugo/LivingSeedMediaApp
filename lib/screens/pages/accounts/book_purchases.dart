@@ -21,7 +21,7 @@ class _BooksPurchasedState extends State<BooksPurchased> {
   @override
   void initState() {
     super.initState();
-    getFileFromAsset('assets/json/Bunyan_Grace_Abounding.pdf').then((f) {
+    getFileFromAsset('assets/pdfs/Bunyan_Grace_Abounding.pdf').then((f) {
       setState(() {
         pdfAssetPath = f.path;
         debugPrint(pdfAssetPath);

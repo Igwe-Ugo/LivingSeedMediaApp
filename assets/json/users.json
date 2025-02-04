@@ -5,6 +5,7 @@
         "password":"passkey2000",
         "telephone":"07085272812",
         "gender":"Male",
+        "userImage":"assets/images/avatar.png",
         "dateOfBirth":"21-Dec-2001",
         "role":"Admin",
         "cart":[
@@ -37,6 +38,7 @@
         "password":"password000",
         "telephone":"09123512570",
         "gender":"Female",
+        "userImage":"assets/images/avatar.png",
         "dateOfBirth":"19-Feb-1987",
         "role":"Regular",
         "cart":[

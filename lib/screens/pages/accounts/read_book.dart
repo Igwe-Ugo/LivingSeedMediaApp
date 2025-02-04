@@ -37,7 +37,7 @@ class ReadBookPage extends StatelessWidget {
               ],
             ),
           ),
-          SfPdfViewer.asset('assets/json/Bunyan_Grace_Abounding.pdf')
+          SfPdfViewer.asset('assets/pdfs/Bunyan_Grace_Abounding.pdf')
         ],
       ),
     );
