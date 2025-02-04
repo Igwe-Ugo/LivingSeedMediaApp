@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import '../../models/models.dart';
 
 class Cart extends StatefulWidget {
-  const Cart({super.key});
+  final Users user;
+  const Cart({super.key, required this.user});
 
   @override
   State<Cart> createState() => _CartState();
@@ -12,6 +14,20 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int numberOfItems = 3;
+  late int totalCost;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.user.cart.isNotEmpty) {
+      totalCost = widget.user.cart
+          .map((item) => item.amount.toInt())
+          .reduce((a, b) => (a + b)); // sums all amount
+    } else {
+      totalCost = 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +56,7 @@ class _CartState extends State<Cart> {
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
                         )),
-                    Text('# ${numberOfItems * 1000}',
+                    Text('# $totalCost',
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
@@ -67,7 +83,7 @@ class _CartState extends State<Cart> {
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
-                            'Make Payment (# ${numberOfItems * 1000})',
+                            'Make Payment (# $totalCost)',
                             style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                                 fontSize: 20.0,
@@ -152,12 +168,16 @@ class _CartState extends State<Cart> {
                   height: 15,
                 ),
                 Column(
-                  children: [
-                    _cartItems(context),
-                    _cartItems(context),
-                    _cartItems(context),
-                    _cartItems(context)
-                  ],
+                  children: widget.user != null && widget.user.cart.isNotEmpty
+                      ? widget.user.cart
+                          .map((item) => _cartItems(context, item.coverImage,
+                              item.bookTitle, item.bookAuthor, item.amount))
+                          .toList()
+                      : [
+                          Center(
+                            child: Text('Cannot fetch cart informations'),
+                          )
+                        ],
                 ),
               ],
             ),
@@ -165,7 +185,8 @@ class _CartState extends State<Cart> {
         ));
   }
 
-  SizedBox _cartItems(BuildContext context) {
+  SizedBox _cartItems(BuildContext context, String coverImage, String bookName,
+      String bookAuthor, int amount) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -195,13 +216,13 @@ class _CartState extends State<Cart> {
                     child: Image.asset(
                       height: 100,
                       width: 100,
-                      'assets/images/becoming_like_jesus.png',
+                      coverImage,
                     ),
                   ),
                   const SizedBox(
                     width: 16,
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,12 +231,12 @@ class _CartState extends State<Cart> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Becoming like Jesus',
+                              bookName,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16.0),
                             ),
                             Text(
-                              'Gbile Akanni',
+                              bookAuthor,
                               style: TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 14.0),
                             ),
@@ -225,7 +246,7 @@ class _CartState extends State<Cart> {
                           height: 8,
                         ),
                         Text(
-                          'N 1000',
+                          'N $amount',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
                         ),

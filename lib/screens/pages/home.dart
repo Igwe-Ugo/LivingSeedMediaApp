@@ -6,7 +6,8 @@ import '../common/widget.dart';
 import 'services/services.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  final Users user;
+  const HomePage({super.key, required this.user});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Welcome\nElijah Nwamadi',
+                            'Welcome\n${widget.user.fullname}',
                             style: TextStyle(
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
                                 .go(LivingSeedAppRouter.dashboardPath),
                             child: CircleAvatar(
                               radius: 25,
-                              child: Image.asset('assets/images/avatar.png'),
+                              child: Image.asset(widget.user.userImage),
                             ),
                           ),
                         ],

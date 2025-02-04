@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import '../common/widget.dart';
+import '../models/models.dart';
+import 'services/services.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -18,6 +20,7 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    Users? user = Provider.of<UsersAuthProvider>(context).userData;
     final themeChange = Provider.of<DarkThemeProvider>(context);
 
     return Scaffold(
@@ -93,10 +96,14 @@ class _AccountPageState extends State<AccountPage> {
             ListTile(
                 leading: CircleAvatar(
                   radius: 30,
-                  child: Image.asset('assets/images/avatar.png'),
+                  child: user != null && user.userImage.isNotEmpty
+                      ? Image.asset(user.userImage)
+                      : Icon(Icons.person),
                 ),
                 title: Text(
-                  'Nwamadi Elijah Chibuokem',
+                  user != null && user.userImage.isNotEmpty
+                      ? user.fullname
+                      : 'Name',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -105,7 +112,9 @@ class _AccountPageState extends State<AccountPage> {
                           : Colors.black),
                 ),
                 subtitle: Text(
-                  'nwamadielijah1@gmail.com',
+                  user != null && user.userImage.isNotEmpty
+                      ? user.emailAddress
+                      : 'Email Address',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
@@ -145,7 +154,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   ListTile(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}'),
+                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}', extra: user),
                     leading: const Icon(Iconsax.shopping_cart),
                     title: const Text(
                       'My Cart',
@@ -156,7 +165,7 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   ListTile(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}'),
+                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}', extra: user),
                     leading: const Icon(Icons.shopping_basket_outlined),
                     title: const Text(
                       'Book Purchased',
@@ -166,7 +175,8 @@ class _AccountPageState extends State<AccountPage> {
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
                   ListTile(
-                    onTap: () {},
+                    onTap: () => GoRouter.of(context).go(
+                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.downloadsPath}', extra: user),
                     leading: const Icon(Icons.download_outlined),
                     title: const Text(
                       'My Downloads',
@@ -175,19 +185,23 @@ class _AccountPageState extends State<AccountPage> {
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
-                  ListTile(
-                    onTap: () {
-                      GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}');
-                    },
-                    leading: const Icon(Icons.admin_panel_settings_outlined),
-                    title: const Text(
-                      'Admin',
-                      style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
-                    ),
-                    trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-                  ),
+                  user != null && user.role == 'Admin'
+                      ? ListTile(
+                          onTap: () {
+                            GoRouter.of(context).go(
+                                '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}');
+                          },
+                          leading:
+                              const Icon(Icons.admin_panel_settings_outlined),
+                          title: const Text(
+                            'Admin',
+                            style: TextStyle(
+                                fontSize: 13, fontWeight: FontWeight.w700),
+                          ),
+                          trailing:
+                              const Icon(Icons.keyboard_arrow_right_outlined),
+                        )
+                      : SizedBox.shrink(),
                 ],
               ),
             ),
@@ -369,7 +383,8 @@ Future<void> showLogoutDialog(BuildContext context) {
       ),
       actions: [
         TextButton(
-          onPressed: () async {
+          onPressed: () {
+            Provider.of<UsersAuthProvider>(context, listen: false).signout();
             Navigator.of(context).pop();
             GoRouter.of(context).go(LivingSeedAppRouter.loginPath);
             showMessage('Logged Out!', context);

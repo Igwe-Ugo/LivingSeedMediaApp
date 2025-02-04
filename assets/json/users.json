@@ -20,7 +20,9 @@
             {
                 "bookTitle":"Raising Agents of Transformation",
                 "coverImage":"assets/images/agents_of_transformation.png",
-                "bookAuthor":"Gbile Akanni"
+                "bookAuthor":"Gbile Akanni",
+                "readBookPath": "assets/pdfs/Bunyan_Grace_Abounding.pdf",
+                "date": 2013
             }
         ],
         "downloads":[
@@ -28,7 +30,10 @@
                 "title": "Two Levels of encountering the Word",
                 "mediaImage": "assets/images/audioImage.png",
                 "mediaUrl":"assets/audios/Two Levels Of Encoutering The Word.mp3",
-                "speaker":"Gbile Akanni"
+                "speaker":"Gbile Akanni",
+                "size": "78 MB",
+                "date":"23-Mar-2024",
+                "time":"02:32 AM"
             }
         ]
     },
@@ -53,7 +58,9 @@
             {
                 "bookTitle":"The Dignity of Manhood",
                 "coverImage":"assets/images/dignity_of_manhood.png",
-                "bookAuthor":"Gbile Akanni"
+                "bookAuthor":"Gbile Akanni",
+                "readBookPath": "assets/pdfs/Bunyan_Grace_Abounding.pdf",
+                "date": 2007
             }
         ],
         "downloads":[
@@ -61,7 +68,10 @@
                 "title": "Engaging your youthful years for kingdom exploits",
                 "mediaImage": "assets/images/audioImage.png",
                 "mediaUrl":"assets/audios/Engaging-Your-Youthful-Years-For-Kingdom-Exploits.mp3",
-                "speaker":"Gbile Akanni"
+                "speaker":"Gbile Akanni",
+                "size": "100 MB",
+                "date":"12-Dec-2023",
+                "time":"05:15 PM"
             }
         ]
     }

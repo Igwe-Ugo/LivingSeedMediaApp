@@ -12,22 +12,14 @@ class UsersAuthProvider extends ChangeNotifier {
 
   Future<void> initializeUsers() async {
     String jsonString = await rootBundle.loadString('assets/json/users.json');
-    debugPrint("Raw JSON Data: $jsonString");
-
     _users = Users.fromJsonList(jsonString);
-
-    debugPrint("Users loaded: ${_users.length}");
-    debugPrint(
-        "First user: ${_users.isNotEmpty ? _users.first.emailAddress : 'No users found'}");
     notifyListeners();
   }
 
-  Future<bool> signIn(String email, String password) async {
+  Future<Users?> signIn(String email, String password) async {
     if (_users.isEmpty) {
       await initializeUsers(); // Ensure users are loaded before checking
     }
-
-    debugPrint("Loaded users: ${_users.map((u) => u.emailAddress).toList()}");
 
     Users? user = _users.firstWhereOrNull(
       (u) => u.emailAddress == email && u.password == password,
@@ -36,10 +28,10 @@ class UsersAuthProvider extends ChangeNotifier {
     if (user != null) {
       _currentUser = user;
       notifyListeners();
-      return true;
+      return _currentUser;
     } else {
       debugPrint("Error: Invalid credentials for $email");
-      return false;
+      return null;
     }
   }
 
@@ -55,11 +47,14 @@ class UsersAuthProvider extends ChangeNotifier {
 
   void addToCart(PurchasedBooksItems bookPurchase) {
     if (_currentUser != null) {
-      _currentUser!.bookPurchased.addAll(_currentUser!.cart.map((cartItem) =>
+      // Will attend to this later because I am meant to pass about_book here....
+      /* _currentUser!.bookPurchased.addAll(_currentUser!.cart.map((cartItem) =>
           PurchasedBooksItems(
               bookTitle: cartItem.bookTitle,
               coverImage: cartItem.coverImage,
-              bookAuthor: cartItem.bookAuthor)));
+              bookAuthor: cartItem.bookAuthor,
+              readBookPath: cartItem.
+              ))); */
       _currentUser!.cart.clear();
       notifyListeners();
     }

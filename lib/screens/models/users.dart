@@ -27,11 +27,15 @@ class PurchasedBooksItems {
   final String bookTitle;
   final String coverImage;
   final String bookAuthor;
+  final String readBookPath;
+  final int date;
 
   PurchasedBooksItems({
     required this.bookTitle,
     required this.coverImage,
     required this.bookAuthor,
+    required this.readBookPath,
+    required this.date
   });
 
   factory PurchasedBooksItems.fromJson(Map<String, dynamic> json) {
@@ -39,6 +43,8 @@ class PurchasedBooksItems {
       bookTitle: json["bookTitle"],
       bookAuthor: json["bookAuthor"],
       coverImage: json["coverImage"],
+      readBookPath: json['readBookPath'],
+      date: (json['date'] as num).toInt(),
     );
   }
 }
@@ -48,12 +54,18 @@ class MediaItems {
   final String mediaImage;
   final String mediaUrl;
   final String speaker;
+  final String size;
+  final String date;
+  final String time;
 
   MediaItems({
     required this.title,
     required this.mediaImage,
     required this.mediaUrl,
     required this.speaker,
+    required this.size,
+    required this.date,
+    required this.time,
   });
 
   factory MediaItems.fromJson(Map<String, dynamic> json) {
@@ -61,7 +73,11 @@ class MediaItems {
         title: json["title"],
         mediaImage: json["mediaImage"],
         mediaUrl: json["mediaUrl"],
-        speaker: json["speaker"]);
+        speaker: json["speaker"],
+        size: json['size'],
+        date: json['date'],
+        time: json['time'],
+      );
   }
 }
 

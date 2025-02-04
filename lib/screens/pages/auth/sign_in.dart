@@ -8,6 +8,7 @@ import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:provider/provider.dart';
 import '../../common/widget.dart';
+import '../../models/models.dart';
 
 class LivingSeedSignIn extends StatefulWidget {
   const LivingSeedSignIn({super.key});
@@ -208,14 +209,14 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           setState(() {
                             isLoading = true;
                           });
-                          bool isAuthenticated =
+                          Users? authenticatedUser =
                               await Provider.of<UsersAuthProvider>(context,
                                       listen: false)
                                   .signIn(emailController.text,
                                       passwordController.text);
-                          if (isAuthenticated) {
+                          if (authenticatedUser != null) {
                             GoRouter.of(context)
-                                .go(LivingSeedAppRouter.homePath);
+                                .go(LivingSeedAppRouter.homePath, extra: authenticatedUser);
                           } else {
                             setState(() {
                               errorMessage = 'Invalid EmailAddress or password';

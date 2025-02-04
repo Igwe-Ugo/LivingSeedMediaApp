@@ -6,10 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_route.dart';
+import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 
 class BooksPurchased extends StatefulWidget {
-  const BooksPurchased({super.key});
+  final Users user;
+  const BooksPurchased({super.key, required this.user});
 
   @override
   State<BooksPurchased> createState() => _BooksPurchasedState();
@@ -75,38 +77,32 @@ class _BooksPurchasedState extends State<BooksPurchased> {
             const SizedBox(
               height: 10,
             ),
-            ...buildBooksPurchased(context, [
-              {
-                'imagePath': 'assets/images/book_frame.png',
-                'date': '1905',
-                'title': 'Grace Abounding to the Chiefest of Sinners',
-                'author': 'John Bunyan',
-                'readBookPath': pdfAssetPath,
-              },
-            ]),
+            Column(
+              children:
+                  widget.user != null && widget.user.bookPurchased.isNotEmpty
+                      ? widget.user.bookPurchased
+                          .map((item) => book(context,
+                              imagePath: item.coverImage,
+                              date: item.date,
+                              title: item.bookTitle,
+                              readBookPath: item.readBookPath,
+                              author: item.bookAuthor))
+                          .toList()
+                      : [
+                          Center(
+                            child: Text('No Book has been purchased by you!'),
+                          )
+                        ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  List<Widget> buildBooksPurchased(
-      BuildContext context, List<Map<String, String>> booksPurchased) {
-    return booksPurchased
-        .map((bookPurchased) => book(
-              context,
-              imagePath: bookPurchased['imagePath']!,
-              date: bookPurchased['date']!,
-              title: bookPurchased['title']!,
-              readBookPath: bookPurchased['readBookPath']!,
-              author: bookPurchased['author']!,
-            ))
-        .toList();
-  }
-
   Widget book(BuildContext context,
       {required String imagePath,
-      required String date,
+      required int date,
       required String title,
       required String readBookPath,
       required String author}) {
@@ -116,10 +112,9 @@ class _BooksPurchasedState extends State<BooksPurchased> {
           onTap: () {
             if (pdfAssetPath != null) {
               GoRouter.of(context).go(
-                  '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}/${LivingSeedAppRouter.readBookPath}',
-                  extra: {
-                    'readBookPath': readBookPath,
-                  });
+                '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}/${LivingSeedAppRouter.readBookPath}',
+                extra: readBookPath,
+              );
             }
           },
           child: Container(
@@ -169,7 +164,7 @@ class _BooksPurchasedState extends State<BooksPurchased> {
                           height: 8,
                         ),
                         Text(
-                          date,
+                          date.toString(),
                           style: const TextStyle(
                               fontWeight: FontWeight.w300, fontSize: 12.0),
                         ),

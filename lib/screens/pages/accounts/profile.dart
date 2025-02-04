@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-
+import 'package:provider/provider.dart';
 import '../../common/widget.dart';
+import '../../models/models.dart';
+import '../services/services.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -14,6 +16,8 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
+    Users? user = Provider.of<UsersAuthProvider>(context).userData;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
@@ -52,7 +56,7 @@ class _ProfileState extends State<Profile> {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      child: Image.asset('assets/images/profile.png'),
+                      child: Image.asset(user!.userImage),
                     ),
                     const SizedBox(
                       height: 20,
@@ -79,7 +83,7 @@ class _ProfileState extends State<Profile> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              const ListTile(
+              ListTile(
                 title: Text(
                   'Name',
                   style: TextStyle(
@@ -87,7 +91,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 subtitle: Text(
-                  'Elijah Nwamadi',
+                  user.fullname,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
@@ -118,7 +122,7 @@ class _ProfileState extends State<Profile> {
                 ),
                 trailing: Icon(Iconsax.copy),
               ),
-              const ListTile(
+              ListTile(
                 title: Text(
                   'E-mail',
                   style: TextStyle(
@@ -126,14 +130,14 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 subtitle: Text(
-                  'elijahnwamadi1@gmail.com',
+                  user.emailAddress,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 trailing: Icon(Iconsax.arrow_right_34),
               ),
-              const ListTile(
+              ListTile(
                 title: Text(
                   'Gender',
                   style: TextStyle(
@@ -141,13 +145,13 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 subtitle: Text(
-                  'Male',
+                  user.gender,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
-              const ListTile(
+              ListTile(
                 title: Text(
                   'Date of Birth',
                   style: TextStyle(
@@ -155,7 +159,7 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 subtitle: Text(
-                  '12th - June - 2001',
+                  user.dateOfBirth,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),

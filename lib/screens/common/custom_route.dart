@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livingseed_media/screens/common/custom_bottomnav.dart';
 import 'package:livingseed_media/screens/pages/accounts/accounts.dart';
+import 'package:livingseed_media/screens/pages/accounts/downloads.dart';
 import 'package:livingseed_media/screens/pages/admin/admin.dart';
 import 'package:livingseed_media/screens/pages/auth/verify_account.dart';
 import 'package:livingseed_media/screens/pages/messages/library.dart';
@@ -53,6 +54,7 @@ class LivingSeedAppRouter {
   static const String changePasswordPath = 'change_password';
   static const String notificationPath = 'notifications';
   static const String profilePath = 'profile';
+  static const String downloadsPath = 'downloads';
   static const String booksPurchasedPath = 'book_purchased';
   static const String readBookPath = 'read_book';
 
@@ -95,7 +97,14 @@ class LivingSeedAppRouter {
                 routes: <RouteBase>[
                   GoRoute(
                       path: homePath,
-                      builder: (context, state) => const HomePage(),
+                      builder: (context, state) {
+                        final user = state.extra as Users;
+                        return user != null
+                            ? HomePage(
+                                user: user,
+                              )
+                            : const LivingSeedSignUp();
+                      },
                       routes: [
                         GoRoute(
                             path: notificationPath,
@@ -217,15 +226,32 @@ class LivingSeedAppRouter {
                             builder: (context, state) => const Notifications()),
                         GoRoute(
                           path: cartPath,
-                          builder: (context, state) => const Cart(),
+                          builder: (context, state) {
+                            final user = state.extra as Users;
+                            return Cart(
+                              user: user,
+                            );
+                          },
                         ),
                         GoRoute(
                           path: editAccountPath,
                           builder: (context, state) => const Profile(),
                         ),
                         GoRoute(
+                          path: downloadsPath,
+                          builder: (context, state) {
+                            final user = state.extra as Users;
+                            return Downloads(user: user,);
+                          },
+                        ),
+                        GoRoute(
                             path: booksPurchasedPath,
-                            builder: (context, state) => const BooksPurchased(),
+                            builder: (context, state) {
+                              final user = state.extra as Users;
+                              return BooksPurchased(
+                                user: user,
+                              );
+                            },
                             routes: [
                               GoRoute(
                                 path: readBookPath,
