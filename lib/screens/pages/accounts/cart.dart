@@ -179,6 +179,24 @@ class _CartState extends State<Cart> {
                           )
                         ],
                 ),
+                const SizedBox(
+                  height: 30,
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ListTile(
+                    onTap: () => showClearItemDialog(context),
+                    leading: const Icon(
+                      Iconsax.trash,
+                      color: Colors.red,
+                    ),
+                    title: const Text('Clear all items in cart',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.red)),
+                  ),
+                ),
               ],
             ),
           ),
@@ -186,7 +204,7 @@ class _CartState extends State<Cart> {
   }
 
   SizedBox _cartItems(BuildContext context, String coverImage, String bookName,
-      String bookAuthor, int amount) {
+      String bookAuthor, double amount) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -304,6 +322,52 @@ Future<void> showRemoveItemDialog(BuildContext context) {
             'Remove'.toUpperCase(),
             style:
                 TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            'cancel'.toUpperCase(),
+            style:
+                TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Future<void> showClearItemDialog(BuildContext context) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text(
+        'Clearing items?',
+        style: TextStyle(
+          fontSize: 19,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: const SizedBox(
+        height: 40,
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Are you sure you want to clear all items from cart?',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            Navigator.of(context).pop();
+          },
+          child: Text(
+            'clear'.toUpperCase(),
+            style: TextStyle(fontSize: 13, color: Colors.red),
           ),
         ),
         TextButton(

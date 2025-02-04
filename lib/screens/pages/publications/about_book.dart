@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/common/custom_route.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
+import 'package:provider/provider.dart';
+import '../services/services.dart';
 import 'publications.dart';
 
 class AboutBook extends StatefulWidget {
@@ -104,7 +106,11 @@ class _AboutBookState extends State<AboutBook> {
               ),
               const SizedBox(height: 15),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Provider.of<UsersAuthProvider>(context, listen: false)
+                      .addToCart(widget.about_books);
+                  showMessage('Book has been added to Cart', context);
+                },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,
                   backgroundColor: Theme.of(context).primaryColor,

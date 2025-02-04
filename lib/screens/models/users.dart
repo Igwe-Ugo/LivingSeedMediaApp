@@ -4,7 +4,7 @@ class CartItems {
   final String bookTitle;
   final String coverImage;
   final String bookAuthor;
-  final int amount;
+  final double amount;
 
   CartItems({
     required this.bookTitle,
@@ -18,8 +18,17 @@ class CartItems {
       bookTitle: json['bookTitle'],
       coverImage: json['coverImage'],
       bookAuthor: json['bookAuthor'],
-      amount: (json['amount']),
+      amount: (json['amount'] as num).toDouble(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'bookTitle': bookTitle,
+      'coverImage': coverImage,
+      'bookAuthor': bookAuthor,
+      'amount': amount,
+    };
   }
 }
 
@@ -30,13 +39,12 @@ class PurchasedBooksItems {
   final String readBookPath;
   final int date;
 
-  PurchasedBooksItems({
-    required this.bookTitle,
-    required this.coverImage,
-    required this.bookAuthor,
-    required this.readBookPath,
-    required this.date
-  });
+  PurchasedBooksItems(
+      {required this.bookTitle,
+      required this.coverImage,
+      required this.bookAuthor,
+      required this.readBookPath,
+      required this.date});
 
   factory PurchasedBooksItems.fromJson(Map<String, dynamic> json) {
     return PurchasedBooksItems(
@@ -46,6 +54,16 @@ class PurchasedBooksItems {
       readBookPath: json['readBookPath'],
       date: (json['date'] as num).toInt(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'bookTitle': bookTitle,
+      'coverImage': coverImage,
+      'bookAuthor': bookAuthor,
+      'date': date,
+      'readBookPath': readBookPath
+    };
   }
 }
 
@@ -70,14 +88,26 @@ class MediaItems {
 
   factory MediaItems.fromJson(Map<String, dynamic> json) {
     return MediaItems(
-        title: json["title"],
-        mediaImage: json["mediaImage"],
-        mediaUrl: json["mediaUrl"],
-        speaker: json["speaker"],
-        size: json['size'],
-        date: json['date'],
-        time: json['time'],
-      );
+      title: json["title"],
+      mediaImage: json["mediaImage"],
+      mediaUrl: json["mediaUrl"],
+      speaker: json["speaker"],
+      size: json['size'],
+      date: json['date'],
+      time: json['time'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'title': title,
+      'mediaImage': mediaImage,
+      'mediaUrl': mediaUrl,
+      'speaker': speaker,
+      'size': size,
+      'time': time,
+      'date': date,
+    };
   }
 }
 
@@ -141,6 +171,22 @@ class Users {
         cart: extractedCart,
         downloads: extractedDownloads,
         bookPurchased: extractedBookPurchased);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fullname': fullname,
+      'emailAddress': emailAddress,
+      'userImage': userImage,
+      'telephone': telephone,
+      'password': password,
+      'gender': gender,
+      'dateOfBirth': dateOfBirth,
+      'role': role,
+      'cart': cart.map((e) => e.toJson()).toList(),
+      'downloads': downloads.map((e) => e.toJson()).toList(),
+      'bookPurchased': bookPurchased.map((e) => e.toJson()).toList(),
+    };
   }
 
   // Convert a JSON string (list) to a list of Users
