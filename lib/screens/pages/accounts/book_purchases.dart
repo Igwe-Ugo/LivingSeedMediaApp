@@ -1,14 +1,11 @@
 // ignore_for_file: sized_box_for_whitespace
 
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/users_services.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class BooksPurchased extends StatefulWidget {
@@ -20,32 +17,6 @@ class BooksPurchased extends StatefulWidget {
 }
 
 class _BooksPurchasedState extends State<BooksPurchased> {
-  String pdfAssetPath = '';
-
-  @override
-  void initState() {
-    super.initState();
-    getFileFromAsset('assets/pdfs/Bunyan_Grace_Abounding.pdf').then((f) {
-      setState(() {
-        pdfAssetPath = f.path;
-        debugPrint(pdfAssetPath);
-      });
-    });
-  }
-
-  Future<File> getFileFromAsset(String asset) async {
-    try {
-      var data = await rootBundle.load(asset);
-      var bytes = data.buffer.asUint8List();
-      var dir = await getApplicationDocumentsDirectory();
-      File file = File('${dir.path}/Bunyan_Grace_Abounding.pdf');
-      File assetFile = await file.writeAsBytes(bytes);
-      return assetFile;
-    } catch (e) {
-      throw Exception('Error opening Asset file');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -130,12 +101,10 @@ class _BooksPurchasedState extends State<BooksPurchased> {
       children: [
         InkWell(
           onTap: () {
-            if (pdfAssetPath != null) {
-              GoRouter.of(context).go(
+            GoRouter.of(context).go(
                 '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}/${LivingSeedAppRouter.readBookPath}',
                 extra: readBookPath,
               );
-            }
           },
           child: Container(
             width: MediaQuery.of(context).size.width,

@@ -225,6 +225,7 @@ class HorizontalList extends StatelessWidget {
         itemCount: about_books.length,
         separatorBuilder: (context, index) => const SizedBox(width: 10),
         itemBuilder: (context, index) {
+          var aboutBooksInstance = about_books[index];
           return Container(
             width: 120,
             decoration: BoxDecoration(
@@ -234,7 +235,7 @@ class HorizontalList extends StatelessWidget {
             child: InkWell(
               onTap: () => GoRouter.of(context).go(
                   '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}',
-                  extra: about_books[index]),
+                  extra: aboutBooksInstance),
               child: Container(
                 height: 170,
                 decoration: BoxDecoration(
@@ -242,7 +243,7 @@ class HorizontalList extends StatelessWidget {
                     color: Theme.of(context).canvasColor,
                     image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage(about_books[index].coverImage))),
+                        image: AssetImage(aboutBooksInstance.coverImage))),
               ),
             ),
           );

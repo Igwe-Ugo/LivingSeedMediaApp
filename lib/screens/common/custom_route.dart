@@ -100,12 +100,12 @@ class LivingSeedAppRouter {
                   GoRoute(
                       path: homePath,
                       builder: (context, state) {
-                        final user = state.extra as Users;
-                        return user != null
-                            ? HomePage(
-                                user: user,
-                              )
-                            : const LivingSeedSignUp();
+                        final extra = state.extra;
+                        if (extra is Users) {
+                          return HomePage(user: extra);
+                        } else {
+                          return const LivingSeedSignUp();
+                        }
                       },
                       routes: [
                         GoRoute(
@@ -114,10 +114,16 @@ class LivingSeedAppRouter {
                         GoRoute(
                           path: aboutBookPath,
                           builder: (context, state) {
-                            final about_books = state.extra as AboutBooks;
-                            return AboutBook(
-                              about_books: about_books,
-                            );
+                            final about_books = state.extra;
+                            if (about_books is AboutBooks) {
+                              return AboutBook(
+                                about_books: about_books,
+                              );
+                            } else {
+                              return Center(
+                                child: Text('Error Page'),
+                              );
+                            }
                           },
                         )
                       ]),
@@ -229,12 +235,10 @@ class LivingSeedAppRouter {
                         GoRoute(
                             path: cartPath,
                             builder: (context, state) {
-                              final user = state.extra as Users?;
-                              final book = state.extra as AboutBooks?;
-                              if (user != null && book != null) {
+                              final user = state.extra;
+                              if (user is Users) {
                                 return Cart(
                                   user: user,
-                                  about_books: book,
                                 );
                               } else {
                                 return Padding(
@@ -298,8 +302,8 @@ class LivingSeedAppRouter {
                               GoRoute(
                                   path: makePaymentPath,
                                   builder: (context, state) {
-                                    final book = state.extra as AboutBooks?;
-                                    if (book != null) {
+                                    final book = state.extra;
+                                    if (book is List<AboutBooks>) {
                                       return MakePayment(
                                         book: book,
                                       );
@@ -327,16 +331,31 @@ class LivingSeedAppRouter {
                         GoRoute(
                             path: booksPurchasedPath,
                             builder: (context, state) {
-                              final user = state.extra as Users;
-                              return BooksPurchased(
-                                user: user,
-                              );
+                              final user = state.extra;
+                              if (user is Users) {
+                                return BooksPurchased(
+                                  user: user,
+                                );
+                              } else {
+                                return Center(
+                                  child: Text('No book purchased'),
+                                );
+                              }
                             },
                             routes: [
                               GoRoute(
                                 path: readBookPath,
                                 builder: (context, state) {
-                                  return const ReadBookPage();
+                                  final readBook = state.extra;
+                                  if (readBook is String) {
+                                    return const ReadBookPage(
+                                      readBookPath: readBookPath,
+                                    );
+                                  } else {
+                                    return Center(
+                                      child: Text('Book not found'),
+                                    );
+                                  }
                                 },
                               ),
                             ]),

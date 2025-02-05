@@ -4,7 +4,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class ReadBookPage extends StatelessWidget {
-  const ReadBookPage({super.key});
+  final String readBookPath;
+  const ReadBookPage({super.key, required this.readBookPath});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,7 @@ class ReadBookPage extends StatelessWidget {
               ],
             ),
           ),
-          SfPdfViewer.asset('assets/pdfs/Bunyan_Grace_Abounding.pdf')
+          SfPdfViewer.asset(readBookPath)
         ],
       ),
     );

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/users_services.dart';
 import 'package:provider/provider.dart';
 
 class MakePayment extends StatefulWidget {
-  final AboutBooks book;
+  final List<AboutBooks> book;
   const MakePayment({super.key, required this.book});
 
   @override
@@ -43,9 +44,11 @@ class _MakePaymentState extends State<MakePayment> {
             ),
             ElevatedButton(
               onPressed: () {
-                Provider.of<UsersAuthProvider>(context, listen: false)
-                    .addToBookPurchase(widget.book);
-                GoRouter.of(context).pop();
+                for (var item in widget.book) {
+                  Provider.of<UsersAuthProvider>(context, listen: false)
+                      .addToBookPurchase(item);
+                }
+                GoRouter.of(context).go(LivingSeedAppRouter.accountPath);
               },
               style: ElevatedButton.styleFrom(
                 elevation: 0,

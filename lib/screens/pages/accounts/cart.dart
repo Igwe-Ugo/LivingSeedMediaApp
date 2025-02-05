@@ -9,8 +9,7 @@ import '../../models/models.dart';
 
 class Cart extends StatefulWidget {
   final Users user;
-  final AboutBooks about_books;
-  const Cart({super.key, required this.user, required this.about_books});
+  const Cart({super.key, required this.user});
 
   @override
   State<Cart> createState() => _CartState();
@@ -18,10 +17,12 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   late int totalCost;
+  late Future<List<AboutBooks>> aboutBooksFuture;
 
   @override
   void initState() {
     super.initState();
+    aboutBooksFuture = loadAboutBook();
     if (widget.user.cart.isNotEmpty) {
       totalCost = widget.user.cart
           .map((item) => item.amount.toInt())
@@ -34,201 +35,233 @@ class _CartState extends State<Cart> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        persistentFooterButtons: [
-          Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
-            child: Column(
-              children: [
-                const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Cart Summary',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      )),
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Total order cost:',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        )),
-                    Text('# $totalCost',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        )),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          GoRouter.of(context).go(
-                              '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}/${LivingSeedAppRouter.makePaymentPath}',
-                              extra: widget.about_books);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          elevation: 0,
-                          backgroundColor: Theme.of(context).primaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
+        body: FutureBuilder(
+            future: aboutBooksFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text("Error loading books"));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text("No books found"));
+              }
+
+              return SingleChildScrollView(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                GoRouter.of(context).pop();
+                              },
+                              icon: const Icon(
+                                Iconsax.arrow_left_2,
+                                size: 17,
+                              )),
+                          const SizedBox(
+                            width: 15,
                           ),
-                          minimumSize: const Size(10, 50),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            'Make Payment (# $totalCost)',
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20.0,
-                                color: Colors.white),
+                          const Text(
+                            'My Cart',
+                            style: TextStyle(
+                              fontFamily: 'Playfair',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Payment secured by',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.w500,
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SvgPicture.asset('assets/icons/paystack.svg',
-                            width: 10, height: 10),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        Text(
-                          'PayStack',
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold,
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          GoRouter.of(context).pop();
-                        },
-                        icon: const Icon(
-                          Iconsax.arrow_left_2,
-                          size: 17,
-                        )),
-                    const SizedBox(
-                      width: 15,
-                    ),
-                    const Text(
-                      'My Cart',
-                      style: TextStyle(
-                        fontFamily: 'Playfair',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Column(
-                  children: widget.user != null && widget.user.cart.isNotEmpty
-                      ? widget.user.cart
-                          .map((item) => _cartItems(context, item.coverImage,
-                              item.bookTitle, item.bookAuthor, item.amount))
-                          .toList()
-                      : [
-                          Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: const [
-                                SizedBox(
-                                  height: 30,
-                                ),
-                                Icon(
-                                  Icons.shopify_sharp,
-                                  size: 100,
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                  'Nothing in Cart Session yet, please add book to cart',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ])
                         ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Column(
+                        children: widget.user != null &&
+                                widget.user.cart.isNotEmpty
+                            ? widget.user.cart
+                                .map((item) => _cartItems(
+                                    context,
+                                    item.coverImage,
+                                    item.bookTitle,
+                                    item.bookAuthor,
+                                    item.amount))
+                                .toList()
+                            : [
+                                Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: const [
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      Icon(
+                                        Icons.shopify_sharp,
+                                        size: 100,
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text(
+                                        'Nothing in Cart Session yet, please add book to cart',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ])
+                              ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      widget.user != null && widget.user.cart.isNotEmpty
+                          ? Align(
+                              alignment: Alignment.bottomCenter,
+                              child: ListTile(
+                                onTap: () => showClearItemDialog(context),
+                                leading: const Icon(
+                                  Iconsax.trash,
+                                  color: Colors.red,
+                                ),
+                                title: const Text('Clear all items in cart',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.red)),
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      SizedBox(
+                        height: 100,
+                      ),
+                      widget.user.cart.isNotEmpty && widget.user.cart != null
+                          ? Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 7),
+                              child: Column(
+                                children: [
+                                  const Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text('Cart Summary',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18,
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    height: 15,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text('Total order cost:',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          )),
+                                      Text('# $totalCost',
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 16,
+                                          )),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            GoRouter.of(context).go(
+                                                '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}/${LivingSeedAppRouter.makePaymentPath}',
+                                                extra: snapshot.data!);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            minimumSize: const Size(10, 50),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              'Make Payment (# $totalCost)',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: 20.0,
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Payment secured by',
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          SvgPicture.asset(
+                                              'assets/icons/paystack.svg',
+                                              width: 10,
+                                              height: 10),
+                                          const SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            'PayStack',
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context)
+                                                          .brightness ==
+                                                      Brightness.dark
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                    ],
+                  ),
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
-                widget.user != null && widget.user.cart.isNotEmpty
-                    ? Align(
-                        alignment: Alignment.bottomCenter,
-                        child: ListTile(
-                          onTap: () => showClearItemDialog(context),
-                          leading: const Icon(
-                            Iconsax.trash,
-                            color: Colors.red,
-                          ),
-                          title: const Text('Clear all items in cart',
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.red)),
-                        ),
-                      )
-                    : SizedBox.shrink(),
-              ],
-            ),
-          ),
-        ));
+              );
+            }));
   }
 
   SizedBox _cartItems(BuildContext context, String coverImage, String bookName,

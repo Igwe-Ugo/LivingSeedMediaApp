@@ -113,6 +113,7 @@ class UsersAuthProvider extends ChangeNotifier {
           readBookPath: book.pdfLink,
           date: book.productionDate));
       notifyListeners();
+      clearCart();
       _saveUserToLocal();
     }
   }

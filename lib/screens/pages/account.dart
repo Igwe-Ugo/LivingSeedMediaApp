@@ -154,7 +154,8 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   ListTile(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}', extra: user),
+                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}',
+                        extra: user),
                     leading: const Icon(Iconsax.shopping_cart),
                     title: const Text(
                       'My Cart',
@@ -165,10 +166,11 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   ListTile(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}', extra: user),
-                    leading: const Icon(Icons.shopping_basket_outlined),
+                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}',
+                        extra: user),
+                    leading: const Icon(Icons.collections_bookmark_outlined),
                     title: const Text(
-                      'Book Purchased',
+                      'Books Purchased',
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
                     ),
@@ -176,7 +178,8 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   ListTile(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.downloadsPath}', extra: user),
+                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.downloadsPath}',
+                        extra: user),
                     leading: const Icon(Icons.download_outlined),
                     title: const Text(
                       'My Downloads',
