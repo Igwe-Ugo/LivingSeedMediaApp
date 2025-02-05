@@ -9,14 +9,14 @@ import '../../models/models.dart';
 
 class Cart extends StatefulWidget {
   final Users user;
-  const Cart({super.key, required this.user});
+  final AboutBooks about_books;
+  const Cart({super.key, required this.user, required this.about_books});
 
   @override
   State<Cart> createState() => _CartState();
 }
 
 class _CartState extends State<Cart> {
-  int numberOfItems = 3;
   late int totalCost;
 
   @override
@@ -74,7 +74,11 @@ class _CartState extends State<Cart> {
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          GoRouter.of(context).go(
+                              '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}/${LivingSeedAppRouter.makePaymentPath}',
+                              extra: widget.about_books);
+                        },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
                           backgroundColor: Theme.of(context).primaryColor,
@@ -193,6 +197,7 @@ class _CartState extends State<Cart> {
                                 ),
                                 Text(
                                   'Nothing in Cart Session yet, please add book to cart',
+                                  textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),

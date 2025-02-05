@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_bottomnav.dart';
 import 'package:livingseed_media/screens/pages/accounts/accounts.dart';
 import 'package:livingseed_media/screens/pages/accounts/downloads.dart';
@@ -57,6 +58,7 @@ class LivingSeedAppRouter {
   static const String downloadsPath = 'downloads';
   static const String booksPurchasedPath = 'book_purchased';
   static const String readBookPath = 'read_book';
+  static const String makePaymentPath = 'make_payment';
 
   //admin pages
   static const String uploadBookPath = 'upload_book_path';
@@ -225,14 +227,90 @@ class LivingSeedAppRouter {
                             path: notificationPath,
                             builder: (context, state) => const Notifications()),
                         GoRoute(
-                          path: cartPath,
-                          builder: (context, state) {
-                            final user = state.extra as Users;
-                            return Cart(
-                              user: user,
-                            );
-                          },
-                        ),
+                            path: cartPath,
+                            builder: (context, state) {
+                              final user = state.extra as Users?;
+                              final book = state.extra as AboutBooks?;
+                              if (user != null && book != null) {
+                                return Cart(
+                                  user: user,
+                                  about_books: book,
+                                );
+                              } else {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 25, horizontal: 10),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {
+                                                GoRouter.of(context).pop();
+                                              },
+                                              icon: const Icon(
+                                                Iconsax.arrow_left_2,
+                                                size: 17,
+                                              )),
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
+                                          const Text(
+                                            'My Cart',
+                                            style: TextStyle(
+                                              fontFamily: 'Playfair',
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: const [
+                                            SizedBox(
+                                              height: 30,
+                                            ),
+                                            Icon(
+                                              Icons.shopify_sharp,
+                                              size: 100,
+                                            ),
+                                            SizedBox(
+                                              height: 20,
+                                            ),
+                                            Text(
+                                              'Nothing in Cart Session yet, please add book to cart',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ]),
+                                    ],
+                                  ),
+                                );
+                              }
+                            },
+                            routes: [
+                              GoRoute(
+                                  path: makePaymentPath,
+                                  builder: (context, state) {
+                                    final book = state.extra as AboutBooks?;
+                                    if (book != null) {
+                                      return MakePayment(
+                                        book: book,
+                                      );
+                                    } else {
+                                      return Center(
+                                        child: Text(
+                                            'No book has been purchased yet'),
+                                      );
+                                    }
+                                  }),
+                            ]),
                         GoRoute(
                           path: editAccountPath,
                           builder: (context, state) => const Profile(),
@@ -241,7 +319,9 @@ class LivingSeedAppRouter {
                           path: downloadsPath,
                           builder: (context, state) {
                             final user = state.extra as Users;
-                            return Downloads(user: user,);
+                            return Downloads(
+                              user: user,
+                            );
                           },
                         ),
                         GoRoute(
@@ -256,8 +336,6 @@ class LivingSeedAppRouter {
                               GoRoute(
                                 path: readBookPath,
                                 builder: (context, state) {
-                                  /* final data = state.extra as Map<String, dynamic>;
-                                  final String readBookPath = data['readBookPath']; */
                                   return const ReadBookPage();
                                 },
                               ),

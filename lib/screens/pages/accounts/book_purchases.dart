@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/common/custom_route.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
+import 'package:livingseed_media/screens/pages/services/users_services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class BooksPurchased extends StatefulWidget {
   final Users user;
@@ -90,14 +92,26 @@ class _BooksPurchasedState extends State<BooksPurchased> {
                           .toList()
                       : [
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              SizedBox(height: 40,),
-                              Icon(Iconsax.book_saved, size: 100,),
-                              SizedBox(height: 20,),
-                              Text('No Book has been purchased by you!', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
-                            ]
-                          )
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                                SizedBox(
+                                  height: 40,
+                                ),
+                                Icon(
+                                  Iconsax.book_saved,
+                                  size: 100,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  'No Book has been purchased by you!',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15),
+                                ),
+                              ])
                         ],
             ),
           ],
@@ -177,6 +191,17 @@ class _BooksPurchasedState extends State<BooksPurchased> {
                       ],
                     ),
                   ),
+                  SizedBox(
+                    width: 7,
+                  ),
+                  IconButton(
+                    onPressed: () => deletePurchasedBook(context, title),
+                    icon: Icon(
+                      Iconsax.trash,
+                      color: Colors.red,
+                      semanticLabel: 'delete bookPurchased',
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -188,4 +213,53 @@ class _BooksPurchasedState extends State<BooksPurchased> {
       ],
     );
   }
+}
+
+Future<void> deletePurchasedBook(BuildContext context, String bookTitle) {
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) => AlertDialog(
+      title: const Text(
+        'Delete Purchased Book?',
+        style: TextStyle(
+          fontSize: 19,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      content: const SizedBox(
+        height: 70,
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            'Are you sure you want to delete this book your purchased? Be advised that this is not a good measure!',
+            style: TextStyle(
+              fontSize: 15,
+            ),
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Provider.of<UsersAuthProvider>(context, listen: false)
+                .deletePurchasedBook(bookTitle);
+            Navigator.of(context).pop();
+            showMessage('Book deleted!', context);
+          },
+          child: Text(
+            'delete book'.toUpperCase(),
+            style: TextStyle(fontSize: 13, color: Colors.red),
+          ),
+        ),
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            'cancel'.toUpperCase(),
+            style:
+                TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
+          ),
+        ),
+      ],
+    ),
+  );
 }

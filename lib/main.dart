@@ -24,8 +24,9 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
     getCurrentAppTheme();
   }
 
-  void getCurrentAppTheme() async{
-    themeChangeProvider.darkTheme = await themeChangeProvider.bigShelfPreference.getTheme();
+  void getCurrentAppTheme() async {
+    themeChangeProvider.darkTheme =
+        await themeChangeProvider.livingSeedPreference.getTheme();
   }
 
   @override
@@ -35,16 +36,14 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
         ChangeNotifierProvider(create: (_) => themeChangeProvider),
         ChangeNotifierProvider(create: (_) => UsersAuthProvider())
       ],
-      child: Consumer<DarkThemeProvider>(
-        builder: (context, themeData, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Living Seed Media',
-            theme: Styles.themeData(themeChangeProvider.darkTheme, context),
-            routerConfig: LivingSeedAppRouter.router,
-          );
-        }
-      ),
+      child: Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
+        return MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'Living Seed Media',
+          theme: Styles.themeData(themeChangeProvider.darkTheme, context),
+          routerConfig: LivingSeedAppRouter.router,
+        );
+      }),
     );
   }
 }

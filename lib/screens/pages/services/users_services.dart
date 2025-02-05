@@ -104,6 +104,28 @@ class UsersAuthProvider extends ChangeNotifier {
     }
   }
 
+  void addToBookPurchase(AboutBooks book) {
+    if (_currentUser != null) {
+      _currentUser!.bookPurchased.add(PurchasedBooksItems(
+          bookTitle: book.bookTitle,
+          coverImage: book.coverImage,
+          bookAuthor: book.author,
+          readBookPath: book.pdfLink,
+          date: book.productionDate));
+      notifyListeners();
+      _saveUserToLocal();
+    }
+  }
+
+  void deletePurchasedBook(String bookTitle) {
+    if (_currentUser != null) {
+      _currentUser!.bookPurchased
+          .removeWhere((item) => item.bookTitle == bookTitle);
+      notifyListeners();
+      _saveUserToLocal();
+    }
+  }
+
   void addToDownloads(MediaItems media) {
     _currentUser?.downloads.add(media);
     notifyListeners();
