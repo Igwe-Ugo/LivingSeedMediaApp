@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
+import 'package:livingseed_media/screens/models/models.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 
 class AdminUserManagement extends StatelessWidget {
   const AdminUserManagement({super.key});
 
   @override
   Widget build(BuildContext context) {
+    List<Users>? allUsers = Provider.of<UsersAuthProvider>(context).users;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -58,20 +64,18 @@ class AdminUserManagement extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return CustomUserTile(
-                    imageUrl: 'assets/images/profile.png',
-                    name: 'Elijah Nwamadi',
-                    email: 'elijahnwamadi1@gmail.com',
-                    isAdmin: true,
-                    onOptionSelected: (p0) {},
-                  );
-                },
-              ),
-            ),
+                child: Column(
+              children: allUsers
+                  .map((users) => CustomUserTile(
+                        user: users,
+                        imageUrl: users.userImage,
+                        name: users.fullname,
+                        email: users.emailAddress,
+                        onOptionSelected: (po) {},
+                        isAdmin: users.role,
+                      ))
+                  .toList(),
+            )),
           ],
         ),
       ),
@@ -80,18 +84,20 @@ class AdminUserManagement extends StatelessWidget {
 }
 
 class CustomUserTile extends StatelessWidget {
+  final Users user;
   final String imageUrl;
   final String name;
   final String email;
-  final bool isAdmin;
+  final String isAdmin;
   final Function(String) onOptionSelected;
 
   const CustomUserTile({
     super.key,
+    required this.user,
     required this.imageUrl,
     required this.name,
     required this.email,
-    this.isAdmin = false,
+    required this.isAdmin,
     required this.onOptionSelected,
   });
 
@@ -106,15 +112,11 @@ class CustomUserTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Leading: User Image
           CircleAvatar(
-            radius: 25,
+            radius: 20,
             backgroundImage: AssetImage(imageUrl),
           ),
-
           const SizedBox(width: 10),
-
-          // Title and Subtitle
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,7 +131,7 @@ class CustomUserTile extends StatelessWidget {
                 Text(
                   email,
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 13,
                     color: Colors.grey[700],
                   ),
                 ),
@@ -137,7 +139,7 @@ class CustomUserTile extends StatelessWidget {
                   height: 10,
                 ),
                 // Badge for Admins
-                if (isAdmin)
+                if (isAdmin == 'Admin')
                   Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -157,7 +159,6 @@ class CustomUserTile extends StatelessWidget {
               ],
             ),
           ),
-          // Dropdown Menu
           DropdownButton<String>(
             elevation: 5,
             onChanged: (value) {
@@ -167,12 +168,32 @@ class CustomUserTile extends StatelessWidget {
             },
             icon: const Icon(Icons.more_vert),
             underline: const SizedBox(),
-            items: const [
+            items: [
               DropdownMenuItem(
                 value: 'view',
                 child: Text('View Details'),
+                onTap: () {
+                  GoRouter.of(context).go(
+                      '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageUsersPath}/${LivingSeedAppRouter.userProfilePath}',
+                      extra: user);
+                },
               ),
+              if (isAdmin != 'Admin')
+                DropdownMenuItem(
+                  value: 'admin',
+                  child: Text('Make Admin'),
+                ),
+              if (isAdmin == 'Admin')
+                DropdownMenuItem(
+                  value: 'remove_admin',
+                  child: Text('Remove Admin'),
+                ),
               DropdownMenuItem(
+                onTap: () {
+                  Provider.of<UsersAuthProvider>(context).deleteUser(name);
+                  GoRouter.of(context).pop();
+                  showMessage('User has been deleted!', context);
+                },
                 value: 'delete',
                 child: Text('Delete User'),
               ),

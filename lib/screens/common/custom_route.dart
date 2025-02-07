@@ -65,6 +65,8 @@ class LivingSeedAppRouter {
   static const String dashboardPath = 'dashboard';
   static const String manageNotificationsPath = 'manage_notifications';
   static const String manageUsersPath = 'manage_users';
+  static const String userProfilePath = 'user_profile';
+  static const String noticePath = 'notice';
 
   LivingSeedAppRouter._internal() {
     final routes = <RouteBase>[
@@ -219,15 +221,45 @@ class LivingSeedAppRouter {
                                     const UploadBookScreen(),
                               ),
                               GoRoute(
-                                path: manageNotificationsPath,
-                                builder: (context, state) =>
-                                    const AdminNotifications(),
-                              ),
+                                  path: manageNotificationsPath,
+                                  builder: (context, state) =>
+                                      const AdminNotifications(),
+                                  routes: [
+                                    GoRoute(
+                                      path: noticePath,
+                                      builder: (context, state) {
+                                        final notice = state.extra;
+                                        if (notice is NotificationItems) {
+                                          return Notices(notice: notice);
+                                        } else {
+                                          return Center(
+                                            child: Text(
+                                                'No Recent Notification to be reviewed'),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ]),
                               GoRoute(
-                                path: manageUsersPath,
-                                builder: (context, state) =>
-                                    const AdminUserManagement(),
-                              ),
+                                  path: manageUsersPath,
+                                  builder: (context, state) =>
+                                      const AdminUserManagement(),
+                                  routes: [
+                                    GoRoute(
+                                      path: userProfilePath,
+                                      builder: (context, state) {
+                                        final user = state.extra;
+                                        if (user is Users) {
+                                          return UsersProfile(user: user);
+                                        } else {
+                                          return Center(
+                                            child: Text(
+                                                'User Profile not available'),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ]),
                             ]),
                         GoRoute(
                             path: notificationPath,

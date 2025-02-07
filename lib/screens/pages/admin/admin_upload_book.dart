@@ -16,12 +16,14 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
   int numOfContents = 0;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _subtitleController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _audienceController = TextEditingController();
   final TextEditingController _aboutAuthor = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _reviewController = TextEditingController();
+  final TextEditingController _bookChapterController = TextEditingController();
 
   XFile? _coverImage;
   PlatformFile? _bookFile;
@@ -178,6 +180,31 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     ),
                   ),
                   child: TextFormField(
+                    controller: _subtitleController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: 'Write the subtitle of book (optional)...',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      fillColor:
+                          Theme.of(context).disabledColor.withOpacity(0.2),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    border: Border.all(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Theme.of(context).disabledColor.withOpacity(0.15),
+                    ),
+                  ),
+                  child: TextFormField(
                     controller: _authorController,
                     decoration: InputDecoration(
                       filled: true,
@@ -241,10 +268,11 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _reviewController,
+                    controller: _bookChapterController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       filled: true,
-                      hintText: "Say Something about the book...",
+                      hintText: 'How many chapters of book?...',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -252,11 +280,42 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                       fillColor:
                           Theme.of(context).disabledColor.withOpacity(0.2),
                     ),
-                    maxLines: 5,
-                    maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please give a lttile summary of book';
+                        return 'Please enter the number of chapters of the book';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    border: Border.all(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.white
+                          : Theme.of(context).disabledColor.withOpacity(0.15),
+                    ),
+                  ),
+                  child: TextFormField(
+                    controller: _reviewController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      hintText: "Write preface...",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide.none,
+                      ),
+                      fillColor:
+                          Theme.of(context).disabledColor.withOpacity(0.2),
+                    ),
+                    maxLines: 10,
+                    maxLength: 300,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please write about the preface of the book';
                       }
                       return null;
                     },
@@ -289,7 +348,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     maxLength: 300,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a description';
+                        return 'Please describe what the book is about!';
                       }
                       return null;
                     },

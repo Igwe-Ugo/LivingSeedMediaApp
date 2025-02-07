@@ -11,11 +11,11 @@ import '../../models/models.dart';
 class UsersAuthProvider extends ChangeNotifier {
   Users? _currentUser;
   Users? get userData => _currentUser;
-  List<Users> _users = [];
+  List<Users> users = [];
 
   Future<void> initializeUsers() async {
     String jsonString = await rootBundle.loadString('assets/json/users.json');
-    _users = Users.fromJsonList(jsonString);
+    users = Users.fromJsonList(jsonString);
     await _loadUserFromLocal();
     notifyListeners();
   }
@@ -26,7 +26,7 @@ class UsersAuthProvider extends ChangeNotifier {
       if (file.existsSync()) {
         String data = await file.readAsString();
         List<dynamic> jsonList = json.decode(data);
-        _users = jsonList.map((json) => Users.fromJson(json)).toList();
+        users = jsonList.map((json) => Users.fromJson(json)).toList();
       }
     } catch (e) {
       debugPrint('Error loading local user data: $e');
@@ -40,16 +40,16 @@ class UsersAuthProvider extends ChangeNotifier {
 
   Future<void> _saveUserToLocal() async {
     final file = await _getUserFile();
-    String jsonData = json.encode(_users.map((user) => user.toJson()).toList());
+    String jsonData = json.encode(users.map((user) => user.toJson()).toList());
     await file.writeAsString(jsonData);
   }
 
   Future<Users?> signIn(String email, String password) async {
-    if (_users.isEmpty) {
+    if (users.isEmpty) {
       await initializeUsers(); // Ensure users are loaded before checking
     }
 
-    Users? user = _users.firstWhereOrNull(
+    Users? user = users.firstWhereOrNull(
       (u) => u.emailAddress == email && u.password == password,
     );
 
@@ -66,6 +66,14 @@ class UsersAuthProvider extends ChangeNotifier {
   void signout() {
     _currentUser = null;
     notifyListeners();
+  }
+
+  void deleteUser(String fullname) {
+    if (users != null) {
+      users.removeWhere((item) => item.fullname == fullname);
+      notifyListeners();
+      _saveUserToLocal();
+    }
   }
 
   void updateUserInfo(Users updatedUser) {
@@ -112,8 +120,8 @@ class UsersAuthProvider extends ChangeNotifier {
           bookAuthor: book.author,
           readBookPath: book.pdfLink,
           date: book.productionDate));
-      notifyListeners();
       clearCart();
+      notifyListeners();
       _saveUserToLocal();
     }
   }
