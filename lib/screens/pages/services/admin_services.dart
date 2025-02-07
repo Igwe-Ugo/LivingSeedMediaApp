@@ -5,6 +5,20 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 
+// this should be here, until I find a way to load notifications dynamically.
+Future<List<NotificationItems>> loadNotificationItems() async {
+  try {
+    String jsonString =
+        await rootBundle.loadString('assets/json/notifications.json');
+
+    // decode JSON and convert to a list of book object
+    List<NotificationItems> notifications = NotificationItems.fromJsonList(jsonString);
+    return notifications;
+  } catch (e) {
+    debugPrint('Error Loading JSON: $e');
+    return [];
+  }
+}
 class AdminAuthProvider extends ChangeNotifier {
   NotificationItems? _notice;
   NotificationItems? get noticesData => _notice;

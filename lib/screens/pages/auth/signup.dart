@@ -13,6 +13,8 @@ class LivingSeedSignUp extends StatefulWidget {
 
 class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
   bool agreeToTerms = false;
+  bool male = false;
+  bool female = false;
   bool _obscureText = true;
   final loginFormField = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -291,7 +293,109 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
                         ),
                       ),
                       const SizedBox(
+                        height: 20,
+                      ),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Telephone',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
+                                    ? Colors.white
+                                    : Theme.of(context)
+                                        .disabledColor
+                                        .withOpacity(0.15),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: TextFormField(
+                          controller: passwordController,
+                          keyboardType: TextInputType.phone,
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Theme.of(context)
+                                .disabledColor
+                                .withOpacity(0.15),
+                            prefixIcon: const Icon(Icons.phone_android_outlined,
+                                size: 17),
+                            hintText: 'Telephone',
+                            border: InputBorder.none,
+                            hintStyle: TextStyle(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Theme.of(context).disabledColor,
+                              fontSize: 17,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
                         height: 15,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Select Gender: ',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                            Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: Theme.of(context).primaryColor,
+                              onChanged: (value) {
+                                setState(() {
+                                  male = value!;
+                                });
+                              },
+                              value: male,
+                            ),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            const Text(
+                              'Male',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                            ),
+                            Checkbox(
+                              checkColor: Colors.white,
+                              activeColor: Theme.of(context).primaryColor,
+                              onChanged: (value) {
+                                setState(() {
+                                  female = value!;
+                                });
+                              },
+                              value: female,
+                            ),
+                            const SizedBox(
+                              width: 7,
+                            ),
+                            const Text(
+                              'Female',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.9,

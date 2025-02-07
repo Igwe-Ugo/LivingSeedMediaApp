@@ -145,14 +145,14 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     minimumSize: const Size(10, 50),
                   ),
                   child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15.0),
+                    padding: EdgeInsets.symmetric(vertical: 10.0),
                     child: Center(
                       child: Text(
                         'Continue',
                         style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 20.0,
-                            color: Colors.black),
+                            color: Colors.white),
                       ),
                     ),
                   ),

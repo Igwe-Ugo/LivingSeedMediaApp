@@ -63,6 +63,22 @@ class UsersAuthProvider extends ChangeNotifier {
     }
   }
 
+  Future<Users?> signUp(String fullname, String email, String password,
+      String telephone, String gender) async {
+    users.add(Users(
+        fullname: fullname,
+        emailAddress: email,
+        userImage: 'assets/images/avatar.png',
+        telephone: gender,
+        password: password,
+        gender: gender,
+        dateOfBirth: '',
+        role: 'Regular',
+        cart: [],
+        bookPurchased: [],
+        downloads: []));
+  }
+
   void signout() {
     _currentUser = null;
     notifyListeners();
