@@ -119,7 +119,7 @@ class Users {
   final String password;
   final String gender;
   final String dateOfBirth;
-  final String role;
+  String role;
   final List<CartItems> cart;
   final List<PurchasedBooksItems> bookPurchased;
   final List<MediaItems> downloads;

@@ -11,7 +11,7 @@ class AdminUserManagement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Users>? allUsers = Provider.of<UsersAuthProvider>(context).users;
+    List<Users>? allUsers = Provider.of<UsersAuthProvider>(context).allUsers;
 
     return Scaffold(
       body: Padding(
@@ -180,6 +180,11 @@ class CustomUserTile extends StatelessWidget {
               ),
               if (isAdmin != 'Admin')
                 DropdownMenuItem(
+                  onTap: () {
+                    Provider.of<UsersAuthProvider>(context, listen: false)
+                        .makeAdmin(email);
+                    showMessage('User has been made an Admin', context);
+                  },
                   value: 'admin',
                   child: Text('Make Admin'),
                 ),

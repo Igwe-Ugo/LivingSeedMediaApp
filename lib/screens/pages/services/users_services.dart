@@ -11,11 +11,12 @@ import '../../models/models.dart';
 class UsersAuthProvider extends ChangeNotifier {
   Users? _currentUser;
   Users? get userData => _currentUser;
-  List<Users> users = [];
+  List<Users> _users = [];
+  List<Users> get allUsers => _users;
 
   Future<void> initializeUsers() async {
     String jsonString = await rootBundle.loadString('assets/json/users.json');
-    users = Users.fromJsonList(jsonString);
+    _users = Users.fromJsonList(jsonString);
     await _loadUserFromLocal();
     notifyListeners();
   }
@@ -26,7 +27,7 @@ class UsersAuthProvider extends ChangeNotifier {
       if (file.existsSync()) {
         String data = await file.readAsString();
         List<dynamic> jsonList = json.decode(data);
-        users = jsonList.map((json) => Users.fromJson(json)).toList();
+        _users = jsonList.map((json) => Users.fromJson(json)).toList();
       }
     } catch (e) {
       debugPrint('Error loading local user data: $e');
@@ -40,16 +41,16 @@ class UsersAuthProvider extends ChangeNotifier {
 
   Future<void> _saveUserToLocal() async {
     final file = await _getUserFile();
-    String jsonData = json.encode(users.map((user) => user.toJson()).toList());
+    String jsonData = json.encode(_users.map((user) => user.toJson()).toList());
     await file.writeAsString(jsonData);
   }
 
   Future<Users?> signIn(String email, String password) async {
-    if (users.isEmpty) {
+    if (_users.isEmpty) {
       await initializeUsers(); // Ensure users are loaded before checking
     }
 
-    Users? user = users.firstWhereOrNull(
+    Users? user = _users.firstWhereOrNull(
       (u) => u.emailAddress == email && u.password == password,
     );
 
@@ -63,20 +64,15 @@ class UsersAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<Users?> signUp(String fullname, String email, String password,
-      String telephone, String gender) async {
-    users.add(Users(
-        fullname: fullname,
-        emailAddress: email,
-        userImage: 'assets/images/avatar.png',
-        telephone: gender,
-        password: password,
-        gender: gender,
-        dateOfBirth: '',
-        role: 'Regular',
-        cart: [],
-        bookPurchased: [],
-        downloads: []));
+  Future<bool> signup(Users newUser) async {
+    if (_users.any((user) => user.emailAddress == newUser.emailAddress)) {
+      return false; // Email Already exists
+    }
+    _users.add(newUser);
+    _currentUser = newUser;
+    await _saveUserToLocal();
+    notifyListeners();
+    return true;
   }
 
   void signout() {
@@ -85,8 +81,8 @@ class UsersAuthProvider extends ChangeNotifier {
   }
 
   void deleteUser(String fullname) {
-    if (users != null) {
-      users.removeWhere((item) => item.fullname == fullname);
+    if (_users != null) {
+      _users.removeWhere((item) => item.fullname == fullname);
       notifyListeners();
       _saveUserToLocal();
     }
@@ -123,6 +119,15 @@ class UsersAuthProvider extends ChangeNotifier {
   void clearCart() {
     if (_currentUser != null) {
       _currentUser!.cart.clear();
+      notifyListeners();
+      _saveUserToLocal();
+    }
+  }
+
+  void makeAdmin(String email) {
+    Users? user = _users.firstWhereOrNull((u) => u.emailAddress == email);
+    if (user != null) {
+      user.role = 'Admin';
       notifyListeners();
       _saveUserToLocal();
     }

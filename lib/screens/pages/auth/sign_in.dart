@@ -215,8 +215,9 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                                   .signIn(emailController.text,
                                       passwordController.text);
                           if (authenticatedUser != null) {
-                            GoRouter.of(context)
-                                .go(LivingSeedAppRouter.homePath, extra: authenticatedUser);
+                            GoRouter.of(context).go(
+                                LivingSeedAppRouter.homePath,
+                                extra: authenticatedUser);
                           } else {
                             setState(() {
                               errorMessage = 'Invalid EmailAddress or password';
@@ -279,7 +280,7 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           minimumSize: const Size(10, 50),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          padding: const EdgeInsets.symmetric(vertical: 10.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
