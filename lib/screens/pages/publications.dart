@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_route.dart';
+import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/publications/publications.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
 
 class PublicationsPage extends StatefulWidget {
   const PublicationsPage({super.key});
@@ -14,6 +16,8 @@ class PublicationsPage extends StatefulWidget {
 
 class _PublicationsPageState extends State<PublicationsPage> {
   final TextEditingController _searchController = TextEditingController();
+  List<AboutBooks> books = [];
+  List<AboutBooks> filteredBooks = [];
   List<String> choices = [
     'All',
     'Books',
@@ -35,6 +39,38 @@ class _PublicationsPageState extends State<PublicationsPage> {
   void setSelectedValue(String? value) {
     setState(() => selectedValue = value);
     debugPrint(value);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBooks();
+    _searchController.addListener(_filterBooks);
+  }
+
+  void _filterBooks() {
+    String query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredBooks = books
+          .where((book) =>
+              book.bookTitle.toLowerCase().contains(query) ||
+              book.author.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  Future<void> _loadBooks() async {
+    books = await loadAboutBook(); // load books from json
+    setState(() {
+      filteredBooks = books; // initially, all books are displayed
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_filterBooks);
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -132,52 +168,156 @@ class _PublicationsPageState extends State<PublicationsPage> {
             const SizedBox(
               height: 20,
             ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text('Categories',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
-            ),
-            InlineChoice<String>.single(
-              clearable: true,
-              value: selectedValue,
-              onChanged: setSelectedValue,
-              itemCount: choices.length,
-              itemBuilder: (state, i) {
-                return ChoiceChip(
-                  avatar: Icon(iconChoices[i],
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black),
-                  side: const BorderSide(style: BorderStyle.none),
-                  selected: state.selected(choices[i]),
-                  onSelected: state.onSelected(choices[i]),
-                  label: Text(
-                    choices[i],
-                    style: TextStyle(
+            if (_searchController.text.isEmpty) ...[
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text('Categories',
+                    style:
+                        TextStyle(fontWeight: FontWeight.w700, fontSize: 18)),
+              ),
+              InlineChoice<String>.single(
+                clearable: true,
+                value: selectedValue,
+                onChanged: setSelectedValue,
+                itemCount: choices.length,
+                itemBuilder: (state, i) {
+                  return ChoiceChip(
+                    avatar: Icon(iconChoices[i],
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.white
                             : Colors.black),
+                    side: const BorderSide(style: BorderStyle.none),
+                    selected: state.selected(choices[i]),
+                    onSelected: state.onSelected(choices[i]),
+                    label: Text(
+                      choices[i],
+                      style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black),
+                    ),
+                  );
+                },
+                listBuilder: ChoiceList.createWrapped(
+                  spacing: 5,
+                  runSpacing: 5,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 10,
                   ),
-                );
-              },
-              listBuilder: ChoiceList.createWrapped(
-                spacing: 5,
-                runSpacing: 5,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 0,
-                  vertical: 10,
                 ),
               ),
+              const SizedBox(
+                height: 20,
+              ),
+              if (selectedValue == 'All')
+                const AllPage()
+              else if (selectedValue == 'Books')
+                const Books()
+              else
+                const AllPage()
+            ],
+
+            // show search results only when a user is typing...
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.9, // Adjust height
+              child: filteredBooks.isEmpty
+                  ? const Center(child: Text("No matching books found"))
+                  : ListView.builder(
+                      itemCount: filteredBooks.length,
+                      itemBuilder: (context, index) {
+                        final book = filteredBooks[index];
+                        return Column(
+                          children: [
+                            InkWell(
+                              onTap: () => GoRouter.of(context).go(
+                                  '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+                                  extra: book),
+                              child: SizedBox(
+                                width: MediaQuery.of(context).size.width,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5, horizontal: 10),
+                                  child: Row(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          height: 100,
+                                          width: 100,
+                                          padding: const EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.withOpacity(0.1),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(5)),
+                                          ),
+                                          child: Image.asset(
+                                            book.coverImage,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 16,
+                                      ),
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  book.bookTitle,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16.0),
+                                                ),
+                                                Text(
+                                                  book.author,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontSize: 14.0),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              'N${book.amount.toString()}',
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 13.0),
+                                            ),
+                                            Text(
+                                              book.productionDate.toString(),
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.w300,
+                                                  fontSize: 12.0),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const Divider(
+                              thickness: 0.4,
+                            )
+                          ],
+                        );
+                      },
+                    ),
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            if (selectedValue == 'All')
-              const AllPage()
-            else if (selectedValue == 'Books')
-              const Books()
-            else
-              const AllPage()
           ],
         ),
       ),

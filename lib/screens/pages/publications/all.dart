@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/pages/publications/publications.dart';
 import '../../models/models.dart';
 import '../services/services.dart';
@@ -65,7 +67,8 @@ class _AllPageState extends State<AllPage> {
                       ],
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () => GoRouter.of(context).go(
+                                  '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.moreBooksPath}'),
                       child: Text('More',
                           style: TextStyle(
                               fontSize: 17, color: Theme.of(context).primaryColor)),

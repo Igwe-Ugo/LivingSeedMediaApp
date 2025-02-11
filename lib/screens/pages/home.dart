@@ -140,7 +140,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             const SectionTitle(title: 'Books'),
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () => GoRouter.of(context).go(
+                                  '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.moreBooksPath}'),
                               child: Text('More...',
                                   style: TextStyle(
                                     color: Theme.of(context).primaryColor,

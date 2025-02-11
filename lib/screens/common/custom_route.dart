@@ -59,6 +59,7 @@ class LivingSeedAppRouter {
   static const String booksPurchasedPath = 'book_purchased';
   static const String readBookPath = 'read_book';
   static const String makePaymentPath = 'make_payment';
+  static const String moreBooksPath = 'more_books';
 
   //admin pages
   static const String uploadBookPath = 'upload_book_path';
@@ -140,6 +141,10 @@ class LivingSeedAppRouter {
                         GoRoute(
                             path: notificationPath,
                             builder: (context, state) => const Notifications()),
+                        GoRoute(
+                          path: moreBooksPath,
+                          builder: (context, state) => const MoreBooks(),
+                        ),
                         GoRoute(
                             path: aboutBookPath,
                             builder: (context, state) {
