@@ -165,7 +165,7 @@ class _CartState extends State<Cart> {
                                             fontWeight: FontWeight.w500,
                                             fontSize: 16,
                                           )),
-                                      Text('# $totalCost',
+                                      Text('₦ $totalCost',
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 16,
@@ -199,7 +199,7 @@ class _CartState extends State<Cart> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
                                             child: Text(
-                                              'Make Payment (# $totalCost)',
+                                              'Make Payment (₦ $totalCost)',
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.w700,
                                                   fontSize: 20.0,

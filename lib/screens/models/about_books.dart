@@ -37,7 +37,7 @@ class AboutBooks {
   final String whoseAbout;
   final int chapterNum;
   final String pdfLink;
-  final List<Map<String, dynamic>> chapters;
+  final List<Map<String, String>> chapters;
   final List<RatingReview> ratingReviews;
 
   AboutBooks(
@@ -55,10 +55,10 @@ class AboutBooks {
       required this.ratingReviews});
 
   factory AboutBooks.fromJson(Map<String, dynamic> json) {
-    List<Map<String, dynamic>> extractedChapters = [];
+    List<Map<String, String>> extractedChapters = [];
     if (json['chapters'] != null && json['chapters'] is List) {
     extractedChapters = (json['chapters'] as List)
-        .map((chapter) => Map<String, dynamic>.from(chapter as Map))
+        .map((chapter) => Map<String, String>.from(chapter as Map))
         .toList();
   }
 

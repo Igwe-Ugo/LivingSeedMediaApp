@@ -113,7 +113,7 @@ class _MoreBooksState extends State<MoreBooks> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    '₦${book.amount.toString()}',
+                    '₦ ${book.amount.toString()}',
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ],

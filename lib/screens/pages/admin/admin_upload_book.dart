@@ -68,7 +68,6 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
       // Perform the upload logic here, e.g., send data to backend or Firebase
       _uploadBookToJson;
       _clearFields;
-      showMessage('Book uploaded successfully!', context);
       // Clear the form
       _formKey.currentState!.reset();
       setState(() {
@@ -551,8 +550,8 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
     bool success = await Provider.of<AboutBookProvider>(context, listen: false)
         .uploadBook(newUpload);
     if (success) {
-      showMessage('Upload is successful!', context);
-      return;
+      showMessage('Book uploaded successfully!', context);
+      GoRouter.of(context).pop();
     } else {
       showMessage('Book already exists, please upload a new book', context);
       return;

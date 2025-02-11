@@ -123,7 +123,7 @@ class _AboutBookState extends State<AboutBook> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'N${widget.about_books.amount.toString()}',
+                      '₦ ${widget.about_books.amount.toString()}',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 20.0,
@@ -330,35 +330,44 @@ class _AboutBookState extends State<AboutBook> {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.about_books.chapters.length,
-                    itemBuilder: ((context, index) {
-                      Map<String, dynamic> chapterMap =
-                          widget.about_books.chapters[index];
-                      String chapterTitle = chapterMap.values.first;
-                      return Container(
-                        margin: const EdgeInsets.all(7),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
+                    physics:
+                        NeverScrollableScrollPhysics(), // Prevents scrolling conflicts
+                    itemCount: widget.about_books.chapters
+                        .length, // Loops through list of maps
+                    itemBuilder: (context, index) {
+                      Map<String, String> chapterMap =
+                          widget.about_books.chapters[index]; // Get Map
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: chapterMap.entries.map((entry) {
+                          return Container(
+                            margin: const EdgeInsets.all(7),
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
                                     ? Colors.white
                                     : Theme.of(context)
                                         .disabledColor
                                         .withOpacity(0.5),
-                          ),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 13.0, horizontal: 10),
-                          child: Text(
-                            chapterTitle,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.w500, fontSize: 17),
-                          ),
-                        ),
+                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 13.0, horizontal: 10),
+                              child: Text(
+                                "${entry.key}: ${entry.value}", // Displays "Chapter 1: God's Great Offer"
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500, fontSize: 14),
+                              ),
+                            ),
+                          );
+                        }).toList(),
                       );
-                    }),
+                    },
                   ),
                   const SizedBox(
                     height: 20,
