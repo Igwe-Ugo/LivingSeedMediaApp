@@ -3,6 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:livingseed_media/screens/models/models.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 import '../../common/widget.dart';
 
 class UploadBookScreen extends StatefulWidget {
@@ -13,17 +16,26 @@ class UploadBookScreen extends StatefulWidget {
 }
 
 class _UploadBookScreenState extends State<UploadBookScreen> {
-  int numOfContents = 0;
+  int selectedChapterNum = 1;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _subtitleController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _audienceController = TextEditingController();
-  final TextEditingController _aboutAuthor = TextEditingController();
+  final TextEditingController _whoseAboutController = TextEditingController();
+  final TextEditingController _aboutAuthorController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _reviewController = TextEditingController();
-  final TextEditingController _bookChapterController = TextEditingController();
+  List<TextEditingController> _bookChapterController = [
+    TextEditingController()
+  ]; // initial textfield
+
+  void updateTextFields(int count) {
+    setState(() {
+      selectedChapterNum = count;
+      _bookChapterController =
+          List.generate(count, (index) => TextEditingController());
+    });
+  }
 
   XFile? _coverImage;
   PlatformFile? _bookFile;
@@ -54,6 +66,8 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
         _coverImage != null &&
         _bookFile != null) {
       // Perform the upload logic here, e.g., send data to backend or Firebase
+      _uploadBookToJson;
+      _clearFields;
       showMessage('Book uploaded successfully!', context);
       // Clear the form
       _formKey.currentState!.reset();
@@ -64,6 +78,17 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
     } else {
       showMessage('Please fill all fields and upload files!', context);
     }
+  }
+
+  void _clearFields() {
+    _titleController.clear();
+    _authorController.clear();
+    _amountController.clear();
+    _reviewController.clear();
+    _aboutAuthorController.clear();
+    _aboutAuthorController.clear();
+    _whoseAboutController.clear();
+    _bookChapterController.forEach((controller) => controller.clear());
   }
 
   @override
@@ -180,31 +205,6 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _subtitleController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Write the subtitle of book (optional)...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
                     controller: _authorController,
                     decoration: InputDecoration(
                       filled: true,
@@ -257,36 +257,67 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
+                DropdownButton(
+                  value: selectedChapterNum,
+                  items: List.generate(
+                    20,
+                    (index) => DropdownMenuItem(
+                      value: index + 1,
+                      child: Text(
+                          'How many chapters of book?... ${index + 1} Fields'),
                     ),
                   ),
-                  child: TextFormField(
-                    controller: _bookChapterController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'How many chapters of book?...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the number of chapters of the book';
-                      }
-                      return null;
-                    },
-                  ),
+                  onChanged: (value) {
+                    if (value != null) {
+                      updateTextFields(value);
+                    }
+                  },
+                ),
+
+                // display text field based on selected chapter numbers
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: selectedChapterNum,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(12)),
+                            border: Border.all(
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Theme.of(context)
+                                      .disabledColor
+                                      .withOpacity(0.15),
+                            ),
+                          ),
+                          child: TextFormField(
+                            controller: _bookChapterController[index],
+                            decoration: InputDecoration(
+                              filled: true,
+                              hintText: 'Chapter ${index + 1} title',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none,
+                              ),
+                              fillColor: Theme.of(context)
+                                  .disabledColor
+                                  .withOpacity(0.2),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter the number of chapters of the book';
+                              }
+                              return null;
+                            },
+                          ),
+                        );
+                      }),
                 ),
                 const SizedBox(height: 16),
                 Container(
@@ -366,7 +397,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _audienceController,
+                    controller: _whoseAboutController,
                     decoration: InputDecoration(
                       filled: true,
                       hintText: "Who's it about...",
@@ -399,7 +430,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     ),
                   ),
                   child: TextFormField(
-                    controller: _aboutAuthor,
+                    controller: _aboutAuthorController,
                     decoration: InputDecoration(
                       filled: true,
                       hintText: "About the author...",
@@ -482,5 +513,49 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
         ),
       ),
     );
+  }
+
+  void _uploadBookToJson() async {
+    if (!_formKey.currentState!.validate()) {
+      return showMessage('Please fill all available input spaces', context);
+    }
+
+    List<Map<String, String>> chapters = [];
+
+    for (int i = 0; i < _bookChapterController.length; i++) {
+      String text = _bookChapterController[i].text.trim();
+      if (text.isEmpty) {
+        chapters.add({
+          "index 1": "Dedication",
+          "index 2": "Preface",
+          "index 3": "Acknowledgements",
+          "chapter ${i + 1}": text
+        });
+      }
+    }
+
+    AboutBooks newUpload = AboutBooks(
+        coverImage: _coverImage.toString(),
+        bookTitle: _titleController.text,
+        author: _authorController.text,
+        amount: double.tryParse(_amountController.text) ?? 0.0,
+        aboutPreface: _reviewController.text,
+        aboutAuthor: _aboutAuthorController.text,
+        aboutBook: _descriptionController.text,
+        whoseAbout: _whoseAboutController.text,
+        chapterNum: _bookChapterController.length,
+        pdfLink: _bookFile.toString(),
+        chapters: chapters,
+        ratingReviews: []);
+
+    bool success = await Provider.of<AboutBookProvider>(context, listen: false)
+        .uploadBook(newUpload);
+    if (success) {
+      showMessage('Upload is successful!', context);
+      return;
+    } else {
+      showMessage('Book already exists, please upload a new book', context);
+      return;
+    }
   }
 }

@@ -37,14 +37,13 @@ class PurchasedBooksItems {
   final String coverImage;
   final String bookAuthor;
   final String readBookPath;
-  final int date;
 
   PurchasedBooksItems(
       {required this.bookTitle,
       required this.coverImage,
       required this.bookAuthor,
       required this.readBookPath,
-      required this.date});
+  });
 
   factory PurchasedBooksItems.fromJson(Map<String, dynamic> json) {
     return PurchasedBooksItems(
@@ -52,7 +51,6 @@ class PurchasedBooksItems {
       bookAuthor: json["bookAuthor"],
       coverImage: json["coverImage"],
       readBookPath: json['readBookPath'],
-      date: (json['date'] as num).toInt(),
     );
   }
 
@@ -61,7 +59,6 @@ class PurchasedBooksItems {
       'bookTitle': bookTitle,
       'coverImage': coverImage,
       'bookAuthor': bookAuthor,
-      'date': date,
       'readBookPath': readBookPath
     };
   }

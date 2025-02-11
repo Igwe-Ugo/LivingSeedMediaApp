@@ -29,7 +29,6 @@ class RatingReview {
 class AboutBooks {
   final String coverImage;
   final String bookTitle;
-  final String bookSubtitle;
   final String author;
   final double amount;
   final String aboutPreface;
@@ -38,14 +37,12 @@ class AboutBooks {
   final String whoseAbout;
   final int chapterNum;
   final String pdfLink;
-  final int productionDate;
-  final List<String> chapters;
+  final List<Map<String, dynamic>> chapters;
   final List<RatingReview> ratingReviews;
 
   AboutBooks(
       {required this.coverImage,
       required this.bookTitle,
-      required this.bookSubtitle,
       required this.author,
       required this.amount,
       required this.aboutPreface,
@@ -54,16 +51,16 @@ class AboutBooks {
       required this.whoseAbout,
       required this.chapterNum,
       required this.pdfLink,
-      required this.productionDate,
       required this.chapters,
       required this.ratingReviews});
 
   factory AboutBooks.fromJson(Map<String, dynamic> json) {
-    List<String> extractedChapters = [];
+    List<Map<String, dynamic>> extractedChapters = [];
     if (json['chapters'] != null && json['chapters'] is List) {
-      Map<String, dynamic> chapterMap = json['chapters'][0];
-      extractedChapters = chapterMap.values.map((e) => e.toString()).toList();
-    }
+    extractedChapters = (json['chapters'] as List)
+        .map((chapter) => Map<String, dynamic>.from(chapter as Map))
+        .toList();
+  }
 
     List<RatingReview> extractedReviews = [];
     if (json['ratingReviews'] != null && json['ratingReviews'] is List) {
@@ -75,7 +72,6 @@ class AboutBooks {
     return AboutBooks(
         coverImage: json['coverImage'],
         bookTitle: json['bookTitle'],
-        bookSubtitle: json['bookSubtitle'],
         author: json['author'],
         amount: (json['amount'] as num).toDouble(),
         aboutPreface: json['aboutPreface'],
@@ -84,9 +80,25 @@ class AboutBooks {
         whoseAbout: json['whoseAbout'],
         chapterNum: json['chapterNum'],
         pdfLink: json['pdfLink'],
-        productionDate: json['productionDate'],
         chapters: extractedChapters,
         ratingReviews: extractedReviews);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "coverImage": coverImage,
+      "bookTitle": bookTitle,
+      "author": author,
+      "amount": amount,
+      "aboutPreface": aboutPreface,
+      "aboutAuthor": aboutAuthor,
+      "aboutBook": aboutBook,
+      "whoseAbout": whoseAbout,
+      "chapterNum": chapterNum,
+      "pdfLink": pdfLink,
+      "chapters": chapters,
+      "ratingReviews": ratingReviews,
+    };
   }
 
   static List<AboutBooks> fromJsonList(String jsonString) {

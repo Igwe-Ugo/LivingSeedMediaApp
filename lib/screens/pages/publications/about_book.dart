@@ -332,6 +332,9 @@ class _AboutBookState extends State<AboutBook> {
                     shrinkWrap: true,
                     itemCount: widget.about_books.chapters.length,
                     itemBuilder: ((context, index) {
+                      Map<String, dynamic> chapterMap =
+                          widget.about_books.chapters[index];
+                      String chapterTitle = chapterMap.values.first;
                       return Container(
                         margin: const EdgeInsets.all(7),
                         decoration: BoxDecoration(
@@ -349,7 +352,7 @@ class _AboutBookState extends State<AboutBook> {
                           padding: const EdgeInsets.symmetric(
                               vertical: 13.0, horizontal: 10),
                           child: Text(
-                            widget.about_books.chapters[index],
+                            chapterTitle,
                             style: const TextStyle(
                                 fontWeight: FontWeight.w500, fontSize: 17),
                           ),

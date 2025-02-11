@@ -109,11 +109,6 @@ class _BooksState extends State<Books> {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
                         ),
-                        Text(
-                          about_books.productionDate.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w300, fontSize: 12.0),
-                        ),
                       ],
                     ),
                   ),

@@ -9,6 +9,7 @@
 # packages, and plugins designed to encourage good coding practices.
 analyzer:
   errors:
+    avoid_function_literals_in_foreach_calls: ignore
     body_might_complete_normally_nullable: ignore
     deprecated_member_use: ignore
     non_constant_identifier_names: ignore

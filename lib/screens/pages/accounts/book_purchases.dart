@@ -56,7 +56,6 @@ class _BooksPurchasedState extends State<BooksPurchased> {
                       ? widget.user.bookPurchased
                           .map((item) => book(context,
                               imagePath: item.coverImage,
-                              date: item.date,
                               title: item.bookTitle,
                               readBookPath: item.readBookPath,
                               author: item.bookAuthor))
@@ -93,7 +92,6 @@ class _BooksPurchasedState extends State<BooksPurchased> {
 
   Widget book(BuildContext context,
       {required String imagePath,
-      required int date,
       required String title,
       required String readBookPath,
       required String author}) {
@@ -151,11 +149,6 @@ class _BooksPurchasedState extends State<BooksPurchased> {
                         ),
                         const SizedBox(
                           height: 8,
-                        ),
-                        Text(
-                          date.toString(),
-                          style: const TextStyle(
-                              fontWeight: FontWeight.w300, fontSize: 12.0),
                         ),
                       ],
                     ),

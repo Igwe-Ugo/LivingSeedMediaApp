@@ -35,7 +35,8 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => themeChangeProvider),
         ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
-        ChangeNotifierProvider(create: (_) => AdminAuthProvider())
+        ChangeNotifierProvider(create: (_) => AdminAuthProvider()),
+        ChangeNotifierProvider(create: (_) => AboutBookProvider())
       ],
       child: Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
         return MaterialApp.router(

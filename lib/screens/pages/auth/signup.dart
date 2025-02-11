@@ -316,6 +316,9 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
         .signup(newUser);
     if (success) {
       GoRouter.of(context).go(LivingSeedAppRouter.homePath);
+    } else {
+      showMessage('User already exists, please register a new user', context);
+      return;
     }
   }
 }

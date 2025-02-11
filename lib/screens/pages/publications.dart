@@ -296,12 +296,6 @@ class _PublicationsPageState extends State<PublicationsPage> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 13.0),
                                             ),
-                                            Text(
-                                              book.productionDate.toString(),
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w300,
-                                                  fontSize: 12.0),
-                                            ),
                                           ],
                                         ),
                                       ),
