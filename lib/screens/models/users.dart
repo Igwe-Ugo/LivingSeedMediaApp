@@ -113,7 +113,7 @@ class Users {
   final String emailAddress;
   final String telephone;
   final String userImage;
-  final String password;
+  String password;
   final String gender;
   final String dateOfBirth;
   String role;

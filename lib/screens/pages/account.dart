@@ -17,6 +17,7 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   bool switchSavedCollectionPrivate = false;
+  final double _fontSize = 13.0;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +118,7 @@ class _AccountPageState extends State<AccountPage> {
                       : 'Email Address',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
-                      fontSize: 13,
+                      fontSize: _fontSize,
                       color: Theme.of(context).brightness == Brightness.dark
                           ? Colors.white
                           : Colors.black),
@@ -156,11 +157,11 @@ class _AccountPageState extends State<AccountPage> {
                     onTap: () => GoRouter.of(context).go(
                         '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}',
                         extra: user),
-                    leading: const Icon(Iconsax.shopping_cart),
-                    title: const Text(
+                    leading: const Icon(Icons.shopping_cart_outlined),
+                    title: Text(
                       'My Cart',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -168,11 +169,11 @@ class _AccountPageState extends State<AccountPage> {
                     onTap: () => GoRouter.of(context).go(
                         '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}',
                         extra: user),
-                    leading: const Icon(Icons.collections_bookmark_outlined),
-                    title: const Text(
+                    leading: const Icon(Iconsax.archive_book),
+                    title: Text(
                       'Books Purchased',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -181,10 +182,10 @@ class _AccountPageState extends State<AccountPage> {
                         '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.downloadsPath}',
                         extra: user),
                     leading: const Icon(Icons.download_outlined),
-                    title: const Text(
+                    title: Text(
                       'My Downloads',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -196,10 +197,10 @@ class _AccountPageState extends State<AccountPage> {
                           },
                           leading:
                               const Icon(Icons.admin_panel_settings_outlined),
-                          title: const Text(
+                          title: Text(
                             'Admin',
                             style: TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w700),
+                                fontSize: _fontSize, fontWeight: FontWeight.w700),
                           ),
                           trailing:
                               const Icon(Icons.keyboard_arrow_right_outlined),
@@ -231,40 +232,40 @@ class _AccountPageState extends State<AccountPage> {
                   ListTile(
                     onTap: () {},
                     leading: const Icon(Iconsax.activity),
-                    title: const Text(
+                    title: Text(
                       'About Livng Seed',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
                   ListTile(
                     onTap: () {},
                     leading: const Icon(Iconsax.message_question),
-                    title: const Text(
+                    title: Text(
                       'Ask a question',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
                   ListTile(
                     onTap: () {},
-                    leading: const Icon(Icons.speaker_group_rounded),
-                    title: const Text(
+                    leading: const Icon(Icons.phone_in_talk_outlined),
+                    title: Text(
                       'Counselling',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
                   ListTile(
                     onTap: () {},
                     leading: const Icon(Iconsax.calendar),
-                    title: const Text(
+                    title: Text(
                       'Upcoming meetings',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -293,10 +294,10 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                   ListTile(
                     leading: const Icon(Iconsax.sun_1),
-                    title: const Text(
+                    title: Text(
                       'Dark mode',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: Switch(
                       activeColor: Colors.white,
@@ -317,10 +318,10 @@ class _AccountPageState extends State<AccountPage> {
                     onTap: () => GoRouter.of(context).go(
                         '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.changePasswordPath}'),
                     leading: const Icon(Iconsax.lock_1),
-                    title: const Text(
+                    title: Text(
                       'Change Password',
                       style:
-                          TextStyle(fontSize: 13, fontWeight: FontWeight.w700),
+                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -362,6 +363,7 @@ class _AccountPageState extends State<AccountPage> {
 }
 
 Future<void> showLogoutDialog(BuildContext context) {
+  double _fontSize =13.0;
   return showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -372,7 +374,7 @@ Future<void> showLogoutDialog(BuildContext context) {
           fontWeight: FontWeight.bold,
         ),
       ),
-      content: const SizedBox(
+      content: SizedBox(
         height: 40,
         child: Align(
           alignment: Alignment.center,
@@ -395,7 +397,7 @@ Future<void> showLogoutDialog(BuildContext context) {
           child: Text(
             'log out'.toUpperCase(),
             style:
-                TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
+                TextStyle(fontSize: _fontSize, color: Theme.of(context).primaryColor),
           ),
         ),
         TextButton(
@@ -403,7 +405,7 @@ Future<void> showLogoutDialog(BuildContext context) {
           child: Text(
             'not yet'.toUpperCase(),
             style:
-                TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
+                TextStyle(fontSize: _fontSize, color: Theme.of(context).primaryColor),
           ),
         ),
       ],

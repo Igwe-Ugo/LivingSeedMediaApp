@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
@@ -18,12 +21,33 @@ class _ChangePasswordState extends State<ChangePassword> {
   final _newPasswordController = TextEditingController();
   final _confirmNewPasswordController = TextEditingController();
 
+  void _changePassword() async {
+    if (!_formKey.currentState!.validate()) {
+      return showMessage('Please fill all available input spaces', context);
+    } else if (_newPasswordController.text !=
+        _confirmNewPasswordController.text) {
+      return showMessage(
+          'New Password must be matched with confirmed password', context);
+    }
+
+    bool success = await Provider.of<UsersAuthProvider>(context, listen: false)
+        .changePassword(
+            _newPasswordController.text, _oldPasswordController.text);
+    if (success) {
+      showMessage('Change of password was successful!', context);
+      GoRouter.of(context).pop();
+    } else {
+      showMessage('Old password does not match with database!', context);
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       persistentFooterButtons: [
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () => _changePassword,
           style: ElevatedButton.styleFrom(
             elevation: 0,
             backgroundColor: Theme.of(context).primaryColor,
@@ -33,7 +57,7 @@ class _ChangePasswordState extends State<ChangePassword> {
             minimumSize: const Size(10, 50),
           ),
           child: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 15.0),
+            padding: EdgeInsets.symmetric(vertical: 10.0),
             child: Center(
                 child: Text('Change Password',
                     style: TextStyle(

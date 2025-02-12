@@ -75,6 +75,18 @@ class UsersAuthProvider extends ChangeNotifier {
     return true;
   }
 
+  Future<bool> changePassword(String newPassword, String oldPassword) async {
+    Users? user = _users.firstWhereOrNull((u) => u.password == oldPassword);
+    if (user != null && user.password == oldPassword) {
+      user.password = newPassword;
+      await _saveUserToLocal();
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void signout() {
     _currentUser = null;
     notifyListeners();
@@ -133,14 +145,23 @@ class UsersAuthProvider extends ChangeNotifier {
     }
   }
 
+  void removeAdmin(String email) {
+    Users? user = _users.firstWhereOrNull((u) => u.emailAddress == email);
+    if (user != null) {
+      user.role = 'Regular';
+      notifyListeners();
+      _saveUserToLocal();
+    }
+  }
+
   void addToBookPurchase(AboutBooks book) {
     if (_currentUser != null) {
       _currentUser!.bookPurchased.add(PurchasedBooksItems(
-          bookTitle: book.bookTitle,
-          coverImage: book.coverImage,
-          bookAuthor: book.author,
-          readBookPath: book.pdfLink,
-          ));
+        bookTitle: book.bookTitle,
+        coverImage: book.coverImage,
+        bookAuthor: book.author,
+        readBookPath: book.pdfLink,
+      ));
       clearCart();
       notifyListeners();
       _saveUserToLocal();

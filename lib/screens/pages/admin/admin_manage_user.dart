@@ -190,6 +190,12 @@ class CustomUserTile extends StatelessWidget {
                 ),
               if (isAdmin == 'Admin')
                 DropdownMenuItem(
+                  onTap: () {
+                    Provider.of<UsersAuthProvider>(context, listen: false)
+                        .removeAdmin(email);
+                    showMessage(
+                        'User has been removed from being an Admin', context);
+                  },
                   value: 'remove_admin',
                   child: Text('Remove Admin'),
                 ),

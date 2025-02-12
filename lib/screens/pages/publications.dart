@@ -222,7 +222,24 @@ class _PublicationsPageState extends State<PublicationsPage> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.9, // Adjust height
               child: filteredBooks.isEmpty
-                  ? const Center(child: Text("No matching books found"))
+                  ? Column(
+                      children: const [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Icon(
+                          Icons.not_interested_rounded,
+                          size: 70,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "Sorry, No matching books found!",
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ],
+                    )
                   : ListView.builder(
                       itemCount: filteredBooks.length,
                       itemBuilder: (context, index) {
