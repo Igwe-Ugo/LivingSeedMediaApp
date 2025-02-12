@@ -6,8 +6,49 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
-class AdminUserManagement extends StatelessWidget {
+class AdminUserManagement extends StatefulWidget {
   const AdminUserManagement({super.key});
+
+  @override
+  State<AdminUserManagement> createState() => _AdminUserManagementState();
+}
+
+class _AdminUserManagementState extends State<AdminUserManagement> {
+  final TextEditingController _searchUserController = TextEditingController();
+  List<Users> users = [];
+  List<Users> filteredUsers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUsers;
+    _searchUserController.addListener(_filterUsers);
+  }
+
+  void _filterUsers() {
+    String query = _searchUserController.text.toLowerCase();
+    setState(() {
+      filteredUsers = users
+          .where((user) =>
+              user.fullname.toLowerCase().contains(query) ||
+              user.emailAddress.toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  void _loadUsers() {
+    users = Provider.of<UsersAuthProvider>(context).allUsers;
+    setState(() {
+      filteredUsers = users;
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchUserController.removeListener(_filterUsers);
+    _searchUserController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,37 +86,80 @@ class AdminUserManagement extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Members List',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                    ),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(12)),
+                border: Border.all(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Theme.of(context).disabledColor.withOpacity(0.15),
+                ),
+              ),
+              child: TextField(
+                controller: _searchUserController,
+                decoration: InputDecoration(
+                  filled: true,
+                  hintText: 'Search for any user...',
+                  prefixIcon: const Icon(Iconsax.user_search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
                   ),
-                  IconButton(
-                      onPressed: () {}, icon: Icon(Iconsax.search_normal))
-                ],
+                  fillColor: Theme.of(context).disabledColor.withOpacity(0.2),
+                ),
               ),
             ),
             const SizedBox(height: 10),
-            Expanded(
-                child: Column(
-              children: allUsers
-                  .map((users) => CustomUserTile(
-                        user: users,
-                        imageUrl: users.userImage,
-                        name: users.fullname,
-                        email: users.emailAddress,
-                        onOptionSelected: (po) {},
-                        isAdmin: users.role,
-                      ))
-                  .toList(),
-            )),
+            if (_searchUserController.text.isEmpty) ...[
+              Expanded(
+                  child: Column(
+                children: allUsers
+                    .map((users) => CustomUserTile(
+                          user: users,
+                          imageUrl: users.userImage,
+                          name: users.fullname,
+                          email: users.emailAddress,
+                          onOptionSelected: (po) {},
+                          isAdmin: users.role,
+                        ))
+                    .toList(),
+              ))
+            ] else if (_searchUserController.text.isNotEmpty) ...[
+              // show search results only when entry is typed...
+              filteredUsers.isEmpty
+                  ? Column(
+                      children: const [
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Icon(
+                          Icons.not_interested_rounded,
+                          size: 70,
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "Sorry, No User found with this identity!",
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ],
+                    )
+                  : Expanded(
+                      child: Column(
+                      children: filteredUsers
+                          .map((filteredUser) => CustomUserTile(
+                                user: filteredUser,
+                                imageUrl: filteredUser.userImage,
+                                name: filteredUser.fullname,
+                                email: filteredUser.emailAddress,
+                                onOptionSelected: (po) {},
+                                isAdmin: filteredUser.role,
+                              ))
+                          .toList(),
+                    ))
+            ]
           ],
         ),
       ),

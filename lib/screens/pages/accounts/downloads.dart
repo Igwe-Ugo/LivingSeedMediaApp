@@ -46,89 +46,115 @@ class _DownloadsState extends State<Downloads> {
               const SizedBox(
                 height: 10,
               ),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: widget.user.downloads.length,
-                itemBuilder: (context, index) {
-                  var downloadsFile = widget.user.downloads[index];
-                  return InkWell(
-                    onTap: () {},
-                    child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 7),
-                        margin: const EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                            color: Theme.of(context)
-                                .disabledColor
-                                .withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(15.0)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(15.0),
-                              child: Image.asset(
-                                downloadsFile.mediaImage,
-                                height: 100,
-                                width: 80,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
+              widget.user != null && widget.user.downloads.isNotEmpty
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: widget.user.downloads.length,
+                      itemBuilder: (context, index) {
+                        var downloadsFile = widget.user.downloads[index];
+                        return InkWell(
+                          onTap: () {},
+                          child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 7),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: Theme.of(context)
+                                      .disabledColor
+                                      .withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(15.0)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text(downloadsFile.title,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyLarge!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold)),
-                                  SizedBox(
-                                    height: 10,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    child: Image.asset(
+                                      downloadsFile.mediaImage,
+                                      height: 100,
+                                      width: 80,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  Text(downloadsFile.speaker,
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
-                                  SizedBox(
-                                    height: 3,
+                                  const SizedBox(
+                                    width: 15,
                                   ),
-                                  Text(downloadsFile.size,
-                                      maxLines: 2,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall),
-                                  Row(
-                                    children: [
-                                      Text(downloadsFile.date,
-                                          maxLines: 2,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall),
-                                      SizedBox(
-                                        width: 20,
-                                      ),
-                                      Text(downloadsFile.time,
-                                          maxLines: 2,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall),
-                                    ],
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(downloadsFile.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge!
+                                                .copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(downloadsFile.speaker,
+                                            maxLines: 2,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Text(downloadsFile.size,
+                                            maxLines: 2,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall),
+                                        Row(
+                                          children: [
+                                            Text(downloadsFile.date,
+                                                maxLines: 2,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall),
+                                            SizedBox(
+                                              width: 20,
+                                            ),
+                                            Text(downloadsFile.time,
+                                                maxLines: 2,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall),
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   )
                                 ],
-                              ),
-                            )
-                          ],
-                        )),
-                  );
-                },
-              ),
+                              )),
+                        );
+                      },
+                    )
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: const [
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Icon(
+                            Iconsax.video_slash,
+                            size: 100,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            'Nothing in downloads. Any downloaded media would appear here!',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                        ]),
             ],
           ),
         ),
