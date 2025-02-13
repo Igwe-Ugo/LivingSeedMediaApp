@@ -123,6 +123,7 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
                 children: allUsers
                     .map((users) => CustomUserTile(
                           user: users,
+                          telephone: users.telephone,
                           imageUrl: users.userImage,
                           name: users.fullname,
                           email: users.emailAddress,
@@ -149,7 +150,7 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
                           ),
                           Text(
                             "Sorry, No User found with this identity!",
-                            style: TextStyle(fontSize: 17),
+                            style: TextStyle(fontSize: 15),
                           ),
                         ],
                       ),
@@ -159,6 +160,7 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
                       children: filteredUsers
                           .map((filteredUser) => CustomUserTile(
                                 user: filteredUser,
+                                telephone: filteredUser.telephone,
                                 imageUrl: filteredUser.userImage,
                                 name: filteredUser.fullname,
                                 email: filteredUser.emailAddress,
@@ -181,6 +183,7 @@ class CustomUserTile extends StatelessWidget {
   final String name;
   final String email;
   final String isAdmin;
+  final String telephone;
   final Function(String) onOptionSelected;
 
   const CustomUserTile({
@@ -190,6 +193,7 @@ class CustomUserTile extends StatelessWidget {
     required this.name,
     required this.email,
     required this.isAdmin,
+    required this.telephone,
     required this.onOptionSelected,
   });
 
@@ -222,6 +226,14 @@ class CustomUserTile extends StatelessWidget {
                 ),
                 Text(
                   email,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[700],
+                  ),
+                ),
+                Text(
+                  telephone,
                   style: TextStyle(
                     fontSize: 13,
                     color: Colors.grey[700],
@@ -278,7 +290,10 @@ class CustomUserTile extends StatelessWidget {
                     showMessage('User has been made an Admin', context);
                   },
                   value: 'admin',
-                  child: Text('Make Admin'),
+                  child: Text(
+                    'Make Admin',
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               if (isAdmin == 'Admin')
                 DropdownMenuItem(
@@ -289,7 +304,10 @@ class CustomUserTile extends StatelessWidget {
                         'User has been removed from being an Admin', context);
                   },
                   value: 'remove_admin',
-                  child: Text('Remove Admin'),
+                  child: Text(
+                    'Remove Admin',
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               DropdownMenuItem(
                 onTap: () {
@@ -298,7 +316,10 @@ class CustomUserTile extends StatelessWidget {
                   showMessage('User has been deleted!', context);
                 },
                 value: 'delete',
-                child: Text('Delete User'),
+                child: Text(
+                  'Delete User',
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ],
           ),
