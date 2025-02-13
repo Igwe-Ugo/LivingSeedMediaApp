@@ -21,8 +21,13 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
   @override
   void initState() {
     super.initState();
-    _loadUsers;
     _searchUserController.addListener(_filterUsers);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadUsers();
   }
 
   void _filterUsers() {
@@ -31,7 +36,8 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
       filteredUsers = users
           .where((user) =>
               user.fullname.toLowerCase().contains(query) ||
-              user.emailAddress.toLowerCase().contains(query))
+              user.emailAddress.toLowerCase().contains(query) ||
+              user.telephone.contains(query))
           .toList();
     });
   }
@@ -128,23 +134,25 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
             ] else if (_searchUserController.text.isNotEmpty) ...[
               // show search results only when entry is typed...
               filteredUsers.isEmpty
-                  ? Column(
-                      children: const [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Icon(
-                          Icons.not_interested_rounded,
-                          size: 70,
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          "Sorry, No User found with this identity!",
-                          style: TextStyle(fontSize: 17),
-                        ),
-                      ],
+                  ? Center(
+                      child: Column(
+                        children: const [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Icon(
+                            Icons.not_interested_rounded,
+                            size: 70,
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            "Sorry, No User found with this identity!",
+                            style: TextStyle(fontSize: 17),
+                          ),
+                        ],
+                      ),
                     )
                   : Expanded(
                       child: Column(
