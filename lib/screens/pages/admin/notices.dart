@@ -32,12 +32,15 @@ class Notices extends StatelessWidget {
                   const SizedBox(
                     width: 15,
                   ),
-                  Text(
-                    notice.notificationTitle,
-                    style: TextStyle(
-                      fontFamily: 'Playfair',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      notice.notificationTitle,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontFamily: 'Playfair',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   IconButton(

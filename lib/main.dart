@@ -36,7 +36,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => themeChangeProvider),
         ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
-        ChangeNotifierProvider(create: (_) => AdminAuthProvider()),
+        ChangeNotifierProvider(create: (_) => AdminAuthProvider()..initializeNotifications()),
         ChangeNotifierProvider(
             create: (_) => AboutBookProvider()..initializeBooks())
       ],

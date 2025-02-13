@@ -21,14 +21,6 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   final TextEditingController _notificationMessageController =
       TextEditingController();
 
-  late Future<List<NotificationItems>> notificationFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    notificationFuture = loadNotificationItems();
-  }
-
   XFile? _coverImage;
 
   Future<void> _pickCoverImage() async {
@@ -46,7 +38,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder(
-            future: notificationFuture,
+            future: Provider.of<AdminAuthProvider>(context).notificationFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -222,17 +214,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                                   elevation: WidgetStatePropertyAll(0),
                                   backgroundColor: WidgetStatePropertyAll(
                                       Theme.of(context).primaryColor)),
-                              onPressed: () {
-                                Provider.of<AdminAuthProvider>(context,
-                                        listen: false)
-                                    .sendNotification(
-                                        _coverImage.toString(),
-                                        _notificationTitleController.text,
-                                        _notificationMessageController.text);
-                                _notificationMessageController.clear();
-                                _notificationTitleController.clear();
-                                showMessage('Notification Sent!', context);
-                              },
+                              onPressed: () => _sendNotification(),
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 15.0),
@@ -283,7 +265,37 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                   ),
                 ),
               );
-            }));
+            }
+          )
+        );
+
+  }
+
+  void _sendNotification() async {
+    if (!_formKey.currentState!.validate()) {
+      return showMessage('Please fill all available input spaces', context);
+    }
+
+
+    NotificationItems newNotification = NotificationItems(
+      notificationImage: _coverImage!.path.toString(),
+      notificationTitle: _notificationTitleController.text,
+      notificationMessage: _notificationMessageController.text,
+      notificationDate:
+          "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+      notificationTime:
+          "${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour >= 12 ? 'PM' : 'AM'}",
+    );
+
+    bool success = await Provider.of<AdminAuthProvider>(context, listen: false)
+        .sendNotification(newNotification);
+    if (success) {
+      showMessage('Notification sent successfully!', context);
+      GoRouter.of(context).pop();
+    } else {
+      showMessage('Notification already exists, please send a new notification', context);
+      return;
+    }
   }
 
   Widget recentNotifications(BuildContext context,

@@ -5,46 +5,57 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 
-// this should be here, until I find a way to load notifications dynamically.
-Future<List<NotificationItems>> loadNotificationItems() async {
-  try {
-    String jsonString =
-        await rootBundle.loadString('assets/json/notifications.json');
-
-    // decode JSON and convert to a list of book object
-    List<NotificationItems> notifications = NotificationItems.fromJsonList(jsonString);
-    return notifications;
-  } catch (e) {
-    debugPrint('Error Loading JSON: $e');
-    return [];
-  }
-}
 class AdminAuthProvider extends ChangeNotifier {
-  NotificationItems? _notice;
-  NotificationItems? get noticesData => _notice;
-  List<NotificationItems> notices = [];
+  List<NotificationItems> _notices = [];
+  List<NotificationItems> get allNotices => _notices;
+  Future<List<NotificationItems>>? notificationFuture;
 
   Future<void> initializeNotifications() async {
-    String jsonString =
-        await rootBundle.loadString('assets/json/notifications.json');
-    notices = NotificationItems.fromJsonList(jsonString);
-    await _loadNotificationFromLocal();
+    notificationFuture = _loadNotices();
     notifyListeners();
   }
 
-  Future<void> _loadNotificationFromLocal() async {
+  Future<List<NotificationItems>> _loadNotices() async {
+    List<NotificationItems> assetNotices = await _loadNoticesFromAssets();
+    List<NotificationItems> localNotices = await _loadNotificationFromLocal();
+
+    Set<String> existingTitles =
+        localNotices.map((notice) => notice.notificationTitle).toSet();
+    assetNotices.removeWhere(
+        (notice) => existingTitles.contains(notice.notificationTitle));
+
+    _notices = [...localNotices, ...assetNotices]; // Prioritize local notices
+    return _notices;
+  }
+
+  // Load notifications from assets (JSON)
+  Future<List<NotificationItems>> _loadNoticesFromAssets() async {
+    try {
+      String jsonString =
+          await rootBundle.loadString('assets/json/notifications.json');
+      List<dynamic> jsonData = json.decode(jsonString);
+      return jsonData.map((item) => NotificationItems.fromJson(item)).toList();
+    } catch (e) {
+      debugPrint('Error Loading JSON: $e');
+      return [];
+    }
+  }
+
+  // Load notifications from local storage
+  Future<List<NotificationItems>> _loadNotificationFromLocal() async {
     try {
       final file = await _getNotificationFile();
       if (file.existsSync()) {
         String data = await file.readAsString();
         List<dynamic> jsonList = json.decode(data);
-        notices =
-            jsonList.map((json) => NotificationItems.fromJson(json)).toList();
+        return jsonList.map((json) => NotificationItems.fromJson(json)).toList();
       }
     } catch (e) {
       debugPrint('Error loading local Notification data: $e');
     }
+    return []; // Return an empty list instead of void
   }
+
 
   Future<File> _getNotificationFile() async {
     final directory = await getApplicationDocumentsDirectory();
@@ -52,32 +63,38 @@ class AdminAuthProvider extends ChangeNotifier {
   }
 
   Future<void> _saveNotificationToLocal() async {
-    final file = await _getNotificationFile();
-    String jsonData =
-        json.encode(notices.map((notice) => notice.toJson()).toList());
-    await file.writeAsString(jsonData);
+    try {
+      final file = await _getNotificationFile();
+      String jsonData =
+          json.encode(_notices.map((notice) => notice.toJson()).toList());
+      await file.writeAsString(jsonData);
+    } catch (e) {
+      debugPrint('Error saving notifications: $e');
+    }
   }
 
-  void sendNotification(String notificationImage, String notificationTitle,
-      String notificationMessage) {
-    if (_notice != null) {
-      notices.add(NotificationItems(
-          notificationImage: notificationImage,
-          notificationTitle: notificationTitle,
-          notificationMessage: notificationMessage,
-          notificationDate: DateTime.now().toString(),
-          notificationTime: DateTime.now().toString()));
+  Future<bool> sendNotification(NotificationItems newNotification) async {
+    if (_notices.any((notice) =>
+        notice.notificationTitle == newNotification.notificationTitle)) {
+      return false;
     }
+
+    _notices.add(newNotification);
+    await _saveNotificationToLocal();
     notifyListeners();
-    _saveNotificationToLocal();
+    return true;
   }
 
-  void deleteNotification(String notificationTitle) {
-    if (notices != null) {
-      notices
-          .removeWhere((item) => item.notificationTitle == notificationTitle);
+  Future<bool> deleteNotification(String notificationTitle) async {
+    int initialLength = _notices.length;
+    _notices.removeWhere((item) => item.notificationTitle == notificationTitle);
+
+    if (_notices.length != initialLength) {
+      await _saveNotificationToLocal();
       notifyListeners();
-      _saveNotificationToLocal();
+      return true; // Successfully deleted
     }
+    return false; // Notification not found
   }
+
 }
