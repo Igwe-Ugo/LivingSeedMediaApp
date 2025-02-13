@@ -22,7 +22,7 @@ class _ReviewsState extends State<Reviews> {
   double starSize = 30.0;
   late Map<int, int> ratingCount;
   late int totalReviews;
-  late List<int> ratings;
+  List<int>? ratings;
 
   @override
   void initState() {
@@ -36,6 +36,7 @@ class _ReviewsState extends State<Reviews> {
           .toList();
     } else {
       allReviews = 0;
+      ratings = [];
     }
     _calculateRatings();
   }
@@ -44,9 +45,11 @@ class _ReviewsState extends State<Reviews> {
     // Initialize map to store counts for each star (1-5)
     ratingCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
 
-    // Count occurrences of each rating
-    for (int rating in ratings) {
-      ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+    if (ratings!.isNotEmpty) {
+      // Count occurrences of each rating
+      for (int rating in ratings!) {
+        ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+      }
     }
 
     // Get total number of reviews
@@ -116,14 +119,23 @@ class _ReviewsState extends State<Reviews> {
                   children: [
                     Column(
                       children: [
-                        Text(
-                          (allReviews / widget.about_books.ratingReviews.length)
-                              .toStringAsFixed(2),
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        widget.about_books.ratingReviews.isNotEmpty
+                            ? Text(
+                                (allReviews /
+                                        widget.about_books.ratingReviews.length)
+                                    .toStringAsFixed(2),
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              )
+                            : Text(
+                                '0',
+                                style: TextStyle(
+                                  fontSize: 40,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                         Text(
                           'out of 5',
                           style: TextStyle(
@@ -183,18 +195,20 @@ class _ReviewsState extends State<Reviews> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
-                      if (index <
-                          (allReviews / widget.about_books.ratingReviews.length)
-                              .floor()) {
+                      int averageRating =
+                          widget.about_books.ratingReviews.isNotEmpty
+                              ? (allReviews /
+                                      widget.about_books.ratingReviews.length)
+                                  .floor()
+                              : 0; // Default to 0 if there are no reviews
+                      if (index < averageRating) {
                         // filled
                         return Icon(
                           Iconsax.star1,
                           color: filledColor,
                           size: starSize,
                         );
-                      } else if (index <
-                          (allReviews /
-                              widget.about_books.ratingReviews.length)) {
+                      } else if (index < averageRating) {
                         // halffilled
                         return Icon(
                           Icons.star_half,
@@ -213,17 +227,41 @@ class _ReviewsState extends State<Reviews> {
                 Divider(
                   color: Theme.of(context).disabledColor,
                 ),
-                Column(
-                  children: widget.about_books.ratingReviews.map((reviews) {
-                    return ReviewsWidget(
-                        context: context,
-                        reviewText: reviews.reviewText,
-                        date: reviews.date,
-                        reviewTitle: reviews.reviewTitle,
-                        rating: reviews.reviewRating.toInt(),
-                        reviewer: reviews.reviewer);
-                  }).toList(),
-                )
+                widget.about_books.ratingReviews.isNotEmpty
+                    ? Column(
+                        children:
+                            widget.about_books.ratingReviews.map((reviews) {
+                          return ReviewsWidget(
+                              context: context,
+                              reviewText: reviews.reviewText,
+                              date: reviews.date,
+                              reviewTitle: reviews.reviewTitle,
+                              rating: reviews.reviewRating.toInt(),
+                              reviewer: reviews.reviewer);
+                        }).toList(),
+                      )
+                    : Center(
+                        child: const Column(
+                          children: [
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Icon(
+                              Iconsax.magic_star,
+                              size: 70,
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Text(
+                              'No Review yet for this book! All reviews from people appear here...',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 15),
+                            ),
+                          ],
+                        ),
+                      )
               ],
             ),
           ),

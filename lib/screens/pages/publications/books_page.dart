@@ -19,7 +19,7 @@ class _BooksPageState extends State<BooksPage> {
   double starSize = 12.0;
   late Map<int, int> ratingCount;
   late int totalReviews;
-  late List<int> ratings;
+  List<int>? ratings;
 
   @override
   void initState() {
@@ -33,6 +33,7 @@ class _BooksPageState extends State<BooksPage> {
           .toList();
     } else {
       allReviews = 0;
+      ratings = []; // ensure ratings is always initialized
     }
     _calculateRatings();
   }
@@ -41,9 +42,11 @@ class _BooksPageState extends State<BooksPage> {
     // Initialize map to store counts for each star (1-5)
     ratingCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
 
-    // Count occurrences of each rating
-    for (int rating in ratings) {
-      ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+    if (ratings!.isNotEmpty) {
+      // Count occurrences of each rating
+      for (int rating in ratings!) {
+        ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
+      }
     }
 
     // Get total number of reviews
@@ -100,43 +103,42 @@ class _BooksPageState extends State<BooksPage> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                  if (widget.about_books.ratingReviews.isEmpty) ...[
-                    Row(
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          Iconsax.star1,
-                          color: unfilledColor,
-                        );
-                      }),
-                    )
-                  ],
                   Row(
                     children: [
-                      Text(
-                        (allReviews / widget.about_books.ratingReviews.length)
-                            .toStringAsFixed(2),
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 10),
-                      ),
+                      widget.about_books.ratingReviews.isNotEmpty
+                          ? Text(
+                              (allReviews /
+                                      widget.about_books.ratingReviews.length)
+                                  .toStringAsFixed(2),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 10),
+                            )
+                          : Text(
+                              '0',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 10),
+                            ),
                       SizedBox(
                         width: 10,
                       ),
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: List.generate(5, (index) {
-                            if (index <
-                                (allReviews /
+                            int averageRating = widget
+                                    .about_books.ratingReviews.isNotEmpty
+                                ? (allReviews /
                                         widget.about_books.ratingReviews.length)
-                                    .floor()) {
+                                    .floor()
+                                : 0; // Default to 0 if there are no reviews
+
+                            if (index < averageRating) {
                               // filled
                               return Icon(
                                 Iconsax.star1,
                                 color: filledColor,
                                 size: starSize,
                               );
-                            } else if (index <
-                                (allReviews /
-                                    widget.about_books.ratingReviews.length)) {
+                            } else if (index < averageRating) {
                               // halffilled
                               return Icon(
                                 Icons.star_half,

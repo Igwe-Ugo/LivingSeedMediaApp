@@ -525,9 +525,6 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
       String text = _bookChapterController[i].text.trim();
       if (text.isNotEmpty) {
         chapters.add({
-          "index 1": "Dedication",
-          "index 2": "Preface",
-          "index 3": "Acknowledgements",
           "chapter ${i + 1}": text
         });
       }
