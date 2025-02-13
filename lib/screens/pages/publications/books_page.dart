@@ -58,10 +58,10 @@ class _BooksPageState extends State<BooksPage> {
   Widget _bookGridView(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget.about_books != null){
+        if (widget.about_books != null) {
           GoRouter.of(context).go(
-            '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
-            extra: widget.about_books);
+              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+              extra: widget.about_books);
         }
       },
       child: Container(
@@ -100,6 +100,16 @@ class _BooksPageState extends State<BooksPage> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
+                  if (widget.about_books.ratingReviews.isEmpty) ...[
+                    Row(
+                      children: List.generate(5, (index) {
+                        return Icon(
+                          Iconsax.star1,
+                          color: unfilledColor,
+                        );
+                      }),
+                    )
+                  ],
                   Row(
                     children: [
                       Text(

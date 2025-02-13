@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   LivingSeedAppRouter.instance;
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const LivingSeedApp());
 }
 
@@ -36,7 +37,8 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
         ChangeNotifierProvider(create: (_) => themeChangeProvider),
         ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
         ChangeNotifierProvider(create: (_) => AdminAuthProvider()),
-        ChangeNotifierProvider(create: (_) => AboutBookProvider())
+        ChangeNotifierProvider(
+            create: (_) => AboutBookProvider()..initializeBooks())
       ],
       child: Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
         return MaterialApp.router(

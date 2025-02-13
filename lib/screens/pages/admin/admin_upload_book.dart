@@ -66,8 +66,8 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
         _coverImage != null &&
         _bookFile != null) {
       // Perform the upload logic here, e.g., send data to backend or Firebase
-      _uploadBookToJson;
-      _clearFields;
+      _uploadBookToJson();
+      _clearFields();
       // Clear the form
       _formKey.currentState!.reset();
       setState(() {
@@ -523,7 +523,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
 
     for (int i = 0; i < _bookChapterController.length; i++) {
       String text = _bookChapterController[i].text.trim();
-      if (text.isEmpty) {
+      if (text.isNotEmpty) {
         chapters.add({
           "index 1": "Dedication",
           "index 2": "Preface",
@@ -534,7 +534,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
     }
 
     AboutBooks newUpload = AboutBooks(
-        coverImage: _coverImage.toString(),
+        coverImage: _coverImage!.path.toString(),
         bookTitle: _titleController.text,
         author: _authorController.text,
         amount: double.tryParse(_amountController.text) ?? 0.0,
@@ -543,7 +543,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
         aboutBook: _descriptionController.text,
         whoseAbout: _whoseAboutController.text,
         chapterNum: _bookChapterController.length,
-        pdfLink: _bookFile.toString(),
+        pdfLink: _bookFile!.path.toString(),
         chapters: chapters,
         ratingReviews: []);
 

@@ -17,12 +17,10 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   late int totalCost;
-  late Future<List<AboutBooks>> aboutBooksFuture;
 
   @override
   void initState() {
     super.initState();
-    aboutBooksFuture = loadAboutBook();
     if (widget.user.cart.isNotEmpty) {
       totalCost = widget.user.cart
           .map((item) => item.amount.toInt())
@@ -36,7 +34,7 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder(
-            future: aboutBooksFuture,
+            future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());

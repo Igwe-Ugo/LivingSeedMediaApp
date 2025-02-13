@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/pages/publications/publications.dart';
+import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import '../services/services.dart';
 
@@ -13,18 +14,10 @@ class AllPage extends StatefulWidget {
 }
 
 class _AllPageState extends State<AllPage> {
-  late Future<List<AboutBooks>> aboutBooksFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    aboutBooksFuture = loadAboutBook();
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: aboutBooksFuture,
+      future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());

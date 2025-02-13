@@ -24,6 +24,16 @@ class RatingReview {
       reviewRating: (json["reviewRating"] as num).toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "reviewText": reviewText,
+      "date": date,
+      "reviewTitle": reviewTitle,
+      "reviewer": reviewer,
+      "reviewRating": reviewRating,
+    };
+  }
 }
 
 class AboutBooks {
@@ -57,10 +67,10 @@ class AboutBooks {
   factory AboutBooks.fromJson(Map<String, dynamic> json) {
     List<Map<String, String>> extractedChapters = [];
     if (json['chapters'] != null && json['chapters'] is List) {
-    extractedChapters = (json['chapters'] as List)
-        .map((chapter) => Map<String, String>.from(chapter as Map))
-        .toList();
-  }
+      extractedChapters = (json['chapters'] as List)
+          .map((chapter) => Map<String, String>.from(chapter as Map))
+          .toList();
+    }
 
     List<RatingReview> extractedReviews = [];
     if (json['ratingReviews'] != null && json['ratingReviews'] is List) {
@@ -97,7 +107,7 @@ class AboutBooks {
       "chapterNum": chapterNum,
       "pdfLink": pdfLink,
       "chapters": chapters,
-      "ratingReviews": ratingReviews,
+      "ratingReviews": ratingReviews.map((review) => review.toJson()).toList(),
     };
   }
 

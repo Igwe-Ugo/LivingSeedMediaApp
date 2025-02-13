@@ -6,6 +6,7 @@ import 'package:livingseed_media/screens/common/custom_route.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/publications/publications.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 
 class PublicationsPage extends StatefulWidget {
   const PublicationsPage({super.key});
@@ -60,7 +61,8 @@ class _PublicationsPageState extends State<PublicationsPage> {
   }
 
   Future<void> _loadBooks() async {
-    books = await loadAboutBook(); // load books from json
+    books = await Provider.of<AboutBookProvider>(context, listen: false)
+        .booksFuture!; // load books from json
     setState(() {
       filteredBooks = books; // initially, all books are displayed
     });
@@ -236,7 +238,7 @@ class _PublicationsPageState extends State<PublicationsPage> {
                         ),
                         Text(
                           "Sorry, No matching books found!",
-                          style: TextStyle(fontSize: 17),
+                          style: TextStyle(fontSize: 15),
                         ),
                       ],
                     )

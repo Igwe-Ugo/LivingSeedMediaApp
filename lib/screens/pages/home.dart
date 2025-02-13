@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/models/models.dart';
+import 'package:provider/provider.dart';
 import '../common/widget.dart';
 import 'services/services.dart';
 
@@ -14,19 +15,11 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<AboutBooks>> aboutBooksFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    aboutBooksFuture = loadAboutBook();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: aboutBooksFuture,
+          future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,14 +14,6 @@ class MoreBooks extends StatefulWidget {
 }
 
 class _MoreBooksState extends State<MoreBooks> {
-  late Future<List<AboutBooks>> booksFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    booksFuture = loadAboutBook();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +36,7 @@ class _MoreBooksState extends State<MoreBooks> {
         ),
       ),
       body: FutureBuilder<List<AboutBooks>>(
-        future: booksFuture,
+        future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -78,7 +71,8 @@ class _MoreBooksState extends State<MoreBooks> {
   Widget _buildBookItem(BuildContext context, AboutBooks book) {
     return GestureDetector(
       onTap: () => GoRouter.of(context).go(
-          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}', extra: book),
+          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+          extra: book),
       child: Card(
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

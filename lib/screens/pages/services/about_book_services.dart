@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_final_fields
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -6,74 +7,82 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 
-Future<List<AboutBooks>> loadAboutBook() async {
-  try {
-    String jsonString = await rootBundle.loadString('assets/json/about_book.json');
-
-    // Decode JSON and convert to a list of book objects
-    List<AboutBooks> aboutBooks = AboutBooks.fromJsonList(jsonString);
-    return aboutBooks;
-  } catch (e) {
-    debugPrint('Error Loading JSON: $e');
-    return [];
-  }
-}
-
 class AboutBookProvider extends ChangeNotifier {
   AboutBooks? _currentBook;
   AboutBooks? get bookData => _currentBook;
-  
+
   List<AboutBooks> _books = [];
   List<AboutBooks> get allBooks => _books;
+  
+  Future<List<AboutBooks>>? booksFuture; // Cached future for reuse
 
-  /// **Initialize Books from JSON**
+  // Initialize books once when the app starts
   Future<void> initializeBooks() async {
+    booksFuture = _loadBooks(); // Store future so it can be reused
+    notifyListeners();
+  }
+
+  // Fetch books from both assets and local storage
+  Future<List<AboutBooks>> _loadBooks() async {
+    List<AboutBooks> assetBooks = await _loadBooksFromAssets();
+    List<AboutBooks> localBooks = await _loadBooksFromLocal();
+    
+    // Merge books while preventing duplicates
+    Set<String> existingTitles = localBooks.map((book) => book.bookTitle).toSet();
+    assetBooks.removeWhere((book) => existingTitles.contains(book.bookTitle));
+    
+    _books = [...localBooks, ...assetBooks]; // Prioritize local books
+    return _books;
+  }
+
+  // Fetch books from assets (JSON)
+  Future<List<AboutBooks>> _loadBooksFromAssets() async {
     try {
       String jsonString = await rootBundle.loadString('assets/json/about_book.json');
-      _books = AboutBooks.fromJsonList(jsonString);
-      await _loadBooksFromLocal(); // Load local saved books
-      notifyListeners();
+      List<dynamic> jsonData = json.decode(jsonString);
+      return jsonData.map((item) => AboutBooks.fromJson(item)).toList();
     } catch (e) {
-      debugPrint('Error initializing books: $e');
+      debugPrint('Error Loading JSON: $e');
+      return [];
     }
   }
 
-  /// **Load Books from Local Storage**
-  Future<void> _loadBooksFromLocal() async {
+  // Fetch books from local storage (if available)
+  Future<List<AboutBooks>> _loadBooksFromLocal() async {
     try {
       final file = await _getBooksFile();
       if (file.existsSync()) {
         String data = await file.readAsString();
         List<dynamic> jsonList = json.decode(data);
-        _books = jsonList.map((json) => AboutBooks.fromJson(json)).toList();
-        notifyListeners();
+        return jsonList.map((json) => AboutBooks.fromJson(json)).toList();
       }
     } catch (e) {
       debugPrint('Error loading local book data: $e');
     }
+    return [];
   }
 
-  /// **Get File Path for Books Storage**
+  // Get file location for local book storage
   Future<File> _getBooksFile() async {
     final directory = await getApplicationDocumentsDirectory();
     return File('${directory.path}/about_book.json');
   }
 
-  /// **Save Books to Local Storage**
+  // Save books to local storage
   Future<void> _saveBooksToLocal() async {
     try {
       final file = await _getBooksFile();
       String jsonData = json.encode(_books.map((book) => book.toJson()).toList());
-      await file.writeAsString(jsonData);
+      await file.writeAsString(jsonData, mode: FileMode.write);
     } catch (e) {
       debugPrint('Error saving book data: $e');
     }
   }
 
-  /// **Upload a New Book**
+  // Upload book and update local storage
   Future<bool> uploadBook(AboutBooks newBook) async {
     if (_books.any((book) => book.bookTitle == newBook.bookTitle)) {
-      return false; // Book already exists
+      return false; // Prevent duplicates
     }
     _books.add(newBook);
     _currentBook = newBook;
