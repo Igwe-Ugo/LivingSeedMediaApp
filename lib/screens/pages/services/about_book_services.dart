@@ -13,11 +13,12 @@ class AboutBookProvider extends ChangeNotifier {
 
   List<AboutBooks> _books = [];
   List<AboutBooks> get allBooks => _books;
-  
+
   Future<List<AboutBooks>>? booksFuture; // Cached future for reuse
 
   // Initialize books once when the app starts
   Future<void> initializeBooks() async {
+    debugPrint("Initializing Books...");
     booksFuture = _loadBooks(); // Store future so it can be reused
     notifyListeners();
   }
@@ -26,11 +27,12 @@ class AboutBookProvider extends ChangeNotifier {
   Future<List<AboutBooks>> _loadBooks() async {
     List<AboutBooks> assetBooks = await _loadBooksFromAssets();
     List<AboutBooks> localBooks = await _loadBooksFromLocal();
-    
+
     // Merge books while preventing duplicates
-    Set<String> existingTitles = localBooks.map((book) => book.bookTitle).toSet();
+    Set<String> existingTitles =
+        localBooks.map((book) => book.bookTitle).toSet();
     assetBooks.removeWhere((book) => existingTitles.contains(book.bookTitle));
-    
+
     _books = [...localBooks, ...assetBooks]; // Prioritize local books
     return _books;
   }
@@ -38,7 +40,8 @@ class AboutBookProvider extends ChangeNotifier {
   // Fetch books from assets (JSON)
   Future<List<AboutBooks>> _loadBooksFromAssets() async {
     try {
-      String jsonString = await rootBundle.loadString('assets/json/about_book.json');
+      String jsonString =
+          await rootBundle.loadString('assets/json/about_book.json');
       List<dynamic> jsonData = json.decode(jsonString);
       return jsonData.map((item) => AboutBooks.fromJson(item)).toList();
     } catch (e) {
@@ -72,7 +75,8 @@ class AboutBookProvider extends ChangeNotifier {
   Future<void> _saveBooksToLocal() async {
     try {
       final file = await _getBooksFile();
-      String jsonData = json.encode(_books.map((book) => book.toJson()).toList());
+      String jsonData =
+          json.encode(_books.map((book) => book.toJson()).toList());
       await file.writeAsString(jsonData, mode: FileMode.write);
     } catch (e) {
       debugPrint('Error saving book data: $e');

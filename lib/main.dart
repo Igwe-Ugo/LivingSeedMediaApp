@@ -3,6 +3,7 @@ import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'screens/common/widget.dart';
 import 'package:provider/provider.dart';
 
+
 void main() {
   LivingSeedAppRouter.instance;
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => themeChangeProvider),
         ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
-        ChangeNotifierProvider(create: (_) => AdminAuthProvider()..initializeNotifications()),
+        ChangeNotifierProvider(create: (_) => AdminAuthProvider()..initializeNotifications(context)),
         ChangeNotifierProvider(
             create: (_) => AboutBookProvider()..initializeBooks())
       ],

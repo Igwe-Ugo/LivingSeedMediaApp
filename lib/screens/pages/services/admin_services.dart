@@ -1,100 +1,207 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:livingseed_media/screens/models/models.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 class AdminAuthProvider extends ChangeNotifier {
-  List<NotificationItems> _notices = [];
-  List<NotificationItems> get allNotices => _notices;
-  Future<List<NotificationItems>>? notificationFuture;
+  List<NotificationItems> _generalNotices = [];
+  Map<String, List<NotificationItems>> _personalNotices = {};
 
-  Future<void> initializeNotifications() async {
-    notificationFuture = _loadNotices();
+  List<NotificationItems> get generalNotices => _generalNotices;
+  Map<String, List<NotificationItems>> get personalNotices => _personalNotices;
+  bool _isInitialized = false;
+
+  Future<void> initializeNotifications(BuildContext context) async {
+    if (_isInitialized) return; // Prevent multiple calls
+    _isInitialized = true;
+    debugPrint("Initializing Notifications..."); // Debugging print
+    await _loadNotices(context); // Load all notices on startup
     notifyListeners();
   }
 
-  Future<List<NotificationItems>> _loadNotices() async {
-    List<NotificationItems> assetNotices = await _loadNoticesFromAssets();
-    List<NotificationItems> localNotices = await _loadNotificationFromLocal();
+  /// **Load all notifications from assets and local storage**
+  Future<void> _loadNotices(BuildContext context) async {
+    //final userAuthProvider = Provider.of<UsersAuthProvider>(context, listen: false);
+    //String? userEmail = userAuthProvider.userData?.emailAddress;
 
+    //if (userEmail == null) return; // No user logged in, so skip loading
+
+    debugPrint("Loading general notifications...");
+    // Load General Notifications
+    List<NotificationItems> assetGeneralNotices =
+        await _loadNoticesFromAssets();
+    List<NotificationItems> localGeneralNotices =
+        await _loadGeneralNoticesFromLocal();
+
+    // Merge notices while preventing duplicates
     Set<String> existingTitles =
-        localNotices.map((notice) => notice.notificationTitle).toSet();
-    assetNotices.removeWhere(
-        (notice) => existingTitles.contains(notice.notificationTitle));
+        localGeneralNotices.map((n) => n.notificationTitle).toSet();
+    assetGeneralNotices
+        .removeWhere((n) => existingTitles.contains(n.notificationTitle));
 
-    _notices = [...localNotices, ...assetNotices]; // Prioritize local notices
-    return _notices;
+    _generalNotices = [...localGeneralNotices, ...assetGeneralNotices];
+
+    debugPrint("Loading personal notifications...");
+    // Load Personal Notifications for this specific user!
+    //_personalNotices = await _loadPersonalNoticesFromLocal(userEmail);
+
+    notifyListeners(); // Ensure UI updates with new notifications
+    debugPrint("Notifications loaded successfully!");
   }
 
-  // Load notifications from assets (JSON)
+  /// **Load general notifications from assets**
   Future<List<NotificationItems>> _loadNoticesFromAssets() async {
     try {
       String jsonString =
           await rootBundle.loadString('assets/json/notifications.json');
-      List<dynamic> jsonData = json.decode(jsonString);
-      return jsonData.map((item) => NotificationItems.fromJson(item)).toList();
+      Map<String, dynamic> jsonData = json.decode(jsonString);
+
+      if (jsonData.containsKey('generalNotifications') &&
+          jsonData['generalNotifications'] is List) {
+        return (jsonData['generalNotifications'] as List)
+            .map((item) => NotificationItems.fromJson(item))
+            .toList();
+      }
     } catch (e) {
-      debugPrint('Error Loading JSON: $e');
-      return [];
+      debugPrint('Error loading general notifications from assets: $e');
     }
+    return [];
   }
 
-  // Load notifications from local storage
-  Future<List<NotificationItems>> _loadNotificationFromLocal() async {
+  /// **Load general notifications from local storage**
+  Future<List<NotificationItems>> _loadGeneralNoticesFromLocal() async {
     try {
       final file = await _getNotificationFile();
       if (file.existsSync()) {
         String data = await file.readAsString();
-        List<dynamic> jsonList = json.decode(data);
-        return jsonList.map((json) => NotificationItems.fromJson(json)).toList();
+        Map<String, dynamic> jsonData = json.decode(data);
+
+        if (jsonData.containsKey('generalNotifications') &&
+            jsonData['generalNotifications'] is List) {
+          return (jsonData['generalNotifications'] as List)
+              .map((item) => NotificationItems.fromJson(item))
+              .toList();
+        }
       }
     } catch (e) {
-      debugPrint('Error loading local Notification data: $e');
+      debugPrint('Error loading general notifications from local: $e');
     }
-    return []; // Return an empty list instead of void
+    return [];
   }
 
+  /// **Load personal notifications from local storage**
+  Future<Map<String, List<NotificationItems>>> _loadPersonalNoticesFromLocal(
+      String userEmail) async {
+    try {
+      final file = await _getNotificationFile();
+      if (file.existsSync()) {
+        String data = await file.readAsString();
+        Map<String, dynamic> jsonMap = json.decode(data);
 
+        if (jsonMap.containsKey("personalNotifications")) {
+          Map<String, dynamic> personalJson = jsonMap["personalNotifications"];
+
+          // Get only the notifications for the logged-in user
+          if (personalJson.containsKey(userEmail)) {
+            return {
+              userEmail: (personalJson[userEmail] as List)
+                  .map((item) => NotificationItems.fromJson(item))
+                  .toList()
+            };
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error loading personal notifications: $e');
+    }
+    return {}; // Return empty map if user has no notifications
+  }
+
+  /// **Get the file for storing notifications**
   Future<File> _getNotificationFile() async {
     final directory = await getApplicationDocumentsDirectory();
     return File('${directory.path}/notifications.json');
   }
 
+  /// **Save notifications to local storage**
   Future<void> _saveNotificationToLocal() async {
     try {
       final file = await _getNotificationFile();
-      String jsonData =
-          json.encode(_notices.map((notice) => notice.toJson()).toList());
+      String jsonData = json.encode({
+        "generalNotifications": _generalNotices.map((n) => n.toJson()).toList(),
+        "personalNotifications": _personalNotices.map(
+          (key, value) => MapEntry(key, value.map((n) => n.toJson()).toList()),
+        ),
+      });
       await file.writeAsString(jsonData);
     } catch (e) {
       debugPrint('Error saving notifications: $e');
     }
   }
 
-  Future<bool> sendNotification(NotificationItems newNotification) async {
-    if (_notices.any((notice) =>
-        notice.notificationTitle == newNotification.notificationTitle)) {
+  /// **Send a general notification**
+  Future<bool> sendGeneralNotification(
+      NotificationItems newNotification) async {
+    if (_generalNotices
+        .any((n) => n.notificationTitle == newNotification.notificationTitle)) {
       return false;
     }
 
-    _notices.add(newNotification);
+    _generalNotices.add(newNotification);
     await _saveNotificationToLocal();
     notifyListeners();
     return true;
   }
 
-  Future<bool> deleteNotification(String notificationTitle) async {
-    int initialLength = _notices.length;
-    _notices.removeWhere((item) => item.notificationTitle == notificationTitle);
-
-    if (_notices.length != initialLength) {
-      await _saveNotificationToLocal();
-      notifyListeners();
-      return true; // Successfully deleted
+  /// **Send a personal notification**
+  Future<bool> sendPersonalNotification(
+      String email, NotificationItems newNotification) async {
+    if (!_personalNotices.containsKey(email)) {
+      _personalNotices[email] = [];
     }
-    return false; // Notification not found
+
+    _personalNotices[email]!.add(newNotification);
+    await _saveNotificationToLocal();
+    notifyListeners();
+    return true;
   }
 
+  /// **Delete a general notification**
+  Future<bool> deleteGeneralNotification(String notificationTitle) async {
+    int initialLength = _generalNotices.length;
+    _generalNotices
+        .removeWhere((n) => n.notificationTitle == notificationTitle);
+
+    if (_generalNotices.length != initialLength) {
+      await _saveNotificationToLocal();
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+
+  /// **Delete a personal notification**
+  Future<bool> deletePersonalNotification(
+      String email, String notificationTitle) async {
+    if (_personalNotices.containsKey(email)) {
+      int initialLength = _personalNotices[email]!.length;
+      _personalNotices[email]!
+          .removeWhere((n) => n.notificationTitle == notificationTitle);
+
+      if (_personalNotices[email]!.isEmpty) {
+        _personalNotices.remove(email);
+      }
+
+      if (_personalNotices.length != initialLength) {
+        await _saveNotificationToLocal();
+        notifyListeners();
+        return true;
+      }
+    }
+    return false;
+  }
 }

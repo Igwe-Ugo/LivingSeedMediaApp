@@ -38,17 +38,18 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder(
-            future: Provider.of<AdminAuthProvider>(context).notificationFuture,
+            future: Provider.of<AdminAuthProvider>(context).initializeNotifications(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(child: Text("Error loading books"));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text("No books found"));
+                return Center(child: Text("Error loading Notices"));
+              } else if (!snapshot.hasData) {
+                return Center(child: Text("No Notices found"));
               }
 
-              var notifications = snapshot.data!;
+              final adminProvider = Provider.of<AdminAuthProvider>(context, listen: false);
+              final generalNotices = adminProvider.generalNotices;
 
               return SingleChildScrollView(
                 child: Padding(
@@ -251,7 +252,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                       ),
                       const SizedBox(height: 10),
                       Column(
-                        children: notifications
+                        children: generalNotices
                             .map((notice) => recentNotifications(context,
                                 notificationImage: notice.notificationImage,
                                 notificationTitle: notice.notificationTitle,
@@ -288,7 +289,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
     );
 
     bool success = await Provider.of<AdminAuthProvider>(context, listen: false)
-        .sendNotification(newNotification);
+        .sendGeneralNotification(newNotification);
     if (success) {
       showMessage('Notification sent successfully!', context);
       GoRouter.of(context).pop();
@@ -375,7 +376,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                   IconButton(
                     onPressed: () {
                       Provider.of<AdminAuthProvider>(context, listen: false)
-                          .deleteNotification(notificationTitle);
+                          .deleteGeneralNotification(notificationTitle);
                       showMessage('Notification Deleted!', context);
                     },
                     icon: Icon(

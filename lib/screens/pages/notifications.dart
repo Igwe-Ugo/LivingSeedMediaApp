@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:livingseed_media/screens/pages/notices/notices.dart';
+import 'package:livingseed_media/screens/pages/services/services.dart';
+import 'package:provider/provider.dart';
 
 class Notifications extends StatelessWidget {
   const Notifications({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final notificationProvider = Provider.of<AdminAuthProvider>(context);
+    final generalNotices = notificationProvider.generalNotices;
+    final personalNotices = notificationProvider.personalNotices;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
@@ -15,16 +22,15 @@ class Notifications extends StatelessWidget {
             Row(
               children: [
                 IconButton(
-                    onPressed: () {
-                      GoRouter.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Iconsax.arrow_left_2,
-                      size: 17,
-                    )),
-                const SizedBox(
-                  width: 15,
+                  onPressed: () {
+                    GoRouter.of(context).pop();
+                  },
+                  icon: const Icon(
+                    Iconsax.arrow_left_2,
+                    size: 17,
+                  ),
                 ),
+                const SizedBox(width: 15),
                 const Text(
                   'Notifications',
                   style: TextStyle(
@@ -35,130 +41,96 @@ class Notifications extends StatelessWidget {
                 ),
               ],
             ),
-            ListView(
-              shrinkWrap: true,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'June 1',
-                      style: TextStyle(fontSize: 12),
+            const SizedBox(height: 10),
+            DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                    child: TabBar(
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      dividerColor: Colors.transparent,
+                      indicatorColor:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
+                      indicator: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white,
+                      ),
+                      tabs: [
+                        Tab(
+                          child: Text(
+                            'General',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12.0,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.grey
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                        Tab(
+                          child: Text(
+                            'Personal',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12.0,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.grey
+                                  : Colors.black,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                ),
-                ...notification(context, [
-                  {
-                    'imagePath': 'assets/images/mlr_2024_flier.jpeg',
-                    'title': 'Payment received, thank you!',
-                    'description':
-                        'Your payment has been successfully approved.',
-                  },
-                  {
-                    'imagePath': 'assets/images/mlr_2024_flier.jpeg',
-                    'title': '"Money Routine" is making waves',
-                    'description': '@bisoye just liked your collection'
-                  },
-                  {
-                    'imagePath': 'assets/images/mlr_2024_flier.jpeg',
-                    'title': '"Money Routine" latest review in.',
-                    'description':
-                        '@bisoye dropped a new review on your collection.'
-                  },
-                ]),
-                const SizedBox(height: 10),
-                const Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'May 24',
-                      style: TextStyle(fontSize: 12),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: TabBarView(
+                      children: [
+                        // General Notices List
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: generalNotices.length,
+                          itemBuilder: (context, index) {
+                            return GeneralNotices(generalNotices[index]);
+                          },
+                        ),
+
+                        // Personal Notices List
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: personalNotices.values
+                              .expand((list) => list) // Flatten the map
+                              .length,
+                          itemBuilder: (context, index) {
+                            final notifications = personalNotices.values
+                                .expand((list) => list)
+                                .toList();
+                            return PersonalNotices(notifications[index]);
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                ...notification(context, [
-                  {
-                    'imagePath': 'assets/images/mlr_2024_flier.jpeg',
-                    'title': 'Payment received, thank you!',
-                    'description':
-                        'Your payment has been successfully approved.',
-                  },
-                  {
-                    'imagePath': 'assets/images/mlr_2024_flier.jpeg',
-                    'title': '"Money Routine" is making waves',
-                    'description': '@bisoye just liked your collection'
-                  },
-                  {
-                    'imagePath': 'assets/images/mlr_2024_flier.jpeg',
-                    'title': '"Money Routine" latest review in.',
-                    'description':
-                        '@bisoye dropped a new review on your collection.'
-                  },
-                ]),
-              ],
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
   }
-}
-
-List<Widget> notification(
-  BuildContext context,
-  List<Map<String, String>> notifications,
-) {
-  return notifications.map((notif) {
-    return notify(
-      context,
-      imagePath: notif['imagePath']!,
-      titleNotify: notif['title']!,
-      descriptionNotify: notif['description']!,
-    );
-  }).toList();
-}
-
-Widget notify(
-  BuildContext context, {
-  required String imagePath,
-  required String titleNotify,
-  required String descriptionNotify,
-}) {
-  return ListTile(
-    onTap: () {},
-    contentPadding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2.5),
-    leading: Container(
-      padding: const EdgeInsets.all(5),
-      constraints: const BoxConstraints(
-        minWidth: 30,
-        minHeight: 30,
-      ),
-      child: CircleAvatar(
-        radius: 15,
-        child: Image.asset(imagePath),
-      ),
-    ),
-    title: Text(
-      titleNotify,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      ),
-    ),
-    subtitle: SizedBox(
-      width: MediaQuery.of(context).size.width * 0.4,
-      child: Text(
-        descriptionNotify,
-        style: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-        ),
-        overflow: TextOverflow.ellipsis,
-        maxLines: 3,
-      ),
-    ),
-    trailing: const Icon(Iconsax.arrow_right, size: 17),
-  );
 }
