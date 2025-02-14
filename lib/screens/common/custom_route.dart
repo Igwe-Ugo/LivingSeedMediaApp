@@ -7,6 +7,7 @@ import 'package:livingseed_media/screens/pages/accounts/downloads.dart';
 import 'package:livingseed_media/screens/pages/admin/admin.dart';
 import 'package:livingseed_media/screens/pages/auth/verify_account.dart';
 import 'package:livingseed_media/screens/pages/messages/library.dart';
+import 'package:livingseed_media/screens/pages/notices/notices.dart';
 import 'package:livingseed_media/screens/pages/publications/publications.dart';
 import '../models/models.dart';
 import '../pages/auth/auth.dart';
@@ -60,6 +61,7 @@ class LivingSeedAppRouter {
   static const String readBookPath = 'read_book';
   static const String makePaymentPath = 'make_payment';
   static const String moreBooksPath = 'more_books';
+  static const String anouncementsPath = 'announcements';
 
   //admin pages
   static const String uploadBookPath = 'upload_book_path';
@@ -67,7 +69,7 @@ class LivingSeedAppRouter {
   static const String manageNotificationsPath = 'manage_notifications';
   static const String manageUsersPath = 'manage_users';
   static const String userProfilePath = 'user_profile';
-  static const String noticePath = 'notice';
+  static const String noticesPath = 'notice';
 
   LivingSeedAppRouter._internal() {
     final routes = <RouteBase>[
@@ -112,9 +114,6 @@ class LivingSeedAppRouter {
                       },
                       routes: [
                         GoRoute(
-                            path: notificationPath,
-                            builder: (context, state) => const Notifications()),
-                        GoRoute(
                           path: aboutBookPath,
                           builder: (context, state) {
                             final about_books = state.extra;
@@ -140,7 +139,23 @@ class LivingSeedAppRouter {
                       routes: [
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) => const Notifications()),
+                            builder: (context, state) => const Notifications(),
+                            routes: [
+                              GoRoute(
+                                path: anouncementsPath,
+                                builder: (context, state) {
+                                  final anouncement = state.extra;
+                                  if (anouncement is NotificationItems) {
+                                    return Announcements(announcement: anouncement);
+                                  } else {
+                                    return Center(
+                                      child: Text(
+                                          'No Recent Annoucements to be reviewed'),
+                                    );
+                                  }
+                                },
+                              ),
+                            ]),
                         GoRoute(
                           path: moreBooksPath,
                           builder: (context, state) => const MoreBooks(),
@@ -193,7 +208,23 @@ class LivingSeedAppRouter {
                       routes: [
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) => const Notifications()),
+                            builder: (context, state) => const Notifications(),
+                            routes: [
+                              GoRoute(
+                                path: anouncementsPath,
+                                builder: (context, state) {
+                                  final anouncement = state.extra;
+                                  if (anouncement is NotificationItems) {
+                                    return Announcements(announcement: anouncement);
+                                  } else {
+                                    return Center(
+                                      child: Text(
+                                          'No Recent Announcements to be reviewed'),
+                                    );
+                                  }
+                                },
+                              ),
+                            ]),
                         GoRoute(
                             path: videoMessagesPath,
                             builder: (context, state) => const VideoMessages()),
@@ -231,15 +262,15 @@ class LivingSeedAppRouter {
                                       const AdminNotifications(),
                                   routes: [
                                     GoRoute(
-                                      path: noticePath,
+                                      path: noticesPath,
                                       builder: (context, state) {
-                                        final notice = state.extra;
-                                        if (notice is NotificationItems) {
-                                          return Notices(notice: notice);
+                                        final anouncement = state.extra;
+                                        if (anouncement is NotificationItems) {
+                                          return Announcements(announcement: anouncement,);
                                         } else {
                                           return Center(
                                             child: Text(
-                                                'No Recent Notification to be reviewed'),
+                                                'No Recent Announcements to be reviewed'),
                                           );
                                         }
                                       },

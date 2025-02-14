@@ -18,7 +18,6 @@ class AdminAuthProvider extends ChangeNotifier {
   Future<void> initializeNotifications(BuildContext context) async {
     if (_isInitialized) return; // Prevent multiple calls
     _isInitialized = true;
-    debugPrint("Initializing Notifications..."); // Debugging print
     await _loadNotices(context); // Load all notices on startup
     notifyListeners();
   }
@@ -30,7 +29,6 @@ class AdminAuthProvider extends ChangeNotifier {
 
     //if (userEmail == null) return; // No user logged in, so skip loading
 
-    debugPrint("Loading general notifications...");
     // Load General Notifications
     List<NotificationItems> assetGeneralNotices =
         await _loadNoticesFromAssets();
@@ -45,12 +43,10 @@ class AdminAuthProvider extends ChangeNotifier {
 
     _generalNotices = [...localGeneralNotices, ...assetGeneralNotices];
 
-    debugPrint("Loading personal notifications...");
     // Load Personal Notifications for this specific user!
     //_personalNotices = await _loadPersonalNoticesFromLocal(userEmail);
 
     notifyListeners(); // Ensure UI updates with new notifications
-    debugPrint("Notifications loaded successfully!");
   }
 
   /// **Load general notifications from assets**

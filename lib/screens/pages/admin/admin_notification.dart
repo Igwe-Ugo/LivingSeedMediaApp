@@ -35,248 +35,234 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AdminAuthProvider>(context, listen: false)
+          .initializeNotifications(context);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: FutureBuilder(
-            future: Provider.of<AdminAuthProvider>(context).initializeNotifications(context),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error loading Notices"));
-              } else if (!snapshot.hasData) {
-                return Center(child: Text("No Notices found"));
-              }
+    return Scaffold(body: Consumer<AdminAuthProvider>(
+        builder: (context, notificationProvider, child) {
+      final generalNotices = notificationProvider.generalNotices;
 
-              final adminProvider = Provider.of<AdminAuthProvider>(context, listen: false);
-              final generalNotices = adminProvider.generalNotices;
-
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          IconButton(
-                              onPressed: () {
-                                GoRouter.of(context).pop();
-                              },
-                              icon: const Icon(
-                                Iconsax.arrow_left_2,
-                                size: 17,
-                              )),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          const Text(
-                            'Manage Notifications',
-                            style: TextStyle(
-                              fontFamily: 'Playfair',
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+      return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        GoRouter.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Iconsax.arrow_left_2,
+                        size: 17,
+                      )),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  const Text(
+                    'Manage Notifications',
+                    style: TextStyle(
+                      fontFamily: 'Playfair',
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Create Notification',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Create Notification',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 17,
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Column(
-                              children: [
-                                if (_coverImage != null)
-                                  Text(
-                                    'Image Selected',
-                                    style: TextStyle(color: Colors.green[700]),
-                                  ),
-                                const SizedBox(width: 12),
-                                ElevatedButton(
-                                  style: ButtonStyle(
-                                    elevation: WidgetStatePropertyAll(0),
-                                  ),
-                                  onPressed: _pickCoverImage,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 10.0),
-                                    child: Row(
-                                      children: const [
-                                        Icon(
-                                          Iconsax.image,
-                                          color: Colors.green,
-                                        ),
-                                        SizedBox(
-                                          width: 7,
-                                        ),
-                                        Text(
-                                          'Upload Notification Image',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                    ),
+                    const SizedBox(height: 16),
+                    Column(
+                      children: [
+                        if (_coverImage != null)
+                          Text(
+                            'Image Selected',
+                            style: TextStyle(color: Colors.green[700]),
+                          ),
+                        const SizedBox(width: 12),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: WidgetStatePropertyAll(0),
+                          ),
+                          onPressed: _pickCoverImage,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Iconsax.image,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Text(
+                                  'Upload Notification Image',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(12)),
-                                border: Border.all(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Theme.of(context)
-                                          .disabledColor
-                                          .withOpacity(0.15),
-                                ),
-                              ),
-                              child: TextFormField(
-                                controller: _notificationTitleController,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  hintText: 'Message title...',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  fillColor: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.2),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter the title of the notification';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 16),
-                            Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(12)),
-                                border: Border.all(
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Theme.of(context)
-                                          .disabledColor
-                                          .withOpacity(0.15),
-                                ),
-                              ),
-                              child: TextFormField(
-                                controller: _notificationMessageController,
-                                decoration: InputDecoration(
-                                  filled: true,
-                                  hintText: "Message",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide.none,
-                                  ),
-                                  fillColor: Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.2),
-                                ),
-                                maxLines: 10,
-                                maxLength: 300,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please give details about the notification made';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              style: ButtonStyle(
-                                  elevation: WidgetStatePropertyAll(0),
-                                  backgroundColor: WidgetStatePropertyAll(
-                                      Theme.of(context).primaryColor)),
-                              onPressed: () => _sendNotification(),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 15.0),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Iconsax.message,
-                                          color: Colors.white),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        'Send Notification',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.white),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                          ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
+                        border: Border.all(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Theme.of(context)
+                                  .disabledColor
+                                  .withOpacity(0.15),
                         ),
                       ),
-                      const Text(
-                        'Recent Notifications',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17,
+                      child: TextFormField(
+                        controller: _notificationTitleController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          filled: true,
+                          hintText: 'Message title...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          fillColor:
+                              Theme.of(context).disabledColor.withOpacity(0.2),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the title of the notification';
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(12)),
+                        border: Border.all(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Theme.of(context)
+                                  .disabledColor
+                                  .withOpacity(0.15),
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      Column(
-                        children: generalNotices
-                            .map((notice) => recentNotifications(context,
-                                notificationImage: notice.notificationImage,
-                                notificationTitle: notice.notificationTitle,
-                                notificationMessage: notice.notificationMessage,
-                                notificationDate: notice.notificationDate,
-                                notificationTime: notice.notificationTime,
-                                notificationData: notice))
-                            .toList(),
+                      child: TextFormField(
+                        controller: _notificationMessageController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          hintText: "Message",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          fillColor:
+                              Theme.of(context).disabledColor.withOpacity(0.2),
+                        ),
+                        maxLines: 10,
+                        maxLength: 300,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please give details about the notification made';
+                          }
+                          return null;
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          elevation: WidgetStatePropertyAll(0),
+                          backgroundColor: WidgetStatePropertyAll(
+                              Theme.of(context).primaryColor)),
+                      onPressed: () => _sendNotification(),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Iconsax.message, color: Colors.white),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text(
+                                'Send Notification',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-              );
-            }
-          )
-        );
-
+              ),
+              const Text(
+                'Recent Notifications',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Column(
+                children: generalNotices
+                    .map((notice) => recentNotifications(context,
+                        notificationImage: notice.notificationImage,
+                        notificationTitle: notice.notificationTitle,
+                        notificationMessage: notice.notificationMessage,
+                        notificationDate: notice.notificationDate,
+                        notificationTime: notice.notificationTime,
+                        notificationData: notice))
+                    .toList(),
+              ),
+            ],
+          ),
+        ),
+      );
+    }));
   }
 
   void _sendNotification() async {
     if (!_formKey.currentState!.validate()) {
       return showMessage('Please fill all available input spaces', context);
     }
-
 
     NotificationItems newNotification = NotificationItems(
       notificationImage: _coverImage!.path.toString(),
@@ -294,7 +280,8 @@ class _AdminNotificationsState extends State<AdminNotifications> {
       showMessage('Notification sent successfully!', context);
       GoRouter.of(context).pop();
     } else {
-      showMessage('Notification already exists, please send a new notification', context);
+      showMessage('Notification already exists, please send a new notification',
+          context);
       return;
     }
   }
@@ -311,7 +298,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
         InkWell(
           onTap: () {
             GoRouter.of(context).go(
-                '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageNotificationsPath}/${LivingSeedAppRouter.noticePath}',
+                '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageNotificationsPath}/${LivingSeedAppRouter.noticesPath}',
                 extra: notificationData);
           },
           child: SizedBox(

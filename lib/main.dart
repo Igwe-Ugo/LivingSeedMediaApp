@@ -3,11 +3,21 @@ import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'screens/common/widget.dart';
 import 'package:provider/provider.dart';
 
-
 void main() {
-  LivingSeedAppRouter.instance;
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const LivingSeedApp());
+  LivingSeedAppRouter.instance;
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
+        ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
+        ChangeNotifierProvider(create: (_) => AdminAuthProvider()),
+        ChangeNotifierProvider(create: (_) => AboutBookProvider()),
+      ],
+      child:
+          const LivingSeedApp(), // Ensure LivingSeedApp is inside MultiProvider
+    ),
+  );
 }
 
 class LivingSeedApp extends StatefulWidget {
@@ -18,12 +28,21 @@ class LivingSeedApp extends StatefulWidget {
 }
 
 class _LivingSeedAppState extends State<LivingSeedApp> {
-  DarkThemeProvider themeChangeProvider = DarkThemeProvider();
+  late DarkThemeProvider themeChangeProvider;
 
   @override
   void initState() {
     super.initState();
+    themeChangeProvider =
+        Provider.of<DarkThemeProvider>(context, listen: false);
     getCurrentAppTheme();
+
+    // Load initial data after the first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AdminAuthProvider>(context, listen: false)
+          .initializeNotifications(context);
+      Provider.of<AboutBookProvider>(context, listen: false).initializeBooks();
+    });
   }
 
   void getCurrentAppTheme() async {
@@ -33,22 +52,15 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => themeChangeProvider),
-        ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
-        ChangeNotifierProvider(create: (_) => AdminAuthProvider()..initializeNotifications(context)),
-        ChangeNotifierProvider(
-            create: (_) => AboutBookProvider()..initializeBooks())
-      ],
-      child: Consumer<DarkThemeProvider>(builder: (context, themeData, child) {
+    return Consumer<DarkThemeProvider>(
+      builder: (context, themeData, child) {
         return MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: 'Living Seed Media',
           theme: Styles.themeData(themeChangeProvider.darkTheme, context),
           routerConfig: LivingSeedAppRouter.router,
         );
-      }),
+      },
     );
   }
 }

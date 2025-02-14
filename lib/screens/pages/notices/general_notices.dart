@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 
 class GeneralNotices extends StatelessWidget {
@@ -13,7 +15,11 @@ class GeneralNotices extends StatelessWidget {
           height: 10,
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            GoRouter.of(context).go(
+                '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.anouncementsPath}',
+                extra: notification);
+          },
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Padding(
