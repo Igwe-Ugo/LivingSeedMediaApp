@@ -2,30 +2,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
-class Notifications extends StatefulWidget {
+class Notifications extends StatelessWidget {
   final Users user;
 
   const Notifications({super.key, required this.user});
 
   @override
-  State<Notifications> createState() => _NotificationsState();
-}
-
-class _NotificationsState extends State<Notifications> {
-  @override
-  void initState() {
-    super.initState();
-    // Load notifications when screen initializes
-    Provider.of<NotificationProvider>(context, listen: false)
-        .loadNotifications();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    debugPrint(user.emailAddress);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -94,12 +83,11 @@ class _NotificationsState extends State<Notifications> {
                   notificationProvider.generalNotifications,
                   'No general notifications',
                 ),
-
                 // Personal Notifications Tab
                 _buildNotificationsList(
-                  widget.user.emailAddress != null
-                      ? notificationProvider.personalNotifications[
-                              widget.user.emailAddress] ??
+                  user.emailAddress != null
+                      ? notificationProvider
+                              .personalNotifications[user.emailAddress] ??
                           []
                       : [],
                   'No personal notifications',
@@ -146,66 +134,71 @@ class NotificationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  notification.notificationImage,
-                  width: 40,
-                  height: 40,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.notification_important, size: 40);
-                  },
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        notification.notificationTitle,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          Text(
-                            notification.notificationDate,
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            notification.notificationTime,
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+    return GestureDetector(
+      onTap: () {
+        GoRouter.of(context).go('${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}', extra: notification);
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Image.asset(
+                    notification.notificationImage,
+                    width: 40,
+                    height: 40,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(Icons.notification_important, size: 40);
+                    },
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Text(
-              notification.notificationMessage,
-              maxLines: 3,
-            ),
-          ],
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          notification.notificationTitle,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            Text(
+                              notification.notificationDate,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              notification.notificationTime,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Text(
+                notification.notificationMessage,
+                maxLines: 3,
+              ),
+            ],
+          ),
         ),
       ),
     );

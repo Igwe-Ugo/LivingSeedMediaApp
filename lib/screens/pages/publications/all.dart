@@ -17,209 +17,177 @@ class _AllPageState extends State<AllPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text("Error loading books"));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text("No books found"));
-        }
+        future:
+            Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error loading books"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No books found"));
+          }
 
-        List<AboutBooks> about_books = snapshot.data!;
+          List<AboutBooks> about_books = snapshot.data!;
 
-        return SingleChildScrollView(
-          child: Column(
-            children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Books',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Text(
-                          'We think you will like these',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () => GoRouter.of(context).go(
-                                  '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.moreBooksPath}'),
-                      child: Text('More',
-                          style: TextStyle(
-                              fontSize: 17, color: Theme.of(context).primaryColor)),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Row(
-                    children: about_books.map((book) => BooksPage(about_books: book)).toList(),
-                  )),
-              const SizedBox(
-                height: 20,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Bible Study Materials',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Books',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'We think you will like these',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Theme.of(context).disabledColor,
+                          Text(
+                            'We think you will like these',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Theme.of(context).disabledColor,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('More',
-                          style: TextStyle(
-                              fontSize: 17, color: Theme.of(context).primaryColor)),
-                    ),
-                  ],
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () => GoRouter.of(context).go(
+                            '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.moreBooksPath}'),
+                        child: Text('More',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Theme.of(context).primaryColor)),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: about_books.map((book) => BooksPage(about_books: book)).toList(),
-                  )),
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Seminar Papers',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Text(
-                          'We think you will like these',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('More',
-                          style: TextStyle(
-                              fontSize: 17, color: Theme.of(context).primaryColor)),
-                    ),
-                  ],
+                const SizedBox(
+                  height: 15,
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: about_books.map((book) => BooksPage(about_books: book)).toList(),
-                  )),
-              const SizedBox(
-                height: 20,
-              ),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Magazines',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        Text(
-                          'We think you will like these',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Theme.of(context).disabledColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: Text('More',
-                          style: TextStyle(
-                              fontSize: 17, color: Theme.of(context).primaryColor)),
-                    ),
-                  ],
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: about_books
+                          .map((book) => BooksPage(about_books: book))
+                          .toList(),
+                    )),
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Row(
-                    children: about_books.map((book) => BooksPage(about_books: book)).toList(),
-                  )),
-            ],
-          ),
-        );
-      }
-    );
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Bible Study Materials',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            'We think you will like these',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Theme.of(context).disabledColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('More',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Theme.of(context).primaryColor)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: about_books
+                          .map((book) => BooksPage(about_books: book))
+                          .toList(),
+                    )),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Seminar Papers & Magazines',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            'We think you will like these',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Theme.of(context).disabledColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text('More',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Theme.of(context).primaryColor)),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: about_books
+                          .map((book) => BooksPage(about_books: book))
+                          .toList(),
+                    )),
+                const SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

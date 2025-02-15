@@ -178,18 +178,6 @@ class _AccountPageState extends State<AccountPage> {
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
-                  ListTile(
-                    onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.downloadsPath}',
-                        extra: user),
-                    leading: const Icon(Icons.download_outlined),
-                    title: Text(
-                      'My Downloads',
-                      style: TextStyle(
-                          fontSize: _fontSize, fontWeight: FontWeight.w700),
-                    ),
-                    trailing: const Icon(Icons.keyboard_arrow_right_outlined),
-                  ),
                   user != null && user.role == 'Admin'
                       ? ListTile(
                           onTap: () {

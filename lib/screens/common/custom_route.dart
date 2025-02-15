@@ -3,7 +3,6 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_bottomnav.dart';
 import 'package:livingseed_media/screens/pages/accounts/accounts.dart';
-import 'package:livingseed_media/screens/pages/accounts/downloads.dart';
 import 'package:livingseed_media/screens/pages/admin/admin.dart';
 import 'package:livingseed_media/screens/pages/auth/verify_account.dart';
 import 'package:livingseed_media/screens/pages/notices/notices.dart';
@@ -117,16 +116,17 @@ class LivingSeedAppRouter {
                             },
                             routes: [
                               GoRoute(
-                                path: anouncementsPath,
+                                path: noticesPath,
                                 builder: (context, state) {
                                   final anouncement = state.extra;
                                   if (anouncement is NotificationItems) {
                                     return Announcements(
-                                        announcement: anouncement);
+                                      announcement: anouncement,
+                                    );
                                   } else {
                                     return Center(
                                       child: Text(
-                                          'No Recent Annoucements to be reviewed'),
+                                          'No Recent Announcements to be reviewed'),
                                     );
                                   }
                                 },
@@ -335,15 +335,6 @@ class LivingSeedAppRouter {
                         GoRoute(
                           path: editAccountPath,
                           builder: (context, state) => const Profile(),
-                        ),
-                        GoRoute(
-                          path: downloadsPath,
-                          builder: (context, state) {
-                            final user = state.extra as Users;
-                            return Downloads(
-                              user: user,
-                            );
-                          },
                         ),
                         GoRoute(
                             path: booksPurchasedPath,

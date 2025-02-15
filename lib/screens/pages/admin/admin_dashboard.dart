@@ -45,11 +45,11 @@ class AdminDashboard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 _buildDashboardCard(
-                    context, 'Books', Iconsax.book_1, Colors.blue, 120),
-                _buildDashboardCard(
-                    context, 'Videos', Iconsax.video, Colors.green, 45),
-                _buildDashboardCard(
-                    context, 'Music', Iconsax.music, Colors.orange, 85),
+                    context, 'Books', Iconsax.book, Colors.blue, 120),
+                _buildDashboardCard(context, 'Bible Study\nMaterials',
+                    Iconsax.book_1, Colors.green, 45),
+                _buildDashboardCard(context, 'Seminar Papers\n& Magazines',
+                    Iconsax.book_saved, Colors.orange, 85),
               ],
             ),
             const SizedBox(height: 20),
@@ -83,26 +83,6 @@ class AdminDashboard extends StatelessWidget {
                       label: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
                         child: const Text('Upload Book'),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    ElevatedButton.icon(
-                      style: ButtonStyle(elevation: WidgetStatePropertyAll(0)),
-                      onPressed: () {}, // Add navigation for uploading videos
-                      icon: const Icon(Iconsax.video_add),
-                      label: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: const Text('Upload Video'),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    ElevatedButton.icon(
-                      style: ButtonStyle(elevation: WidgetStatePropertyAll(0)),
-                      onPressed: () {}, // Add navigation for uploading music
-                      icon: const Icon(Iconsax.music_square_add),
-                      label: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 15.0),
-                        child: const Text('Upload Music'),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -152,10 +132,10 @@ class AdminDashboard extends StatelessWidget {
                   return ListTile(
                     leading: Icon(
                       index % 3 == 0
-                          ? Icons.book
+                          ? Iconsax.book
                           : index % 3 == 1
-                              ? Icons.videocam
-                              : Icons.music_note,
+                              ? Iconsax.book_1
+                              : Iconsax.book_saved,
                       color: Colors.grey[700],
                     ),
                     title: Text('Activity ${index + 1}'),
@@ -163,8 +143,8 @@ class AdminDashboard extends StatelessWidget {
                       index % 3 == 0
                           ? 'Uploaded a book'
                           : index % 3 == 1
-                              ? 'Uploaded a video'
-                              : 'Uploaded a song',
+                              ? 'Uploaded a Bible study material'
+                              : 'Uploaded a Magazine',
                     ),
                     trailing: Text(
                       '${DateTime.now().subtract(Duration(days: index)).toLocal()}'
@@ -188,7 +168,7 @@ class AdminDashboard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Container(
         width: MediaQuery.of(context).size.width / 4,
-        height: 120,
+        height: 150,
         padding: const EdgeInsets.all(10),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +182,7 @@ class AdminDashboard extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(title, style: const TextStyle(fontSize: 14)),
+            Text(title, style: const TextStyle(fontSize: 11)),
           ],
         ),
       ),

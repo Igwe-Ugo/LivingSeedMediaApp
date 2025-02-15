@@ -77,6 +77,8 @@ class _PublicationsPageState extends State<PublicationsPage> {
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UsersAuthProvider>(context, listen: false).userData;
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(
@@ -109,7 +111,7 @@ class _PublicationsPageState extends State<PublicationsPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: InkWell(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.notificationPath}'),
+                        '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.notificationPath}', extra: user),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Stack(
@@ -143,6 +145,27 @@ class _PublicationsPageState extends State<PublicationsPage> {
             const SizedBox(
               height: 15,
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Welcome\n${user!.fullname}',
+                  style: TextStyle(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white
+                        : Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Playfair',
+                  ),
+                ),
+                CircleAvatar(
+                  radius: 25,
+                  child: Image.asset(user.userImage),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
             Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -219,118 +242,121 @@ class _PublicationsPageState extends State<PublicationsPage> {
               else
                 const AllPage()
             ],
-
-            // show search results only when a user is typing...
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.9, // Adjust height
-              child: filteredBooks.isEmpty
-                  ? Column(
-                      children: const [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Icon(
-                          Icons.not_interested_rounded,
-                          size: 70,
-                        ),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        Text(
-                          "Sorry, No matching books found!",
-                          style: TextStyle(fontSize: 15),
-                        ),
-                      ],
-                    )
-                  : ListView.builder(
-                      itemCount: filteredBooks.length,
-                      itemBuilder: (context, index) {
-                        final book = filteredBooks[index];
-                        return Column(
-                          children: [
-                            InkWell(
-                              onTap: () => GoRouter.of(context).go(
-                                  '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
-                                  extra: book),
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  child: Row(
-                                    children: [
-                                      Align(
-                                        alignment: Alignment.topCenter,
-                                        child: Container(
-                                          height: 100,
-                                          width: 100,
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.withOpacity(0.1),
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(5)),
-                                          ),
-                                          child: Image.asset(
-                                            book.coverImage,
+            if (_searchController.text.isNotEmpty) ...[
+              // show search results only when a user is typing...
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height * 0.9, // Adjust height
+                child: filteredBooks.isEmpty
+                    ? Column(
+                        children: const [
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Icon(
+                            Icons.not_interested_rounded,
+                            size: 70,
+                          ),
+                          SizedBox(
+                            height: 30,
+                          ),
+                          Text(
+                            "Sorry, No matching books found!",
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      )
+                    : ListView.builder(
+                        itemCount: filteredBooks.length,
+                        itemBuilder: (context, index) {
+                          final book = filteredBooks[index];
+                          return Column(
+                            children: [
+                              InkWell(
+                                onTap: () => GoRouter.of(context).go(
+                                    '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+                                    extra: book),
+                                child: SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5, horizontal: 10),
+                                    child: Row(
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Container(
+                                            height: 100,
+                                            width: 100,
+                                            padding: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.grey.withOpacity(0.1),
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(5)),
+                                            ),
+                                            child: Image.asset(
+                                              book.coverImage,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 16,
-                                      ),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  book.bookTitle,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16.0),
-                                                ),
-                                                Text(
-                                                  book.author,
-                                                  style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontSize: 14.0),
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            Text(
-                                              'N${book.amount.toString()}',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 13.0),
-                                            ),
-                                          ],
+                                        const SizedBox(
+                                          width: 16,
                                         ),
-                                      ),
-                                    ],
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    book.bookTitle,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16.0),
+                                                  ),
+                                                  Text(
+                                                    book.author,
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontSize: 14.0),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Text(
+                                                'N${book.amount.toString()}',
+                                                style: const TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 13.0),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const Divider(
-                              thickness: 0.4,
-                            )
-                          ],
-                        );
-                      },
-                    ),
-            ),
+                              const Divider(
+                                thickness: 0.4,
+                              )
+                            ],
+                          );
+                        },
+                      ),
+              ),
+            ]
           ],
         ),
       ),

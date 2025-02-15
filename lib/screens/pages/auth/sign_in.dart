@@ -219,8 +219,7 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                                     listen: false)
                                 .loadNotifications();
                             GoRouter.of(context).go(
-                                LivingSeedAppRouter.publicationsPath,
-                                extra: authenticatedUser);
+                                LivingSeedAppRouter.publicationsPath);
                           } else {
                             setState(() {
                               errorMessage = 'Invalid EmailAddress or password';

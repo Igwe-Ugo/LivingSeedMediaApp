@@ -14,7 +14,7 @@ void main() {
         ChangeNotifierProvider(
             create: (_) => UsersAuthProvider()..initializeUsers()),
         ChangeNotifierProvider(
-            create: (_) => NotificationProvider()),
+            create: (_) => NotificationProvider()..loadNotifications()),
         ChangeNotifierProvider(
             create: (_) => AboutBookProvider()..initializeBooks()),
       ],
