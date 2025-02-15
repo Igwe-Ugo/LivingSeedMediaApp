@@ -139,14 +139,17 @@ class LivingSeedAppRouter {
                       routes: [
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) => const Notifications(userEmail: 'elijahnwamadi1@gmail.com',),
+                            builder: (context, state) {
+                              return Notifications(email: 'elijahnwamadi1@gmail.com',);
+                            },
                             routes: [
                               GoRoute(
                                 path: anouncementsPath,
                                 builder: (context, state) {
                                   final anouncement = state.extra;
                                   if (anouncement is NotificationItems) {
-                                    return Announcements(announcement: anouncement);
+                                    return Announcements(
+                                        announcement: anouncement);
                                   } else {
                                     return Center(
                                       child: Text(
@@ -208,14 +211,26 @@ class LivingSeedAppRouter {
                       routes: [
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) => const Notifications(),
+                            builder: (context, state) {
+                              final user = state.extra;
+                              if (user is Users) {
+                                return Notifications(
+                                  email: 'elijahnwamadi1@gmail.com',
+                                );
+                              } else {
+                                return Center(
+                                  child: Text('No Personal Data for this user'),
+                                );
+                              }
+                            },
                             routes: [
                               GoRoute(
                                 path: anouncementsPath,
                                 builder: (context, state) {
                                   final anouncement = state.extra;
                                   if (anouncement is NotificationItems) {
-                                    return Announcements(announcement: anouncement);
+                                    return Announcements(
+                                        announcement: anouncement);
                                   } else {
                                     return Center(
                                       child: Text(
@@ -266,7 +281,9 @@ class LivingSeedAppRouter {
                                       builder: (context, state) {
                                         final anouncement = state.extra;
                                         if (anouncement is NotificationItems) {
-                                          return Announcements(announcement: anouncement,);
+                                          return Announcements(
+                                            announcement: anouncement,
+                                          );
                                         } else {
                                           return Center(
                                             child: Text(
@@ -299,7 +316,18 @@ class LivingSeedAppRouter {
                             ]),
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) => const Notifications()),
+                            builder: (context, state) {
+                              final user = state.extra;
+                              if (user is Users) {
+                                return Notifications(
+                                  email: 'elijahnwamadi1@gmail.com',
+                                );
+                              } else {
+                                return Center(
+                                  child: Text('No Personal Data for this user'),
+                                );
+                              }
+                            }),
                         GoRoute(
                             path: cartPath,
                             builder: (context, state) {

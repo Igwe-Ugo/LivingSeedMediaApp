@@ -6,13 +6,17 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   LivingSeedAppRouter.instance;
+  //await Firebase.initializeApp();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
-        ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
-        ChangeNotifierProvider(create: (_) => NotificationProvider()),
-        ChangeNotifierProvider(create: (_) => AboutBookProvider()),
+        ChangeNotifierProvider(
+            create: (_) => UsersAuthProvider()..initializeUsers()),
+        ChangeNotifierProvider(
+            create: (_) => NotificationProvider()),
+        ChangeNotifierProvider(
+            create: (_) => AboutBookProvider()..initializeBooks()),
       ],
       child:
           const LivingSeedApp(), // Ensure LivingSeedApp is inside MultiProvider
@@ -36,13 +40,6 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
     themeChangeProvider =
         Provider.of<DarkThemeProvider>(context, listen: false);
     getCurrentAppTheme();
-
-    // Load initial data after the first frame
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<NotificationProvider>(context, listen: false)
-          .loadNotifications();
-      Provider.of<AboutBookProvider>(context, listen: false).initializeBooks();
-    });
   }
 
   void getCurrentAppTheme() async {

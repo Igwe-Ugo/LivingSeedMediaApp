@@ -35,15 +35,6 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<NotificationProvider>(context, listen: false)
-          .loadNotifications();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(body: Consumer<NotificationProvider>(
         builder: (context, notificationProvider, child) {
@@ -274,7 +265,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
           "${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour >= 12 ? 'PM' : 'AM'}",
     );
 
-    /* bool success = await Provider.of<AdminAuthProvider>(context, listen: false)
+    bool success = await Provider.of<NotificationProvider>(context, listen: false)
         .sendGeneralNotification(newNotification);
     if (success) {
       showMessage('Notification sent successfully!', context);
@@ -283,7 +274,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
       showMessage('Notification already exists, please send a new notification',
           context);
       return;
-    } */
+    }
   }
 
   Widget recentNotifications(BuildContext context,

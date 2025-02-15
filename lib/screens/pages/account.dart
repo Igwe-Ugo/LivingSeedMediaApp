@@ -60,7 +60,7 @@ class _AccountPageState extends State<AccountPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: InkWell(
                       onTap: () => GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.notificationPath}'),
+                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.notificationPath}', extra: 'elijahnwamadi1@gmail.com'),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Stack(

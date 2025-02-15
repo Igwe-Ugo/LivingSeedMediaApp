@@ -77,6 +77,8 @@ class _PublicationsPageState extends State<PublicationsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Users? user = Provider.of<UsersAuthProvider>(context).userData;
+
     return Scaffold(
         body: SingleChildScrollView(
       child: Padding(

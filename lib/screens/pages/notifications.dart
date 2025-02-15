@@ -1,13 +1,15 @@
 // notifications_screen.dart
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
 class Notifications extends StatefulWidget {
-  final String? userEmail; // Pass the current user's email
+  final String email;
 
-  const Notifications({super.key, this.userEmail});
+  const Notifications({super.key, required this.email});
 
   @override
   State<Notifications> createState() => _NotificationsState();
@@ -28,11 +30,58 @@ class _NotificationsState extends State<Notifications> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Notifications'),
-          bottom: const TabBar(
+          leading: IconButton(
+            onPressed: () {
+              GoRouter.of(context).pop();
+            },
+            icon: const Icon(
+              Iconsax.arrow_left_2,
+              size: 17,
+            ),
+          ),
+          title: const Text(
+            'Notifications',
+            style: TextStyle(
+              fontFamily: 'Playfair',
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          bottom: TabBar(
+            indicatorSize: TabBarIndicatorSize.tab,
+            dividerColor: Colors.transparent,
+            indicatorColor: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+            indicator: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              color: Colors.white,
+            ),
             tabs: [
-              Tab(text: 'General'),
-              Tab(text: 'Personal'),
+              Tab(
+                child: Text(
+                  'General',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12.0,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey
+                        : Colors.black,
+                  ),
+                ),
+              ),
+              Tab(
+                child: Text(
+                  'Personal',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 12.0,
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.grey
+                        : Colors.black,
+                  ),
+                ),
+              )
             ],
           ),
         ),
@@ -48,9 +97,9 @@ class _NotificationsState extends State<Notifications> {
 
                 // Personal Notifications Tab
                 _buildNotificationsList(
-                  widget.userEmail != null
+                  widget.email != null
                       ? notificationProvider
-                              .personalNotifications[widget.userEmail] ??
+                              .personalNotifications[widget.email] ??
                           []
                       : [],
                   'No personal notifications',
