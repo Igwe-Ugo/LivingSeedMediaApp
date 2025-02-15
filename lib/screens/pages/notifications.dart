@@ -1,12 +1,13 @@
+// notifications_screen.dart
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/pages/notices/notices.dart';
+import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
 class Notifications extends StatefulWidget {
-  const Notifications({super.key});
+  final String? userEmail; // Pass the current user's email
+
+  const Notifications({super.key, this.userEmail});
 
   @override
   State<Notifications> createState() => _NotificationsState();
@@ -16,139 +17,148 @@ class _NotificationsState extends State<Notifications> {
   @override
   void initState() {
     super.initState();
-    // Ensure notifications loads only once...
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<UsersAuthProvider>(context, listen: false)
-          .userData
-          ?.emailAddress;
-      Provider.of<AdminAuthProvider>(context, listen: false)
-          .initializeNotifications(context);
-    });
+    // Load notifications when screen initializes
+    Provider.of<NotificationProvider>(context, listen: false)
+        .loadNotifications();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AdminAuthProvider>(
-        builder: (context, notificationProvider, child) {
-      final generalNotices = notificationProvider.generalNotices;
-      final personalNotices = notificationProvider.personalNotices[
-              Provider.of<UsersAuthProvider>(context, listen: false)
-                  .userData
-                  ?.emailAddress] ??
-          [];
-      return SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      GoRouter.of(context).pop();
-                    },
-                    icon: const Icon(
-                      Iconsax.arrow_left_2,
-                      size: 17,
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  const Text(
-                    'Notifications',
-                    style: TextStyle(
-                      fontFamily: 'Playfair',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Colors.grey.withOpacity(0.1),
-                      ),
-                      child: TabBar(
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        dividerColor: Colors.transparent,
-                        indicatorColor:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Colors.black,
-                        indicator: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Colors.white,
-                        ),
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              'General',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.0,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.grey
-                                    : Colors.black,
-                              ),
-                            ),
-                          ),
-                          Tab(
-                            child: Text(
-                              'Personal',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.0,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.grey
-                                    : Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      child: TabBarView(
-                        children: [
-                          // General Notices List
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: generalNotices.length,
-                            itemBuilder: (context, index) =>
-                                GeneralNotices(generalNotices[index]),
-                          ),
-
-                          // Personal Notices List
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: personalNotices.length,
-                            itemBuilder: (context, index) {
-                              return PersonalNotices(personalNotices[index]);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Notifications'),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'General'),
+              Tab(text: 'Personal'),
             ],
           ),
         ),
-      );
-    });
+        body: Consumer<NotificationProvider>(
+          builder: (context, notificationProvider, child) {
+            return TabBarView(
+              children: [
+                // General Notifications Tab
+                _buildNotificationsList(
+                  notificationProvider.generalNotifications,
+                  'No general notifications',
+                ),
+
+                // Personal Notifications Tab
+                _buildNotificationsList(
+                  widget.userEmail != null
+                      ? notificationProvider
+                              .personalNotifications[widget.userEmail] ??
+                          []
+                      : [],
+                  'No personal notifications',
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationsList(
+      List<NotificationItems> notifications, String emptyMessage) {
+    return notifications.isEmpty
+        ? Center(
+            child: Text(
+              emptyMessage,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+          )
+        : ListView.separated(
+            itemCount: notifications.length,
+            separatorBuilder: (context, index) => const Divider(),
+            itemBuilder: (context, index) {
+              final notification = notifications[index];
+              return NotificationCard(notification: notification);
+            },
+          );
+  }
+}
+
+// notification_card.dart
+class NotificationCard extends StatelessWidget {
+  final NotificationItems notification;
+
+  const NotificationCard({
+    super.key,
+    required this.notification,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Image.asset(
+                  notification.notificationImage,
+                  width: 40,
+                  height: 40,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.notification_important, size: 40);
+                  },
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        notification.notificationTitle,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Text(
+                            notification.notificationDate,
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            notification.notificationTime,
+                            style: const TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Text(
+              notification.notificationMessage,
+              maxLines: 3,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

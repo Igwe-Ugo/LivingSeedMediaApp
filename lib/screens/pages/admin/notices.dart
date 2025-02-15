@@ -45,8 +45,8 @@ class Notices extends StatelessWidget {
                   ),
                   IconButton(
                     onPressed: () {
-                      Provider.of<AdminAuthProvider>(context, listen: false)
-                          .deleteGeneralNotification(notice.notificationTitle);
+                      /* Provider.of<AdminAuthProvider>(context, listen: false)
+                          .deleteGeneralNotification(notice.notificationTitle); */
                       showMessage('Notification Deleted!', context);
                     },
                     icon: Icon(

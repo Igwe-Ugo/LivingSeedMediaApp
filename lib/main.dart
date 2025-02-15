@@ -11,7 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
         ChangeNotifierProvider(create: (_) => UsersAuthProvider()),
-        ChangeNotifierProvider(create: (_) => AdminAuthProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
         ChangeNotifierProvider(create: (_) => AboutBookProvider()),
       ],
       child:
@@ -39,8 +39,8 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
 
     // Load initial data after the first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AdminAuthProvider>(context, listen: false)
-          .initializeNotifications(context);
+      Provider.of<NotificationProvider>(context, listen: false)
+          .loadNotifications();
       Provider.of<AboutBookProvider>(context, listen: false).initializeBooks();
     });
   }

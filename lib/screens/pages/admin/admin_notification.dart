@@ -38,16 +38,16 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AdminAuthProvider>(context, listen: false)
-          .initializeNotifications(context);
+      Provider.of<NotificationProvider>(context, listen: false)
+          .loadNotifications();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Consumer<AdminAuthProvider>(
+    return Scaffold(body: Consumer<NotificationProvider>(
         builder: (context, notificationProvider, child) {
-      final generalNotices = notificationProvider.generalNotices;
+      //final generalNotices = notificationProvider.generalNotices;
 
       return SingleChildScrollView(
         child: Padding(
@@ -241,7 +241,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                 ),
               ),
               const SizedBox(height: 10),
-              Column(
+              /* Column(
                 children: generalNotices
                     .map((notice) => recentNotifications(context,
                         notificationImage: notice.notificationImage,
@@ -251,7 +251,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                         notificationTime: notice.notificationTime,
                         notificationData: notice))
                     .toList(),
-              ),
+              ), */
             ],
           ),
         ),
@@ -274,7 +274,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
           "${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour >= 12 ? 'PM' : 'AM'}",
     );
 
-    bool success = await Provider.of<AdminAuthProvider>(context, listen: false)
+    /* bool success = await Provider.of<AdminAuthProvider>(context, listen: false)
         .sendGeneralNotification(newNotification);
     if (success) {
       showMessage('Notification sent successfully!', context);
@@ -283,7 +283,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
       showMessage('Notification already exists, please send a new notification',
           context);
       return;
-    }
+    } */
   }
 
   Widget recentNotifications(BuildContext context,
@@ -362,8 +362,8 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                   ),
                   IconButton(
                     onPressed: () {
-                      Provider.of<AdminAuthProvider>(context, listen: false)
-                          .deleteGeneralNotification(notificationTitle);
+                      /* Provider.of<AdminAuthProvider>(context, listen: false)
+                          .deleteGeneralNotification(notificationTitle); */
                       showMessage('Notification Deleted!', context);
                     },
                     icon: Icon(

@@ -139,7 +139,7 @@ class LivingSeedAppRouter {
                       routes: [
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) => const Notifications(),
+                            builder: (context, state) => const Notifications(userEmail: 'elijahnwamadi1@gmail.com',),
                             routes: [
                               GoRoute(
                                 path: anouncementsPath,

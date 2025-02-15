@@ -13,11 +13,17 @@ class UsersAuthProvider extends ChangeNotifier {
   Users? get userData => _currentUser;
   List<Users> _users = [];
   List<Users> get allUsers => _users;
+  bool _isInitialized = false;
 
   Future<void> initializeUsers() async {
+    if (_isInitialized) return;
+
+    debugPrint('Starting user initialization...');
     String jsonString = await rootBundle.loadString('assets/json/users.json');
     _users = Users.fromJsonList(jsonString);
     await _loadUserFromLocal();
+    _isInitialized = true;
+    debugPrint('User initialization complete. Users count: ${_users.length}');
     notifyListeners();
   }
 
@@ -47,6 +53,7 @@ class UsersAuthProvider extends ChangeNotifier {
 
   Future<Users?> signIn(String email, String password) async {
     if (_users.isEmpty) {
+      debugPrint('Initializing users before sign in...');
       await initializeUsers(); // Ensure users are loaded before checking
     }
 
@@ -55,6 +62,7 @@ class UsersAuthProvider extends ChangeNotifier {
     );
 
     if (user != null) {
+      debugPrint('User found and logged in: ${user.emailAddress}');
       _currentUser = user;
       notifyListeners();
       return _currentUser;
