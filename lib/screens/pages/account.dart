@@ -60,7 +60,8 @@ class _AccountPageState extends State<AccountPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: InkWell(
                       onTap: () => GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.notificationPath}', extra: 'elijahnwamadi1@gmail.com'),
+                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.notificationPath}',
+                          extra: user),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Stack(
@@ -160,8 +161,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Icons.shopping_cart_outlined),
                     title: Text(
                       'My Cart',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -172,8 +173,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Iconsax.archive_book),
                     title: Text(
                       'Books Purchased',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -184,8 +185,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Icons.download_outlined),
                     title: Text(
                       'My Downloads',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -200,7 +201,8 @@ class _AccountPageState extends State<AccountPage> {
                           title: Text(
                             'Admin',
                             style: TextStyle(
-                                fontSize: _fontSize, fontWeight: FontWeight.w700),
+                                fontSize: _fontSize,
+                                fontWeight: FontWeight.w700),
                           ),
                           trailing:
                               const Icon(Icons.keyboard_arrow_right_outlined),
@@ -234,8 +236,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Iconsax.activity),
                     title: Text(
                       'About Livng Seed',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -244,8 +246,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Iconsax.message_question),
                     title: Text(
                       'Ask a question',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -254,8 +256,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Icons.phone_in_talk_outlined),
                     title: Text(
                       'Counselling',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -264,8 +266,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Iconsax.calendar),
                     title: Text(
                       'Upcoming meetings',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -296,8 +298,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Iconsax.sun_1),
                     title: Text(
                       'Dark mode',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: Switch(
                       activeColor: Colors.white,
@@ -320,8 +322,8 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Iconsax.lock_1),
                     title: Text(
                       'Change Password',
-                      style:
-                          TextStyle(fontSize: _fontSize, fontWeight: FontWeight.w700),
+                      style: TextStyle(
+                          fontSize: _fontSize, fontWeight: FontWeight.w700),
                     ),
                     trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                   ),
@@ -363,7 +365,7 @@ class _AccountPageState extends State<AccountPage> {
 }
 
 Future<void> showLogoutDialog(BuildContext context) {
-  double _fontSize =13.0;
+  double _fontSize = 13.0;
   return showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -396,16 +398,16 @@ Future<void> showLogoutDialog(BuildContext context) {
           },
           child: Text(
             'log out'.toUpperCase(),
-            style:
-                TextStyle(fontSize: _fontSize, color: Theme.of(context).primaryColor),
+            style: TextStyle(
+                fontSize: _fontSize, color: Theme.of(context).primaryColor),
           ),
         ),
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: Text(
             'not yet'.toUpperCase(),
-            style:
-                TextStyle(fontSize: _fontSize, color: Theme.of(context).primaryColor),
+            style: TextStyle(
+                fontSize: _fontSize, color: Theme.of(context).primaryColor),
           ),
         ),
       ],

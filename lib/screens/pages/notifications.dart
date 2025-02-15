@@ -7,9 +7,9 @@ import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
 class Notifications extends StatefulWidget {
-  final String email;
+  final Users user;
 
-  const Notifications({super.key, required this.email});
+  const Notifications({super.key, required this.user});
 
   @override
   State<Notifications> createState() => _NotificationsState();
@@ -97,9 +97,9 @@ class _NotificationsState extends State<Notifications> {
 
                 // Personal Notifications Tab
                 _buildNotificationsList(
-                  widget.email != null
-                      ? notificationProvider
-                              .personalNotifications[widget.email] ??
+                  widget.user.emailAddress != null
+                      ? notificationProvider.personalNotifications[
+                              widget.user.emailAddress] ??
                           []
                       : [],
                   'No personal notifications',

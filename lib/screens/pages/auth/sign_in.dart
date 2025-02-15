@@ -219,7 +219,7 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                                     listen: false)
                                 .loadNotifications();
                             GoRouter.of(context).go(
-                                LivingSeedAppRouter.homePath,
+                                LivingSeedAppRouter.publicationsPath,
                                 extra: authenticatedUser);
                           } else {
                             setState(() {

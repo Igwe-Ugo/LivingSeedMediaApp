@@ -28,16 +28,8 @@ class _LivingSeedNavBarState extends State<LivingSeedNavBar> {
         },
         destinations: const [
           NavigationDestination(
-            icon: Icon(Iconsax.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
             icon: Icon(Iconsax.book),
             label: 'Publications',
-          ),
-          NavigationDestination(
-            icon: Icon(Iconsax.video),
-            label: 'Media',
           ),
           NavigationDestination(
             icon: Icon(Iconsax.user),

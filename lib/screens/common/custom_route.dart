@@ -6,7 +6,6 @@ import 'package:livingseed_media/screens/pages/accounts/accounts.dart';
 import 'package:livingseed_media/screens/pages/accounts/downloads.dart';
 import 'package:livingseed_media/screens/pages/admin/admin.dart';
 import 'package:livingseed_media/screens/pages/auth/verify_account.dart';
-import 'package:livingseed_media/screens/pages/messages/library.dart';
 import 'package:livingseed_media/screens/pages/notices/notices.dart';
 import 'package:livingseed_media/screens/pages/publications/publications.dart';
 import '../models/models.dart';
@@ -37,9 +36,7 @@ class LivingSeedAppRouter {
     return _instance;
   }
 
-  static const String homePath = '/home';
   static const String publicationsPath = '/books';
-  static const String messagesPath = '/messages';
   static const String accountPath = '/account';
   static const String aboutBookPath = 'about_book';
   static const String cartPath = 'cart';
@@ -51,8 +48,6 @@ class LivingSeedAppRouter {
   static const String forgotPasswordOtpPath = '/forgot_password_otp';
   static const String reviewsPath = 'reviews';
   static const String writeReviewPath = 'write_review';
-  static const String videoMessagesPath = 'video_messages';
-  static const String audioScreenPath = 'audio_screen';
   static const String changePasswordPath = 'change_password';
   static const String notificationPath = 'notifications';
   static const String profilePath = 'profile';
@@ -100,37 +95,6 @@ class LivingSeedAppRouter {
           },
           branches: <StatefulShellBranch>[
             StatefulShellBranch(
-                navigatorKey: homeTabNavigatorKey,
-                routes: <RouteBase>[
-                  GoRoute(
-                      path: homePath,
-                      builder: (context, state) {
-                        final extra = state.extra;
-                        if (extra is Users) {
-                          return HomePage(user: extra);
-                        } else {
-                          return const LivingSeedSignUp();
-                        }
-                      },
-                      routes: [
-                        GoRoute(
-                          path: aboutBookPath,
-                          builder: (context, state) {
-                            final about_books = state.extra;
-                            if (about_books is AboutBooks) {
-                              return AboutBook(
-                                about_books: about_books,
-                              );
-                            } else {
-                              return Center(
-                                child: Text('Error Page'),
-                              );
-                            }
-                          },
-                        )
-                      ]),
-                ]),
-            StatefulShellBranch(
                 navigatorKey: booksTabNavigationKey,
                 routes: <RouteBase>[
                   GoRoute(
@@ -140,7 +104,16 @@ class LivingSeedAppRouter {
                         GoRoute(
                             path: notificationPath,
                             builder: (context, state) {
-                              return Notifications(email: 'elijahnwamadi1@gmail.com',);
+                              final user = state.extra;
+                              if (user is Users) {
+                                return Notifications(
+                                  user: user,
+                                );
+                              } else {
+                                return Center(
+                                  child: Text('No Personal Data for this user'),
+                                );
+                              }
                             },
                             routes: [
                               GoRoute(
@@ -200,58 +173,6 @@ class LivingSeedAppRouter {
                                     ),
                                   ]),
                             ]),
-                      ]),
-                ]),
-            StatefulShellBranch(
-                navigatorKey: messagesTabNavigationKey,
-                routes: <RouteBase>[
-                  GoRoute(
-                      path: messagesPath,
-                      builder: (context, state) => const MessagesPage(),
-                      routes: [
-                        GoRoute(
-                            path: notificationPath,
-                            builder: (context, state) {
-                              final user = state.extra;
-                              if (user is Users) {
-                                return Notifications(
-                                  email: 'elijahnwamadi1@gmail.com',
-                                );
-                              } else {
-                                return Center(
-                                  child: Text('No Personal Data for this user'),
-                                );
-                              }
-                            },
-                            routes: [
-                              GoRoute(
-                                path: anouncementsPath,
-                                builder: (context, state) {
-                                  final anouncement = state.extra;
-                                  if (anouncement is NotificationItems) {
-                                    return Announcements(
-                                        announcement: anouncement);
-                                  } else {
-                                    return Center(
-                                      child: Text(
-                                          'No Recent Announcements to be reviewed'),
-                                    );
-                                  }
-                                },
-                              ),
-                            ]),
-                        GoRoute(
-                            path: videoMessagesPath,
-                            builder: (context, state) => const VideoMessages()),
-                        GoRoute(
-                          path: audioScreenPath,
-                          builder: (context, state) {
-                            final audioSongs = state.extra as AudioMessage;
-                            return AudioScreen(
-                              audioSongs: audioSongs,
-                            );
-                          },
-                        ),
                       ]),
                 ]),
             StatefulShellBranch(
@@ -320,7 +241,7 @@ class LivingSeedAppRouter {
                               final user = state.extra;
                               if (user is Users) {
                                 return Notifications(
-                                  email: 'elijahnwamadi1@gmail.com',
+                                  user: user,
                                 );
                               } else {
                                 return Center(
