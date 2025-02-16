@@ -6,15 +6,10 @@ import 'package:provider/provider.dart';
 import '../../common/widget.dart';
 import '../../models/models.dart';
 
-class UsersProfile extends StatefulWidget {
+class UsersProfile extends StatelessWidget {
   final Users user;
   const UsersProfile({super.key, required this.user});
 
-  @override
-  State<UsersProfile> createState() => _UsersProfileState();
-}
-
-class _UsersProfileState extends State<UsersProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +48,7 @@ class _UsersProfileState extends State<UsersProfile> {
                 width: double.infinity,
                 child: CircleAvatar(
                   radius: 50,
-                  child: Image.asset(widget.user.userImage),
+                  child: Image.asset(user.userImage),
                 ),
               ),
               const SizedBox(
@@ -76,7 +71,7 @@ class _UsersProfileState extends State<UsersProfile> {
                   ),
                 ),
                 subtitle: Text(
-                  widget.user.fullname,
+                  user.fullname,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
@@ -99,7 +94,7 @@ class _UsersProfileState extends State<UsersProfile> {
                   ),
                 ),
                 subtitle: Text(
-                  widget.user.emailAddress,
+                  user.emailAddress,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
@@ -113,7 +108,7 @@ class _UsersProfileState extends State<UsersProfile> {
                   ),
                 ),
                 subtitle: Text(
-                  widget.user.gender,
+                  user.gender,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
@@ -127,7 +122,7 @@ class _UsersProfileState extends State<UsersProfile> {
                   ),
                 ),
                 subtitle: Text(
-                  widget.user.dateOfBirth,
+                  user.dateOfBirth,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                   ),
@@ -140,7 +135,7 @@ class _UsersProfileState extends State<UsersProfile> {
               Center(
                   child: TextButton(
                       onPressed: () =>
-                          showDeleteDialog(context, widget.user.fullname),
+                          showDeleteDialog(context, user.fullname),
                       child: const Text(
                         'Delete User Account',
                         style: TextStyle(

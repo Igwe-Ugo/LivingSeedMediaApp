@@ -5,15 +5,11 @@ import 'package:livingseed_media/screens/pages/home/home.dart';
 import 'package:provider/provider.dart';
 import '../services/services.dart';
 
-class AllPage extends StatefulWidget {
+class AllPage extends StatelessWidget {
   const AllPage({super.key});
 
-  @override
-  State<AllPage> createState() => _AllPageState();
-}
-
-class _AllPageState extends State<AllPage> {
   final double _fontSize = 11;
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<AboutBookProvider, BibleStudyProvider>(

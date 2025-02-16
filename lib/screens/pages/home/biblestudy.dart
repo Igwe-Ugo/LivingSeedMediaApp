@@ -8,14 +8,9 @@ import '../../common/widget.dart';
 import '../../models/models.dart';
 import '../services/bible_study_services.dart';
 
-class BibleStudy extends StatefulWidget {
+class BibleStudy extends StatelessWidget {
   const BibleStudy({super.key});
 
-  @override
-  State<BibleStudy> createState() => _BibleStudyState();
-}
-
-class _BibleStudyState extends State<BibleStudy> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

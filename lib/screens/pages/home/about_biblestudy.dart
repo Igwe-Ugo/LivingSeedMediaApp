@@ -114,7 +114,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                 onPressed: () {
                   Provider.of<UsersAuthProvider>(context, listen: false)
                       .addToBibleStudyCart(widget.about_biblestudy);
-                  showMessage('Book has been added to Cart', context);
+                  showMessage('Bible study material has been added to Cart', context);
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,

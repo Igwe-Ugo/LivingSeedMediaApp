@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationProvider extends ChangeNotifier {
   List<NotificationItems> _generalNotifications = [];
@@ -14,17 +15,30 @@ class NotificationProvider extends ChangeNotifier {
   Map<String, List<NotificationItems>> get personalNotifications =>
       _personalNotifications;
 
+  // get unread count for a specific user
+  int getUnreadCount(String? userEmail) {
+    int generalUnread = _generalNotifications.where((n) => !n.isRead).length;
+    int personalUnread = 0;
+    if (userEmail != null && _personalNotifications.containsKey(userEmail)) {
+      personalUnread =
+          _personalNotifications[userEmail]!.where((n) => !n.isRead).length;
+    }
+    return generalUnread + personalUnread;
+  }
+
   // load all notificationd form assets and local storage
   Future<void> loadNotifications() async {
-    try {
-      await _loadGeneralNoticesFromAssets();
-      await _loadGeneralNoticesFromLocal();
-      await _loadPersonalNoticesFromAssets();
-      await _loadPersonalNoticesFromLocal();
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error loading notifications: $e');
-    }
+    final prefs = await SharedPreferences.getInstance();
+    final generalReadStatus =
+        json.decode(prefs.getString('general_read_status') ?? '[]');
+    final personalReadStatus =
+        json.decode(prefs.getString('personal_read_status') ?? '{}');
+    //_applyReadStatus(generalReadStatus, personalReadStatus);
+    await _loadGeneralNoticesFromAssets();
+    await _loadGeneralNoticesFromLocal();
+    await _loadPersonalNoticesFromAssets();
+    await _loadPersonalNoticesFromLocal();
+    notifyListeners();
   }
 
   Future<void> _loadGeneralNoticesFromAssets() async {
@@ -126,6 +140,50 @@ class NotificationProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error Saving notifications: $e');
     }
+  }
+
+  // mark a notification as read
+  Future<void> markAsRead(
+      NotificationItems notification, String? userEmail) async {
+    // check general notifications
+    int generalIndex = _generalNotifications.indexOf(notification);
+    if (generalIndex != -1) {
+      _generalNotifications[generalIndex].isRead = true;
+    }
+
+    // check personal notification
+    if (userEmail != null && _personalNotifications.containsKey(userEmail)) {
+      int personalIndex =
+          _personalNotifications[userEmail]!.indexOf(notification);
+      if (personalIndex != -1) {
+        _personalNotifications[userEmail]![personalIndex].isRead = true;
+      }
+    }
+    await _saveReadStatus();
+    await _saveNotificationToLocal();
+    notifyListeners();
+  }
+
+  // read status
+  Future<void> _saveReadStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // save general notifications read status
+    final generalReadStatus = _generalNotifications
+        .map((n) => {'title': n.notificationTitle, 'isRead': n.isRead})
+        .toList();
+    await prefs.setString(
+        'general_read_status', json.encode(generalReadStatus));
+
+    // save personal notifications read status
+    final personalReadStatus = {};
+    _personalNotifications.forEach((email, notifications) {
+      personalReadStatus[email] = notifications
+          .map((n) => {'title': n.notificationTitle, 'isRead': n.isRead})
+          .toList();
+    });
+    await prefs.setString(
+        'personal_read_status', json.encode(personalReadStatus));
   }
 
   // send a general notification

@@ -8,15 +8,10 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/users_services.dart';
 import 'package:provider/provider.dart';
 
-class BooksPurchased extends StatefulWidget {
+class BooksPurchased extends StatelessWidget {
   final Users user;
   const BooksPurchased({super.key, required this.user});
 
-  @override
-  State<BooksPurchased> createState() => _BooksPurchasedState();
-}
-
-class _BooksPurchasedState extends State<BooksPurchased> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -52,8 +47,8 @@ class _BooksPurchasedState extends State<BooksPurchased> {
             ),
             Column(
               children:
-                  widget.user != null && widget.user.bookPurchased.isNotEmpty
-                      ? widget.user.bookPurchased
+                  user != null && user.bookPurchased.isNotEmpty
+                      ? user.bookPurchased
                           .map((item) => book(context,
                               imagePath: item.coverImage,
                               title: item.bookTitle,

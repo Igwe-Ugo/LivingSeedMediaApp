@@ -6,14 +6,9 @@ import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import 'package:go_router/go_router.dart';
 
-class MoreBooks extends StatefulWidget {
+class MoreBooks extends StatelessWidget {
   const MoreBooks({super.key});
 
-  @override
-  State<MoreBooks> createState() => _MoreBooksState();
-}
-
-class _MoreBooksState extends State<MoreBooks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

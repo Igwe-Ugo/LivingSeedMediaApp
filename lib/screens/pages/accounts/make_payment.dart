@@ -5,15 +5,10 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/users_services.dart';
 import 'package:provider/provider.dart';
 
-class MakePayment extends StatefulWidget {
+class MakePayment extends StatelessWidget {
   final List<AboutBooks> book;
   const MakePayment({super.key, required this.book});
 
-  @override
-  State<MakePayment> createState() => _MakePaymentState();
-}
-
-class _MakePaymentState extends State<MakePayment> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +39,7 @@ class _MakePaymentState extends State<MakePayment> {
             ),
             ElevatedButton(
               onPressed: () {
-                for (var item in widget.book) {
+                for (var item in book) {
                   Provider.of<UsersAuthProvider>(context, listen: false)
                       .addToBookPurchase(item);
                 }

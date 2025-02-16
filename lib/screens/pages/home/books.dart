@@ -8,14 +8,9 @@ import '../../common/widget.dart';
 import '../../models/models.dart';
 import '../services/services.dart';
 
-class Books extends StatefulWidget {
+class Books extends StatelessWidget {
   const Books({super.key});
 
-  @override
-  State<Books> createState() => _BooksState();
-}
-
-class _BooksState extends State<Books> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

@@ -6,6 +6,7 @@ class NotificationItems {
   final String notificationMessage;
   final String notificationDate;
   final String notificationTime;
+  bool isRead;
 
   NotificationItems({
     required this.notificationImage,
@@ -13,6 +14,7 @@ class NotificationItems {
     required this.notificationMessage,
     required this.notificationDate,
     required this.notificationTime,
+    this.isRead = false,
   });
 
   factory NotificationItems.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class NotificationItems {
       notificationMessage: json['notificationMessage'],
       notificationDate: json['notificationDate'],
       notificationTime: json['notificationTime'],
+      isRead: json['isRead'] ?? false
     );
   }
 
@@ -32,6 +35,7 @@ class NotificationItems {
       'notificationMessage': notificationMessage,
       'notificationDate': notificationDate,
       'notificationTime': notificationTime,
+      'isRead': isRead
     };
   }
 }
@@ -68,8 +72,8 @@ class Notice {
     return {
       'generalNotifications':
           generalNotifications.map((e) => e.toJson()).toList(),
-      'personalNotifications': personalNotifications.map((key, value) =>
-          MapEntry(key, value.map((e) => e.toJson()).toList())),
+      'personalNotifications': personalNotifications.map(
+          (key, value) => MapEntry(key, value.map((e) => e.toJson()).toList())),
     };
   }
 

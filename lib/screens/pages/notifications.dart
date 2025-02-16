@@ -80,7 +80,7 @@ class Notifications extends StatelessWidget {
                 // General Notifications Tab
                 _buildNotificationsList(
                   notificationProvider.generalNotifications,
-                  'No general notifications',
+                  'No general notifications', user.emailAddress
                 ),
                 // Personal Notifications Tab
                 _buildNotificationsList(
@@ -89,7 +89,7 @@ class Notifications extends StatelessWidget {
                               .personalNotifications[user.emailAddress] ??
                           []
                       : [],
-                  'No personal notifications',
+                  'No personal notifications', user.emailAddress
                 ),
               ],
             );
@@ -100,7 +100,7 @@ class Notifications extends StatelessWidget {
   }
 
   Widget _buildNotificationsList(
-      List<NotificationItems> notifications, String emptyMessage) {
+      List<NotificationItems> notifications, String emptyMessage, String userEmail) {
     return notifications.isEmpty
         ? Center(
             child: Text(
@@ -116,7 +116,7 @@ class Notifications extends StatelessWidget {
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final notification = notifications[index];
-              return NotificationCard(notification: notification);
+              return NotificationCard(notification: notification, userEmail: userEmail,);
             },
           );
   }
@@ -125,22 +125,26 @@ class Notifications extends StatelessWidget {
 // notification_card.dart
 class NotificationCard extends StatelessWidget {
   final NotificationItems notification;
+  final String? userEmail;
 
-  const NotificationCard({
-    super.key,
-    required this.notification,
-  });
+  const NotificationCard(
+      {super.key, required this.notification, this.userEmail});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        GoRouter.of(context).go(
-            '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}',
-            extra: notification);
+        if (!notification.isRead) {
+          Provider.of<NotificationProvider>(context, listen: false)
+              .markAsRead(notification, userEmail);
+          GoRouter.of(context).go(
+              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}',
+              extra: notification);
+        }
       },
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        color: notification.isRead ? Colors.transparent.withBlue(20) : Colors.transparent.withBlue(100),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(

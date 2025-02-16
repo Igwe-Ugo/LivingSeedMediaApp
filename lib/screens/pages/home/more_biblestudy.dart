@@ -6,14 +6,9 @@ import 'package:provider/provider.dart';
 import '../../models/models.dart';
 import 'package:go_router/go_router.dart';
 
-class MoreBibleStudy extends StatefulWidget {
+class MoreBibleStudy extends StatelessWidget {
   const MoreBibleStudy({super.key});
 
-  @override
-  State<MoreBibleStudy> createState() => _MoreBibleStudyState();
-}
-
-class _MoreBibleStudyState extends State<MoreBibleStudy> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
