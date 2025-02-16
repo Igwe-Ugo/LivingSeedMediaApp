@@ -90,6 +90,7 @@ class _BooksPageState extends State<BooksPage> {
                 children: [
                   Text(
                     widget.about_books.bookTitle,
+                    maxLines: 2,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 15.0,

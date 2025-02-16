@@ -74,11 +74,8 @@ class AdminDashboard extends StatelessWidget {
                       style: ButtonStyle(
                         elevation: WidgetStatePropertyAll(0),
                       ),
-                      onPressed: () {
-                        // upload book screen meant to be here.
-                        GoRouter.of(context).go(
-                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.uploadBookPath}');
-                      },
+                      onPressed: () => GoRouter.of(context).go(
+                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.uploadBookPath}'),
                       icon: const Icon(Iconsax.document_upload),
                       label: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -90,9 +87,8 @@ class AdminDashboard extends StatelessWidget {
                       style: ButtonStyle(
                         elevation: WidgetStatePropertyAll(0),
                       ),
-                      onPressed: () {
-                        // upload biblestudy screen meant to be here.
-                      },
+                      onPressed: () => GoRouter.of(context).go(
+                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.uploadBibleStudyPath}'),
                       icon: const Icon(Iconsax.document_cloud),
                       label: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -102,10 +98,8 @@ class AdminDashboard extends StatelessWidget {
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
                       style: ButtonStyle(elevation: WidgetStatePropertyAll(0)),
-                      onPressed: () {
-                        GoRouter.of(context).go(
-                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageNotificationsPath}');
-                      }, // Add navigation for managing notifications
+                      onPressed: () => GoRouter.of(context).go(
+                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageNotificationsPath}'),
                       icon: const Icon(Iconsax.notification),
                       label: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -115,10 +109,8 @@ class AdminDashboard extends StatelessWidget {
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
                       style: ButtonStyle(elevation: WidgetStatePropertyAll(0)),
-                      onPressed: () {
-                        GoRouter.of(context).go(
-                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageUsersPath}');
-                      }, // Add navigation for managing users
+                      onPressed: () => GoRouter.of(context).go(
+                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.manageUsersPath}'),
                       icon: const Icon(Iconsax.people),
                       label: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15.0),

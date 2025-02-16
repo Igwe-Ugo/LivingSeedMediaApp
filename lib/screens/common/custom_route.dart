@@ -61,7 +61,8 @@ class LivingSeedAppRouter {
   static const String reviewsBibleStudyPath = 'reviewBibleStudy';
 
   //admin pages
-  static const String uploadBookPath = 'upload_book_path';
+  static const String uploadBookPath = 'upload_book';
+  static const String uploadBibleStudyPath = 'upload_bibilestudy';
   static const String dashboardPath = 'dashboard';
   static const String manageNotificationsPath = 'manage_notifications';
   static const String manageUsersPath = 'manage_users';
@@ -105,18 +106,7 @@ class LivingSeedAppRouter {
                       routes: [
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) {
-                              final user = state.extra;
-                              if (user is Users) {
-                                return Notifications(
-                                  user: user,
-                                );
-                              } else {
-                                return Center(
-                                  child: Text('No Personal Data for this user'),
-                                );
-                              }
-                            },
+                            builder: (context, state) => Notifications(),
                             routes: [
                               GoRoute(
                                 path: noticesPath,
@@ -231,6 +221,11 @@ class LivingSeedAppRouter {
                                     const UploadBookScreen(),
                               ),
                               GoRoute(
+                                path: uploadBibleStudyPath,
+                                builder: (context, state) =>
+                                    const UploadBibleStudy(),
+                              ),
+                              GoRoute(
                                   path: manageNotificationsPath,
                                   builder: (context, state) =>
                                       const AdminNotifications(),
@@ -275,18 +270,7 @@ class LivingSeedAppRouter {
                             ]),
                         GoRoute(
                             path: notificationPath,
-                            builder: (context, state) {
-                              final user = state.extra;
-                              if (user is Users) {
-                                return Notifications(
-                                  user: user,
-                                );
-                              } else {
-                                return Center(
-                                  child: Text('No Personal Data for this user'),
-                                );
-                              }
-                            }),
+                            builder: (context, state) => Notifications(),),
                         GoRoute(
                             path: cartPath,
                             builder: (context, state) {

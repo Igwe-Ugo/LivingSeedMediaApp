@@ -26,15 +26,15 @@ class BibleStudyProvider extends ChangeNotifier {
   Future<List<BibleStudyMaterial>> _loadBibleStudy() async {
     List<BibleStudyMaterial> assetBibleStudy =
         await _loadBibleStudyFromAssets();
-    /* List<BibleStudyMaterial> localBibleStudy = await _loadBibleStudyFromLocal();
+    List<BibleStudyMaterial> localBibleStudy = await _loadBibleStudyFromLocal();
 
     // Merge books while preventing duplicates
     Set<String> existingTitles =
         localBibleStudy.map((bible_study) => bible_study.title).toSet();
     assetBibleStudy.removeWhere(
         (bible_study) => existingTitles.contains(bible_study.title));
- */
-    _bibileStudies = [...assetBibleStudy]; // Prioritize local books
+
+    _bibileStudies = [...localBibleStudy, ...assetBibleStudy]; // Prioritize local books
     return _bibileStudies;
   }
 
@@ -71,7 +71,7 @@ class BibleStudyProvider extends ChangeNotifier {
   // Get file location for local book storage
   Future<File> _getBibleStudyFile() async {
     final directory = await getApplicationDocumentsDirectory();
-    return File('${directory.path}/about_book.json');
+    return File('${directory.path}/biblestudy.json');
   }
 
   // Save books to local storage

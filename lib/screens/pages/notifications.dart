@@ -8,12 +8,11 @@ import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
 class Notifications extends StatelessWidget {
-  final Users user;
-
-  const Notifications({super.key, required this.user});
+  const Notifications({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var user = Provider.of<UsersAuthProvider>(context, listen: false).userData!;
     debugPrint(user.emailAddress);
     return DefaultTabController(
       length: 2,

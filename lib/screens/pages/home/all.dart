@@ -20,6 +20,7 @@ class _AllPageState extends State<AllPage> {
         builder: (context, bookProvider, bibleStudyProvider, child) {
       return SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Align(
               alignment: Alignment.centerLeft,
@@ -116,6 +117,7 @@ class _AllPageState extends State<AllPage> {
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: bibleStudyProvider.allBibleStudies
                       .map((bible_study) =>
                           BibleStudyPage(bible_study: bible_study))
