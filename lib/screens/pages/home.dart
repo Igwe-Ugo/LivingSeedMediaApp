@@ -4,27 +4,26 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_route.dart';
 import 'package:livingseed_media/screens/models/models.dart';
-import 'package:livingseed_media/screens/pages/publications/publications.dart';
+import 'package:livingseed_media/screens/pages/home/home.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
-class PublicationsPage extends StatefulWidget {
-  const PublicationsPage({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<PublicationsPage> createState() => _PublicationsPageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _PublicationsPageState extends State<PublicationsPage> {
+class _HomeState extends State<Home> {
   final TextEditingController _searchController = TextEditingController();
   List<AboutBooks> books = [];
   List<AboutBooks> filteredBooks = [];
   List<String> choices = [
     'All',
     'Books',
-    'Magazines',
     'Bible study materials',
-    'Seminar papers',
+    'Seminar papers & Magazines',
   ];
 
   List<IconData> iconChoices = [
@@ -111,7 +110,8 @@ class _PublicationsPageState extends State<PublicationsPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: InkWell(
                     onTap: () => GoRouter.of(context).go(
-                        '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.notificationPath}', extra: user),
+                        '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}',
+                        extra: user),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Stack(
@@ -239,6 +239,8 @@ class _PublicationsPageState extends State<PublicationsPage> {
                 const AllPage()
               else if (selectedValue == 'Books')
                 const Books()
+              else if (selectedValue == 'Bible study materials')
+                const BibleStudy()
               else
                 const AllPage()
             ],
@@ -274,7 +276,7 @@ class _PublicationsPageState extends State<PublicationsPage> {
                             children: [
                               InkWell(
                                 onTap: () => GoRouter.of(context).go(
-                                    '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+                                    '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}',
                                     extra: book),
                                 child: SizedBox(
                                   width: MediaQuery.of(context).size.width,

@@ -136,7 +136,9 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        GoRouter.of(context).go('${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}', extra: notification);
+        GoRouter.of(context).go(
+            '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}',
+            extra: notification);
       },
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

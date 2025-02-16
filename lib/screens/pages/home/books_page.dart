@@ -63,7 +63,7 @@ class _BooksPageState extends State<BooksPage> {
       onTap: () {
         if (widget.about_books != null) {
           GoRouter.of(context).go(
-              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}',
               extra: widget.about_books);
         }
       },

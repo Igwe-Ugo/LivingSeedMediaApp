@@ -133,7 +133,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
                 child: ElevatedButton(
                   onPressed: () {
-                    GoRouter.of(context).go(LivingSeedAppRouter.publicationsPath);
+                    GoRouter.of(context).go(LivingSeedAppRouter.homePath);
                   }, // _verifyOtp(context),
                   style: ElevatedButton.styleFrom(
                     elevation: 0,

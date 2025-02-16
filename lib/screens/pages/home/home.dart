@@ -5,3 +5,7 @@ export 'about_book.dart';
 export 'reviews.dart';
 export 'write_review.dart';
 export 'more_books.dart';
+export 'biblestudy_page.dart';
+export 'biblestudy.dart';
+export 'about_biblestudy.dart';
+export 'biblestudy_reviews.dart';

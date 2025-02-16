@@ -6,7 +6,7 @@ import 'package:livingseed_media/screens/pages/accounts/accounts.dart';
 import 'package:livingseed_media/screens/pages/admin/admin.dart';
 import 'package:livingseed_media/screens/pages/auth/verify_account.dart';
 import 'package:livingseed_media/screens/pages/notices/notices.dart';
-import 'package:livingseed_media/screens/pages/publications/publications.dart';
+import 'package:livingseed_media/screens/pages/home/home.dart';
 import '../models/models.dart';
 import '../pages/auth/auth.dart';
 import '../pages/widget.dart';
@@ -35,7 +35,7 @@ class LivingSeedAppRouter {
     return _instance;
   }
 
-  static const String publicationsPath = '/books';
+  static const String homePath = '/home';
   static const String accountPath = '/account';
   static const String aboutBookPath = 'about_book';
   static const String cartPath = 'cart';
@@ -56,6 +56,8 @@ class LivingSeedAppRouter {
   static const String makePaymentPath = 'make_payment';
   static const String moreBooksPath = 'more_books';
   static const String anouncementsPath = 'announcements';
+  static const String aboutBibleStudyPath = 'about_bible_study';
+  static const String reviewsBibleStudyPath = 'reviewBibleStudy';
 
   //admin pages
   static const String uploadBookPath = 'upload_book_path';
@@ -97,8 +99,8 @@ class LivingSeedAppRouter {
                 navigatorKey: booksTabNavigationKey,
                 routes: <RouteBase>[
                   GoRoute(
-                      path: publicationsPath,
-                      builder: (context, state) => const PublicationsPage(),
+                      path: homePath,
+                      builder: (context, state) => const Home(),
                       routes: [
                         GoRoute(
                             path: notificationPath,
@@ -136,6 +138,37 @@ class LivingSeedAppRouter {
                           path: moreBooksPath,
                           builder: (context, state) => const MoreBooks(),
                         ),
+                        GoRoute(
+                            path: aboutBibleStudyPath,
+                            builder: (context, state) {
+                              final about_biblestudy =
+                                  state.extra as BibleStudyMaterial?;
+                              if (about_biblestudy != null) {
+                                return AboutBibleStudy(
+                                  about_biblestudy: about_biblestudy,
+                                );
+                              } else {
+                                return const Center(
+                                    child: Text("No book data available"));
+                              }
+                            },
+                            routes: [
+                              GoRoute(
+                                path: reviewsBibleStudyPath,
+                                builder: (context, state) {
+                                  final about_biblestudy =
+                                      state.extra as BibleStudyMaterial?;
+                                  if (about_biblestudy != null) {
+                                    return BibleStudyReviews(
+                                      about_biblestudy: about_biblestudy,
+                                    );
+                                  } else {
+                                    return const Center(
+                                        child: Text("No book data available"));
+                                  }
+                                },
+                              ),
+                            ]),
                         GoRoute(
                             path: aboutBookPath,
                             builder: (context, state) {

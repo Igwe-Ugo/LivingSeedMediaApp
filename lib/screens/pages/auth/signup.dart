@@ -315,7 +315,7 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
     bool success = await Provider.of<UsersAuthProvider>(context, listen: false)
         .signup(newUser);
     if (success) {
-      GoRouter.of(context).go(LivingSeedAppRouter.publicationsPath, extra: newUser);
+      GoRouter.of(context).go(LivingSeedAppRouter.homePath, extra: newUser);
     } else {
       showMessage('User already exists, please register a new user', context);
       return;

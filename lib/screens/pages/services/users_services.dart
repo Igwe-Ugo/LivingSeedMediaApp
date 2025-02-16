@@ -110,12 +110,24 @@ class UsersAuthProvider extends ChangeNotifier {
     _saveUserToLocal();
   }
 
-  void addToCart(AboutBooks book) {
+  void addToBookCart(AboutBooks book) {
     if (_currentUser != null) {
       _currentUser!.cart.add(CartItems(
           coverImage: book.coverImage,
           bookTitle: book.bookTitle,
           bookAuthor: book.author,
+          amount: book.amount));
+      notifyListeners();
+      _saveUserToLocal();
+    }
+  }
+
+  void addToBibleStudyCart(BibleStudyMaterial book) {
+    if (_currentUser != null) {
+      _currentUser!.cart.add(CartItems(
+          coverImage: book.coverImage,
+          bookTitle: book.title,
+          bookAuthor: book.subTitle,
           amount: book.amount));
       notifyListeners();
       _saveUserToLocal();

@@ -36,7 +36,8 @@ class _MoreBooksState extends State<MoreBooks> {
         ),
       ),
       body: FutureBuilder<List<AboutBooks>>(
-        future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
+        future:
+            Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -71,7 +72,7 @@ class _MoreBooksState extends State<MoreBooks> {
   Widget _buildBookItem(BuildContext context, AboutBooks book) {
     return GestureDetector(
       onTap: () => GoRouter.of(context).go(
-          '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
+          '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}',
           extra: book),
       child: Card(
         elevation: 2,

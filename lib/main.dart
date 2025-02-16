@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:livingseed_media/screens/pages/services/bible_study_services.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'screens/common/widget.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,8 @@ void main() {
             create: (_) => NotificationProvider()..loadNotifications()),
         ChangeNotifierProvider(
             create: (_) => AboutBookProvider()..initializeBooks()),
+        ChangeNotifierProvider(
+            create: (_) => BibleStudyProvider()..initializeBibleStudy()),
       ],
       child:
           const LivingSeedApp(), // Ensure LivingSeedApp is inside MultiProvider

@@ -5,7 +5,7 @@ import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:provider/provider.dart';
 import '../services/services.dart';
-import 'publications.dart';
+import 'home.dart';
 
 class AboutBook extends StatefulWidget {
   final AboutBooks about_books;
@@ -111,7 +111,7 @@ class _AboutBookState extends State<AboutBook> {
               ElevatedButton(
                 onPressed: () {
                   Provider.of<UsersAuthProvider>(context, listen: false)
-                      .addToCart(widget.about_books);
+                      .addToBookCart(widget.about_books);
                   showMessage('Book has been added to Cart', context);
                 },
                 style: ElevatedButton.styleFrom(
@@ -263,7 +263,7 @@ class _AboutBookState extends State<AboutBook> {
                       onPressed: () {
                         if (widget.about_books != null) {
                           GoRouter.of(context).go(
-                              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}',
+                              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}',
                               extra: widget.about_books);
                         }
                       },

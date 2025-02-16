@@ -6,20 +6,21 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import '../../common/widget.dart';
 import '../../models/models.dart';
-import '../services/services.dart';
+import '../services/bible_study_services.dart';
 
-class Books extends StatefulWidget {
-  const Books({super.key});
+class BibleStudy extends StatefulWidget {
+  const BibleStudy({super.key});
 
   @override
-  State<Books> createState() => _BooksState();
+  State<BibleStudy> createState() => _BibleStudyState();
 }
 
-class _BooksState extends State<Books> {
+class _BibleStudyState extends State<BibleStudy> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
+      future: Provider.of<BibleStudyProvider>(context, listen: false)
+          .bibleStudyFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -28,23 +29,25 @@ class _BooksState extends State<Books> {
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Center(child: Text("No books found"));
         }
-        List<AboutBooks> about_books = snapshot.data!;
+        List<BibleStudyMaterial> bibleStudy = snapshot.data!;
         return Column(
-          children: about_books
-              .map((books) => buildBooks(context, about_books: books))
+          children: bibleStudy
+              .map(
+                  (bible_study) => buildBooks(context, bibleStudy: bible_study))
               .toList(),
         );
       },
     );
   }
 
-  Widget buildBooks(BuildContext context, {required AboutBooks about_books}) {
+  Widget buildBooks(BuildContext context,
+      {required BibleStudyMaterial bibleStudy}) {
     return Column(
       children: [
         InkWell(
           onTap: () => GoRouter.of(context).go(
-              '${LivingSeedAppRouter.publicationsPath}/${LivingSeedAppRouter.aboutBookPath}',
-              extra: about_books),
+              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBibleStudyPath}',
+              extra: bibleStudy),
           child: Container(
             width: MediaQuery.of(context).size.width,
             child: Padding(
@@ -63,7 +66,7 @@ class _BooksState extends State<Books> {
                             const BorderRadius.all(Radius.circular(5)),
                       ),
                       child: Image.asset(
-                        about_books.coverImage,
+                        bibleStudy.coverImage,
                       ),
                     ),
                   ),
@@ -75,30 +78,20 @@ class _BooksState extends State<Books> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              about_books.bookTitle,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16.0),
-                            ),
-                            Text(
-                              about_books.author,
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 14.0),
-                            ),
-                          ],
+                        Text(
+                          bibleStudy.title,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
                         ),
                         const SizedBox(
                           height: 8,
                         ),
-                        buildStarRating(about_books.ratingReviews),
+                        buildStarRating(bibleStudy.ratingReviews),
                         const SizedBox(
                           height: 8,
                         ),
                         Text(
-                          'N${about_books.amount.toString()}',
+                          'N${bibleStudy.amount.toString()}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
                         ),
@@ -117,7 +110,7 @@ class _BooksState extends State<Books> {
     );
   }
 
-  Widget buildStarRating(List<RatingReview> ratingReviews) {
+  Widget buildStarRating(List<ReviewRating> ratingReviews) {
     if (ratingReviews.isEmpty) {
       return Row(
         children: List.generate(
