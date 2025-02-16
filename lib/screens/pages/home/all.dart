@@ -13,6 +13,7 @@ class AllPage extends StatefulWidget {
 }
 
 class _AllPageState extends State<AllPage> {
+  final double _fontSize = 11;
   @override
   Widget build(BuildContext context) {
     return Consumer2<AboutBookProvider, BibleStudyProvider>(
@@ -32,14 +33,14 @@ class _AllPageState extends State<AllPage> {
                         'Books',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                       ),
                       Text(
                         'We think you will like these',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 15,
+                          fontSize: 13,
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
                               : Theme.of(context).disabledColor,
@@ -50,9 +51,9 @@ class _AllPageState extends State<AllPage> {
                   TextButton(
                     onPressed: () => GoRouter.of(context).go(
                         '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.moreBooksPath}'),
-                    child: Text('More',
+                    child: Text('More...',
                         style: TextStyle(
-                            fontSize: 17,
+                            fontSize: _fontSize,
                             color: Theme.of(context).primaryColor)),
                   ),
                 ],
@@ -83,14 +84,14 @@ class _AllPageState extends State<AllPage> {
                         'Bible Study Materials',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                       ),
                       Text(
                         'We think you will like these',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 15,
+                          fontSize: 13,
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
                               : Theme.of(context).disabledColor,
@@ -101,9 +102,9 @@ class _AllPageState extends State<AllPage> {
                   TextButton(
                     onPressed: () => GoRouter.of(context).go(
                         '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.moreBibleStudyPath}'),
-                    child: Text('More',
+                    child: Text('More...',
                         style: TextStyle(
-                            fontSize: 17,
+                            fontSize: _fontSize,
                             color: Theme.of(context).primaryColor)),
                   ),
                 ],
@@ -133,14 +134,14 @@ class _AllPageState extends State<AllPage> {
                         'Seminar Papers & Magazines',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                       ),
                       Text(
                         'We think you will like these',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 15,
+                          fontSize: 13,
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.white
                               : Theme.of(context).disabledColor,
@@ -150,9 +151,9 @@ class _AllPageState extends State<AllPage> {
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: Text('More',
+                    child: Text('More...',
                         style: TextStyle(
-                            fontSize: 17,
+                            fontSize: _fontSize,
                             color: Theme.of(context).primaryColor)),
                   ),
                 ],
