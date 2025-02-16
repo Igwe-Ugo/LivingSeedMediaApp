@@ -9,3 +9,4 @@ export 'biblestudy_page.dart';
 export 'biblestudy.dart';
 export 'about_biblestudy.dart';
 export 'biblestudy_reviews.dart';
+export 'more_biblestudy.dart';

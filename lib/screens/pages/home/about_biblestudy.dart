@@ -77,14 +77,17 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
               const SizedBox(
                 width: 20,
               ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  widget.about_biblestudy.title,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      fontFamily: 'Playfair'),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    overflow: TextOverflow.ellipsis,
+                    widget.about_biblestudy.title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        fontFamily: 'Playfair'),
+                  ),
                 ),
               ),
             ],
@@ -128,7 +131,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                       '₦ ${widget.about_biblestudy.amount.toString()}',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
-                          fontSize: 20.0,
+                          fontSize: 18.0,
                           color: Colors.white),
                     ),
                     SizedBox(
@@ -138,14 +141,14 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                       '|',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
-                          fontSize: 20.0,
+                          fontSize: 18.0,
                           color: Colors.white),
                     ),
                     SizedBox(width: 20),
                     Icon(
                       Icons.shopping_cart_outlined,
                       color: Colors.white,
-                      size: 20,
+                      size: 18,
                     ),
                     SizedBox(
                       width: 10,
@@ -153,7 +156,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                     Text('Add to Cart',
                         style: TextStyle(
                             fontWeight: FontWeight.w300,
-                            fontSize: 20.0,
+                            fontSize: 18.0,
                             color: Colors.white),
                         textAlign: TextAlign.start),
                   ],
@@ -275,7 +278,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                     height: 25,
                   ),
                   Text(
-                    'Have ${widget.about_biblestudy.contents.length} Chapters',
+                    'Have ${widget.about_biblestudy.chapterNum} Chapters',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,

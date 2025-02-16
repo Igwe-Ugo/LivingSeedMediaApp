@@ -29,7 +29,7 @@ class _LivingSeedNavBarState extends State<LivingSeedNavBar> {
         destinations: const [
           NavigationDestination(
             icon: Icon(Iconsax.home),
-            label: 'Publications',
+            label: 'Home',
           ),
           NavigationDestination(
             icon: Icon(Iconsax.user),

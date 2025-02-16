@@ -1,10 +1,11 @@
 [
     {
         "title": "The Kingdom Lifestyle",
-        "coverImage": "",
+        "coverImage": "assets/images/kingdom_lifestyle.JPG",
         "amount": 1200,
         "subTitle": "A collection of Bible Study outlines from Peace House Discipleship work",
         "pdfLink": "assets/pdfs/Bunyan_Grace_Abounding.pdf",
+        "chapterNum": 19,
         "contents": [
             {
                 "chapter 1": "On the mount with the Lord",
@@ -34,23 +35,24 @@
                 "date":"Aug 26, 2023",
                 "reviewTitle":"Best book ever",
                 "reviewer": "Emmanuel Okeke",
-                "reviewRating": 5
+                "reviewRating": 4
             },
             {
                 "reviewText":"This is the first book I've read in years. And it sparked my love for living the Christian life",
                 "date":"Nov 26, 2023",
                 "reviewTitle":"Basic Biblical principles",
                 "reviewer": "Anna Bright",
-                "reviewRating": 4
+                "reviewRating": 3
             }
         ]
     },
     {
         "title": "Understanding the concept and conditions for discipleship",
-        "coverImage": "",
+        "coverImage": "assets/images/concepts_discipleship.JPG",
         "amount": 1200,
         "subTitle": "A collection of Bible Study outlines from Peace House Discipleship work",
         "pdfLink": "assets/pdfs/Bunyan_Grace_Abounding.pdf",
+        "chapterNum": 12,
         "contents": [
             {
                 "Chapter 1": "God's great offer",
@@ -73,7 +75,7 @@
                 "date":"Aug 26, 2023",
                 "reviewTitle":"Best book ever",
                 "reviewer": "Emmanuel Okeke",
-                "reviewRating": 5
+                "reviewRating": 4
             },
             {
                 "reviewText":"This is the first book I've read in years. And it sparked my love for living the Christian life",

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/pages/home/home.dart';
-import 'package:livingseed_media/screens/pages/services/bible_study_services.dart';
 import 'package:provider/provider.dart';
 import '../services/services.dart';
 
@@ -100,7 +99,8 @@ class _AllPageState extends State<AllPage> {
                     ],
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => GoRouter.of(context).go(
+                        '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.moreBibleStudyPath}'),
                     child: Text('More',
                         style: TextStyle(
                             fontSize: 17,

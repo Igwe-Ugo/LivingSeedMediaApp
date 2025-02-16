@@ -42,11 +42,13 @@ class BibleStudyMaterial {
   final String subTitle;
   final String coverImage;
   final String pdfLink;
+  final int chapterNum;
   final List<ReviewRating> ratingReviews;
   final List<Map<String, String>> contents;
 
   BibleStudyMaterial(
       {required this.title,
+      required this.chapterNum,
       required this.amount,
       required this.coverImage,
       required this.pdfLink,
@@ -70,14 +72,14 @@ class BibleStudyMaterial {
     }
 
     return BibleStudyMaterial(
-      subTitle: json['subTitle'],
-      coverImage: json['coverImage'],
-      title: json['title'],
-      amount: (json['amount'] as num).toDouble(),
-      pdfLink: json['pdfLink'],
-      ratingReviews: extractedReviews,
-      contents: extractedContents
-    );
+        subTitle: json['subTitle'],
+        coverImage: json['coverImage'],
+        title: json['title'],
+        chapterNum: json['chapterNum'],
+        amount: (json['amount'] as num).toDouble(),
+        pdfLink: json['pdfLink'],
+        ratingReviews: extractedReviews,
+        contents: extractedContents);
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +89,7 @@ class BibleStudyMaterial {
       "subTitle": subTitle,
       "amount": amount,
       "pdfLink": pdfLink,
+      "chapterNum": chapterNum,
       "ratingReviews": ratingReviews.map((review) => review.toJson()).toList(),
       "contents": contents
     };

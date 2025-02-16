@@ -129,7 +129,7 @@ class _AboutBookState extends State<AboutBook> {
                       '₦ ${widget.about_books.amount.toString()}',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
-                          fontSize: 20.0,
+                          fontSize: 18.0,
                           color: Colors.white),
                     ),
                     SizedBox(
@@ -146,7 +146,7 @@ class _AboutBookState extends State<AboutBook> {
                     Icon(
                       Icons.shopping_cart_outlined,
                       color: Colors.white,
-                      size: 20,
+                      size: 18,
                     ),
                     SizedBox(
                       width: 10,
@@ -154,7 +154,7 @@ class _AboutBookState extends State<AboutBook> {
                     Text('Add to Cart',
                         style: TextStyle(
                             fontWeight: FontWeight.w300,
-                            fontSize: 20.0,
+                            fontSize: 18.0,
                             color: Colors.white),
                         textAlign: TextAlign.start),
                   ],

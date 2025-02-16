@@ -18,21 +18,23 @@ class BibleStudyProvider extends ChangeNotifier {
 
   // Initialize books once when the app starts
   Future<void> initializeBibleStudy() async {
-    debugPrint("Initializing Books...");
     bibleStudyFuture = _loadBibleStudy(); // Store future so it can be reused
     notifyListeners();
   }
 
   // Fetch books from both assets and local storage
   Future<List<BibleStudyMaterial>> _loadBibleStudy() async {
-    List<BibleStudyMaterial> assetBibleStudy = await _loadBibleStudyFromAssets();
-    List<BibleStudyMaterial> localBibleStudy = await _loadBibleStudyFromLocal();
+    List<BibleStudyMaterial> assetBibleStudy =
+        await _loadBibleStudyFromAssets();
+    /* List<BibleStudyMaterial> localBibleStudy = await _loadBibleStudyFromLocal();
 
     // Merge books while preventing duplicates
-    Set<String> existingTitles = localBibleStudy.map((bible_study) => bible_study.title).toSet();
-    assetBibleStudy.removeWhere((bible_study) => existingTitles.contains(bible_study.title));
-
-    _bibileStudies = [...localBibleStudy, ...assetBibleStudy]; // Prioritize local books
+    Set<String> existingTitles =
+        localBibleStudy.map((bible_study) => bible_study.title).toSet();
+    assetBibleStudy.removeWhere(
+        (bible_study) => existingTitles.contains(bible_study.title));
+ */
+    _bibileStudies = [...assetBibleStudy]; // Prioritize local books
     return _bibileStudies;
   }
 
@@ -61,7 +63,7 @@ class BibleStudyProvider extends ChangeNotifier {
             .toList();
       }
     } catch (e) {
-      debugPrint('Error loading local book data: $e');
+      debugPrint('Error loading local bible study data: $e');
     }
     return [];
   }

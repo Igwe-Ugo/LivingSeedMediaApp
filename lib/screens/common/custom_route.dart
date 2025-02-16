@@ -55,6 +55,7 @@ class LivingSeedAppRouter {
   static const String readBookPath = 'read_book';
   static const String makePaymentPath = 'make_payment';
   static const String moreBooksPath = 'more_books';
+  static const String moreBibleStudyPath = 'more_bible_study';
   static const String anouncementsPath = 'announcements';
   static const String aboutBibleStudyPath = 'about_bible_study';
   static const String reviewsBibleStudyPath = 'reviewBibleStudy';
@@ -137,6 +138,10 @@ class LivingSeedAppRouter {
                         GoRoute(
                           path: moreBooksPath,
                           builder: (context, state) => const MoreBooks(),
+                        ),
+                        GoRoute(
+                          path: moreBibleStudyPath,
+                          builder: (context, state) => const MoreBibleStudy(),
                         ),
                         GoRoute(
                             path: aboutBibleStudyPath,

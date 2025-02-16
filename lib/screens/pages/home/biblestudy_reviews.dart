@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/common/custom_route.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -23,7 +22,7 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
   late Map<int, int> ratingCount;
   late int totalReviews;
   List<int>? ratings;
-
+  
   @override
   void initState() {
     super.initState();
@@ -87,11 +86,7 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
                 ),
                 IconButton(
                   onPressed: () {
-                    if (widget.about_biblestudy != null) {
-                      GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBookPath}/${LivingSeedAppRouter.reviewsPath}/${LivingSeedAppRouter.writeReviewPath}',
-                          extra: widget.about_biblestudy);
-                    }
+                    if (widget.about_biblestudy != null) {}
                   },
                   icon: const Icon(Iconsax.edit_2),
                 ),
@@ -105,9 +100,10 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
             alignment: Alignment.center,
             child: Text(
               widget.about_biblestudy.title,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  fontSize: 14,
                   fontFamily: 'Playfair'),
             ),
           ),
@@ -122,10 +118,11 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
                         widget.about_biblestudy.ratingReviews.isNotEmpty
                             ? Text(
                                 (allReviews /
-                                        widget.about_biblestudy.ratingReviews.length)
+                                        widget.about_biblestudy.ratingReviews
+                                            .length)
                                     .toStringAsFixed(2),
                                 style: TextStyle(
-                                  fontSize: 40,
+                                  fontSize: 30,
                                   fontWeight: FontWeight.bold,
                                 ),
                               )
@@ -153,7 +150,7 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
                         int starValue =
                             5 - index; // 5-star at top, 1-star at bottom
                         int starCount = ratingCount[starValue] ?? 0;
-                        double iconSize = 12.0;
+                        double iconSize = 11.0;
                         double percentage =
                             totalReviews > 0 ? starCount / totalReviews : 0.0;
                         return Row(
@@ -195,12 +192,12 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
                 Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(5, (index) {
-                      int averageRating =
-                          widget.about_biblestudy.ratingReviews.isNotEmpty
-                              ? (allReviews /
-                                      widget.about_biblestudy.ratingReviews.length)
-                                  .floor()
-                              : 0; // Default to 0 if there are no reviews
+                      int averageRating = widget
+                              .about_biblestudy.ratingReviews.isNotEmpty
+                          ? (allReviews /
+                                  widget.about_biblestudy.ratingReviews.length)
+                              .floor()
+                          : 0; // Default to 0 if there are no reviews
                       if (index < averageRating) {
                         // filled
                         return Icon(
@@ -229,8 +226,8 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
                 ),
                 widget.about_biblestudy.ratingReviews.isNotEmpty
                     ? Column(
-                        children:
-                            widget.about_biblestudy.ratingReviews.map((reviews) {
+                        children: widget.about_biblestudy.ratingReviews
+                            .map((reviews) {
                           return BibleStudyReviewsWidget(
                               context: context,
                               reviewText: reviews.reviewText,

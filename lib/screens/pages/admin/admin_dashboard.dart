@@ -87,6 +87,20 @@ class AdminDashboard extends StatelessWidget {
                     ),
                     const SizedBox(width: 10),
                     ElevatedButton.icon(
+                      style: ButtonStyle(
+                        elevation: WidgetStatePropertyAll(0),
+                      ),
+                      onPressed: () {
+                        // upload biblestudy screen meant to be here.
+                      },
+                      icon: const Icon(Iconsax.document_cloud),
+                      label: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15.0),
+                        child: const Text('Upload Bible study material'),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    ElevatedButton.icon(
                       style: ButtonStyle(elevation: WidgetStatePropertyAll(0)),
                       onPressed: () {
                         GoRouter.of(context).go(

@@ -90,6 +90,7 @@ class _BibleStudyPageState extends State<BibleStudyPage> {
                 children: [
                   Text(
                     widget.bible_study.title,
+                    maxLines: 2,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 15.0,

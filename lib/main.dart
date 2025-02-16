@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:livingseed_media/screens/pages/services/bible_study_services.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'screens/common/widget.dart';
 import 'package:provider/provider.dart';
