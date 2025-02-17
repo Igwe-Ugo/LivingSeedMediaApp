@@ -53,17 +53,14 @@ class _HomeState extends State<Home> {
   void _filterBooks() {
     String query = _searchController.text.toLowerCase();
     setState(() {
+      // Filter books
       filteredBooks = books
           .where((book) =>
               book.bookTitle.toLowerCase().contains(query) ||
               book.author.toLowerCase().contains(query))
           .toList();
-    });
-  }
 
-  void _filterBibleStudy() {
-    String query = _searchController.text.toLowerCase();
-    setState(() {
+      // Filter Bible study materials
       filteredBibleStudy = bible_study
           .where((biblestudy) => biblestudy.title.toLowerCase().contains(query))
           .toList();
@@ -84,7 +81,6 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     _searchController.removeListener(_filterBooks);
-    _searchController.removeListener(_filterBibleStudy);
     _searchController.dispose();
     super.dispose();
   }
@@ -229,38 +225,32 @@ class _HomeState extends State<Home> {
                   const AllPage()
               ],
               if (_searchController.text.isNotEmpty) ...[
-                // show search results only when a user is typing...
                 SizedBox(
-                    height: MediaQuery.of(context).size.height *
-                        0.9, // Adjust height
-                    // I am meant to display a widget here that shows that of bible study...
-                    child: filteredBooks.isEmpty
-                        ? Column(
-                            children: const [
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Icon(
-                                Iconsax.document_filter,
-                                size: 70,
-                              ),
-                              SizedBox(
-                                height: 30,
-                              ),
-                              Text(
-                                "Sorry, No matching books or biblestudy material found!",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 15),
-                              ),
-                            ],
-                          )
-                        : ListView.builder(
-                            itemCount: filteredBooks.length,
-                            itemBuilder: (context, index) {
-                              final book = filteredBooks[index];
-                              return _bookSearch(context, book);
-                            },
-                          )),
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: filteredBooks.isEmpty && filteredBibleStudy.isEmpty
+                      ? Column(
+                          children: const [
+                            SizedBox(height: 20),
+                            Icon(Iconsax.document_filter, size: 70),
+                            SizedBox(height: 30),
+                            Text(
+                              "Sorry, No matching books or Bible study material found!",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 15),
+                            ),
+                          ],
+                        )
+                      : ListView(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: [
+                            ...filteredBooks
+                                .map((book) => _bookSearch(context, book)),
+                            ...filteredBibleStudy.map(
+                                (study) => _bibleStudySearch(context, study)),
+                          ],
+                        ),
+                ),
               ]
             ],
           ),
@@ -311,6 +301,7 @@ class _HomeState extends State<Home> {
                           children: [
                             Text(
                               book.bookTitle,
+                              maxLines: 2,
                               style: const TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16.0),
                             ),
@@ -340,6 +331,75 @@ class _HomeState extends State<Home> {
         const Divider(
           thickness: 0.4,
         )
+      ],
+    );
+  }
+
+  Widget _bibleStudySearch(BuildContext context, BibleStudyMaterial study) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => GoRouter.of(context).go(
+            '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBibleStudyPath}',
+            extra: study,
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              child: Row(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Image.asset(
+                        study.coverImage,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          study.title,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
+                        ),
+                        Text(
+                          study.subTitle,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 14.0),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          'N${study.amount.toString()}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const Divider(thickness: 0.4),
       ],
     );
   }
