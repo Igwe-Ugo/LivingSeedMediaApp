@@ -183,7 +183,7 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                               Theme.of(context).disabledColor.withOpacity(0.2),
                         ),
                         maxLines: 10,
-                        maxLength: 300,
+                        maxLength: 700,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please give details about the notification made';

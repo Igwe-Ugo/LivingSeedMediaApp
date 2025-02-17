@@ -114,7 +114,24 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                 onPressed: () {
                   Provider.of<UsersAuthProvider>(context, listen: false)
                       .addToBibleStudyCart(widget.about_biblestudy);
-                  showMessage('Bible study material has been added to Cart', context);
+                  Users user =
+                      Provider.of<UsersAuthProvider>(context, listen: false)
+                          .userData!;
+                  NotificationItems newNotification = NotificationItems(
+                    notificationImage: widget.about_biblestudy.coverImage,
+                    notificationTitle: 'Bible Study Material added to cart',
+                    notificationMessage:
+                        'A bible study material with the name: ${widget.about_biblestudy.title} has been added to your cart item. You can view it in your cart session. You have done a great job by uplisting this in your purchases, do well to purchase!',
+                    notificationDate:
+                        "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+                    notificationTime:
+                        "${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour >= 12 ? 'PM' : 'AM'}",
+                  );
+                  Provider.of<NotificationProvider>(context, listen: false)
+                      .sendPersonalNotification(
+                          user.emailAddress, newNotification);
+                  showMessage(
+                      'Bible study material has been added to Cart', context);
                 },
                 style: ElevatedButton.styleFrom(
                   elevation: 0,

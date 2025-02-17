@@ -11,123 +11,141 @@ class Notifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: Consumer2<UsersAuthProvider, NotificationProvider>(
-          builder: (context, userProvider, notificationProvider, child) {
-            var user = userProvider.userData!;
-            return SingleChildScrollView(
-                child: Column(children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Image.asset(
-                          'assets/icons/LSeed-Logo-1.png',
-                          scale: 5,
+    return Consumer2<UsersAuthProvider, NotificationProvider>(
+      builder: (context, userProvider, notificationProvider, child) {
+        var user = userProvider.userData!;
+        return Scaffold(
+          body: SingleChildScrollView(
+              child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/icons/LSeed-Logo-1.png',
+                        scale: 5,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      const Text(
+                        'Notifications',
+                        style: TextStyle(
+                          fontFamily: 'Playfair',
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const Text(
-                          'Notifications',
-                          style: TextStyle(
-                            fontFamily: 'Playfair',
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                      ),
+                    ],
+                  ),
+                  IconButton(
+                      onPressed: () => _markAsRead(),
+                      icon: Icon(Icons.more_vert_outlined))
+                ],
+              ),
+            ),
+            DefaultTabController(
+              length: 2,
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: Colors.grey.withOpacity(0.1),
+                    ),
+                    child: TabBar(
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      dividerColor: Colors.transparent,
+                      indicatorColor:
+                          Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black,
+                      indicator: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        color: Colors.white,
+                      ),
+                      tabs: [
+                        Tab(
+                          child: Text(
+                            'General',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12.0,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.grey
+                                  : Colors.black,
+                            ),
                           ),
                         ),
+                        Tab(
+                          child: Text(
+                            'Personal',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12.0,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.grey
+                                  : Colors.black,
+                            ),
+                          ),
+                        )
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.9,
+                    child: TabBarView(
+                      children: [
+                        // General Notifications Tab
+                        _buildNotificationsList(
+                            notificationProvider.generalNotifications,
+                            'No general notifications',
+                            user.emailAddress),
+                        // Personal Notifications Tab
+                        _buildNotificationsList(
+                            user.emailAddress != null
+                                ? notificationProvider.personalNotifications[
+                                        user.emailAddress] ??
+                                    []
+                                : [],
+                            'No personal notifications',
+                            user.emailAddress),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: Colors.grey.withOpacity(0.1),
-                      ),
-                      child: TabBar(
-                        indicatorSize: TabBarIndicatorSize.tab,
-                        dividerColor: Colors.transparent,
-                        indicatorColor:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white
-                                : Colors.black,
-                        indicator: const BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: Colors.white,
-                        ),
-                        tabs: [
-                          Tab(
-                            child: Text(
-                              'General',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.0,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.grey
-                                    : Colors.black,
-                              ),
-                            ),
-                          ),
-                          Tab(
-                            child: Text(
-                              'Personal',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 12.0,
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? Colors.grey
-                                    : Colors.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.9,
-                      child: TabBarView(
-                        children: [
-                          // General Notifications Tab
-                          _buildNotificationsList(
-                              notificationProvider.generalNotifications,
-                              'No general notifications',
-                              user.emailAddress),
-                          // Personal Notifications Tab
-                          _buildNotificationsList(
-                              user.emailAddress != null
-                                  ? notificationProvider.personalNotifications[
-                                          user.emailAddress] ??
-                                      []
-                                  : [],
-                              'No personal notifications',
-                              user.emailAddress),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ]));
-          },
+            )
+          ])),
+        );
+      },
+    );
+  }
+
+  DropdownButton<String> _markAsRead() {
+    return DropdownButton<String>(
+      elevation: 5,
+      onChanged: (value) {
+        if (value != null) {
+          debugPrint(value);
+        }
+      },
+      icon: const Icon(Icons.more_vert),
+      underline: const SizedBox(),
+      items: [
+        DropdownMenuItem(
+          value: 'view',
+          child: Text('Mark all as read'),
+          onTap: () {},
         ),
-      ),
+      ],
     );
   }
 
@@ -144,6 +162,8 @@ class Notifications extends StatelessWidget {
             ),
           )
         : ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: notifications.length,
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
