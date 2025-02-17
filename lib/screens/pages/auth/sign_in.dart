@@ -215,9 +215,6 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                                   .signIn(emailController.text,
                                       passwordController.text);
                           if (authenticatedUser != null) {
-                            await Provider.of<NotificationProvider>(context,
-                                    listen: false)
-                                .loadNotifications();
                             GoRouter.of(context)
                                 .go(LivingSeedAppRouter.homePath);
                           } else {

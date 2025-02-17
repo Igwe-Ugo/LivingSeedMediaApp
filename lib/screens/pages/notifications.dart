@@ -12,8 +12,6 @@ class Notifications extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = Provider.of<UsersAuthProvider>(context, listen: false).userData!;
-    debugPrint(user.emailAddress);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -73,24 +71,25 @@ class Notifications extends StatelessWidget {
             ],
           ),
         ),
-        body: Consumer<NotificationProvider>(
-          builder: (context, notificationProvider, child) {
+        body: Consumer2<UsersAuthProvider, NotificationProvider>(
+          builder: (context, userProvider, notificationProvider, child) {
+            var user = userProvider.userData!;
             return TabBarView(
               children: [
                 // General Notifications Tab
                 _buildNotificationsList(
-                  notificationProvider.generalNotifications,
-                  'No general notifications', user.emailAddress
-                ),
+                    notificationProvider.generalNotifications,
+                    'No general notifications',
+                    user.emailAddress),
                 // Personal Notifications Tab
                 _buildNotificationsList(
-                  user.emailAddress != null
-                      ? notificationProvider
-                              .personalNotifications[user.emailAddress] ??
-                          []
-                      : [],
-                  'No personal notifications', user.emailAddress
-                ),
+                    user.emailAddress != null
+                        ? notificationProvider
+                                .personalNotifications[user.emailAddress] ??
+                            []
+                        : [],
+                    'No personal notifications',
+                    user.emailAddress),
               ],
             );
           },
@@ -99,8 +98,8 @@ class Notifications extends StatelessWidget {
     );
   }
 
-  Widget _buildNotificationsList(
-      List<NotificationItems> notifications, String emptyMessage, String userEmail) {
+  Widget _buildNotificationsList(List<NotificationItems> notifications,
+      String emptyMessage, String userEmail) {
     return notifications.isEmpty
         ? Center(
             child: Text(
@@ -116,7 +115,10 @@ class Notifications extends StatelessWidget {
             separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final notification = notifications[index];
-              return NotificationCard(notification: notification, userEmail: userEmail,);
+              return NotificationCard(
+                notification: notification,
+                userEmail: userEmail,
+              );
             },
           );
   }
@@ -144,7 +146,9 @@ class NotificationCard extends StatelessWidget {
       },
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        color: notification.isRead ? Colors.transparent.withBlue(20) : Colors.transparent.withBlue(100),
+        color: notification.isRead
+            ? Colors.transparent
+            : Theme.of(context).primaryColor.withAlpha(70),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -178,17 +182,13 @@ class NotificationCard extends StatelessWidget {
                             Text(
                               notification.notificationDate,
                               style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
+                                  fontSize: 12, fontWeight: FontWeight.w300),
                             ),
                             const SizedBox(width: 8),
                             Text(
                               notification.notificationTime,
                               style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
-                              ),
+                                  fontSize: 12, fontWeight: FontWeight.w300),
                             ),
                           ],
                         ),
