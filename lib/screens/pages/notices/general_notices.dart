@@ -17,7 +17,7 @@ class GeneralNotices extends StatelessWidget {
         InkWell(
           onTap: () {
             GoRouter.of(context).go(
-                '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.anouncementsPath}',
+                '${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.anouncementsPath}',
                 extra: notification);
           },
           child: SizedBox(

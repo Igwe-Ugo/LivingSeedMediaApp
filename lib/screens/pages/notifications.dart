@@ -1,7 +1,6 @@
 // notifications_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
@@ -15,83 +14,117 @@ class Notifications extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              GoRouter.of(context).pop();
-            },
-            icon: const Icon(
-              Iconsax.arrow_left_2,
-              size: 17,
-            ),
-          ),
-          title: const Text(
-            'Notifications',
-            style: TextStyle(
-              fontFamily: 'Playfair',
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          bottom: TabBar(
-            indicatorSize: TabBarIndicatorSize.tab,
-            dividerColor: Colors.transparent,
-            indicatorColor: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white
-                : Colors.black,
-            indicator: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              color: Colors.white,
-            ),
-            tabs: [
-              Tab(
-                child: Text(
-                  'General',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12.0,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.grey
-                        : Colors.black,
-                  ),
-                ),
-              ),
-              Tab(
-                child: Text(
-                  'Personal',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12.0,
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.grey
-                        : Colors.black,
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
         body: Consumer2<UsersAuthProvider, NotificationProvider>(
           builder: (context, userProvider, notificationProvider, child) {
             var user = userProvider.userData!;
-            return TabBarView(
-              children: [
-                // General Notifications Tab
-                _buildNotificationsList(
-                    notificationProvider.generalNotifications,
-                    'No general notifications',
-                    user.emailAddress),
-                // Personal Notifications Tab
-                _buildNotificationsList(
-                    user.emailAddress != null
-                        ? notificationProvider
-                                .personalNotifications[user.emailAddress] ??
-                            []
-                        : [],
-                    'No personal notifications',
-                    user.emailAddress),
-              ],
-            );
+            return SingleChildScrollView(
+                child: Column(children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Image.asset(
+                          'assets/icons/LSeed-Logo-1.png',
+                          scale: 5,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        const Text(
+                          'Notifications',
+                          style: TextStyle(
+                            fontFamily: 'Playfair',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      child: TabBar(
+                        indicatorSize: TabBarIndicatorSize.tab,
+                        dividerColor: Colors.transparent,
+                        indicatorColor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                        indicator: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: Colors.white,
+                        ),
+                        tabs: [
+                          Tab(
+                            child: Text(
+                              'General',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.0,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                          Tab(
+                            child: Text(
+                              'Personal',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12.0,
+                                color: Theme.of(context).brightness ==
+                                        Brightness.dark
+                                    ? Colors.grey
+                                    : Colors.black,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      child: TabBarView(
+                        children: [
+                          // General Notifications Tab
+                          _buildNotificationsList(
+                              notificationProvider.generalNotifications,
+                              'No general notifications',
+                              user.emailAddress),
+                          // Personal Notifications Tab
+                          _buildNotificationsList(
+                              user.emailAddress != null
+                                  ? notificationProvider.personalNotifications[
+                                          user.emailAddress] ??
+                                      []
+                                  : [],
+                              'No personal notifications',
+                              user.emailAddress),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ]));
           },
         ),
       ),
@@ -136,12 +169,12 @@ class NotificationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        GoRouter.of(context).go(
+            '${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}',
+            extra: notification);
         if (!notification.isRead) {
           Provider.of<NotificationProvider>(context, listen: false)
               .markAsRead(notification, userEmail);
-          GoRouter.of(context).go(
-              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}/${LivingSeedAppRouter.noticesPath}',
-              extra: notification);
         }
       },
       child: Card(

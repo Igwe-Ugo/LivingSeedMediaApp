@@ -5,7 +5,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/custom_route.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/home/home.dart';
-import 'package:livingseed_media/screens/pages/notices/notices.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
 
@@ -95,7 +94,6 @@ class _HomeState extends State<Home> {
     return Consumer2<NotificationProvider, UsersAuthProvider>(
         builder: (context, noticeProvider, userProvider, child) {
       Users user = userProvider.userData!;
-      int unreadCount = noticeProvider.getUnreadCount(user.emailAddress);
       return Scaffold(
           body: SingleChildScrollView(
         child: Padding(
@@ -125,29 +123,6 @@ class _HomeState extends State<Home> {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: InkWell(
-                      onTap: () => GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.notificationPath}',
-                          extra: user),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Stack(
-                          alignment: AlignmentDirectional.bottomEnd,
-                          children: [
-                            const Icon(Iconsax.message),
-                            if (unreadCount > 0)
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: NotificationBadge(count: unreadCount),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               ),
               const SizedBox(

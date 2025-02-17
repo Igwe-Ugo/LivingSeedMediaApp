@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/pages/notices/notices.dart';
 import 'package:provider/provider.dart';
 import '../common/widget.dart';
 import '../models/models.dart';
@@ -25,12 +24,11 @@ class _AccountPageState extends State<AccountPage> {
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.1),
       body:
-          Consumer3<UsersAuthProvider, DarkThemeProvider, NotificationProvider>(
+          Consumer2<UsersAuthProvider, DarkThemeProvider>(
               builder: (context, userProvider, themeChangeProvider,
-                  noticeProvider, child) {
+                  child) {
         final themeChange = themeChangeProvider;
         Users user = userProvider.userData!;
-        var unreadCount = noticeProvider.getUnreadCount(user.emailAddress);
         return SingleChildScrollView(
           child: Column(
             children: [
@@ -62,33 +60,6 @@ class _AccountPageState extends State<AccountPage> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: InkWell(
-                        onTap: () => GoRouter.of(context).go(
-                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.notificationPath}',
-                            extra: user),
-                        child: Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Stack(
-                            alignment: AlignmentDirectional.bottomEnd,
-                            children: [
-                              Icon(Iconsax.message,
-                                  color: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.black),
-                              if (unreadCount > 0)
-                                Positioned(
-                                  right: 0,
-                                  top: 0,
-                                  child: NotificationBadge(count: unreadCount),
-                                )
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
                   ],
                 ),
               ),

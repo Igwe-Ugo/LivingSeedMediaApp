@@ -19,9 +19,7 @@ class LivingSeedAppRouter {
       GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> homeTabNavigatorKey =
       GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> booksTabNavigationKey =
-      GlobalKey<NavigatorState>();
-  static final GlobalKey<NavigatorState> messagesTabNavigationKey =
+  static final GlobalKey<NavigatorState> notificationTabNavigatorKey =
       GlobalKey<NavigatorState>();
   static final GlobalKey<NavigatorState> accountTabNavigationKey =
       GlobalKey<NavigatorState>();
@@ -48,17 +46,18 @@ class LivingSeedAppRouter {
   static const String reviewsPath = 'reviews';
   static const String writeReviewPath = 'write_review';
   static const String changePasswordPath = 'change_password';
-  static const String notificationPath = 'notifications';
   static const String profilePath = 'profile';
-  static const String downloadsPath = 'downloads';
   static const String booksPurchasedPath = 'book_purchased';
   static const String readBookPath = 'read_book';
   static const String makePaymentPath = 'make_payment';
   static const String moreBooksPath = 'more_books';
   static const String moreBibleStudyPath = 'more_bible_study';
-  static const String anouncementsPath = 'announcements';
   static const String aboutBibleStudyPath = 'about_bible_study';
   static const String reviewsBibleStudyPath = 'reviewBibleStudy';
+
+  // notification pages
+  static const String notificationPath = '/notifications';
+  static const String anouncementsPath = 'announcements';
 
   //admin pages
   static const String uploadBookPath = 'upload_book';
@@ -98,33 +97,12 @@ class LivingSeedAppRouter {
           },
           branches: <StatefulShellBranch>[
             StatefulShellBranch(
-                navigatorKey: booksTabNavigationKey,
+                navigatorKey: homeTabNavigatorKey,
                 routes: <RouteBase>[
                   GoRoute(
                       path: homePath,
                       builder: (context, state) => const Home(),
                       routes: [
-                        GoRoute(
-                            path: notificationPath,
-                            builder: (context, state) => Notifications(),
-                            routes: [
-                              GoRoute(
-                                path: noticesPath,
-                                builder: (context, state) {
-                                  final anouncement = state.extra;
-                                  if (anouncement is NotificationItems) {
-                                    return Announcements(
-                                      announcement: anouncement,
-                                    );
-                                  } else {
-                                    return Center(
-                                      child: Text(
-                                          'No Recent Announcements to be reviewed'),
-                                    );
-                                  }
-                                },
-                              ),
-                            ]),
                         GoRoute(
                           path: moreBooksPath,
                           builder: (context, state) => const MoreBooks(),
@@ -204,6 +182,31 @@ class LivingSeedAppRouter {
                       ]),
                 ]),
             StatefulShellBranch(
+                navigatorKey: notificationTabNavigatorKey,
+                routes: <RouteBase>[
+                  GoRoute(
+                      path: notificationPath,
+                      builder: (context, state) => Notifications(),
+                      routes: [
+                        GoRoute(
+                          path: noticesPath,
+                          builder: (context, state) {
+                            final anouncement = state.extra;
+                            if (anouncement is NotificationItems) {
+                              return Announcements(
+                                announcement: anouncement,
+                              );
+                            } else {
+                              return Center(
+                                child: Text(
+                                    'No Recent Announcements to be reviewed'),
+                              );
+                            }
+                          },
+                        ),
+                      ]),
+                ]),
+            StatefulShellBranch(
                 navigatorKey: accountTabNavigationKey,
                 routes: <RouteBase>[
                   GoRoute(
@@ -268,9 +271,6 @@ class LivingSeedAppRouter {
                                     ),
                                   ]),
                             ]),
-                        GoRoute(
-                            path: notificationPath,
-                            builder: (context, state) => Notifications(),),
                         GoRoute(
                             path: cartPath,
                             builder: (context, state) {
