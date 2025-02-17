@@ -1,6 +1,7 @@
 // notifications_screen.dart
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
@@ -13,7 +14,7 @@ class Notifications extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer2<UsersAuthProvider, NotificationProvider>(
       builder: (context, userProvider, notificationProvider, child) {
-        var user = userProvider.userData!;
+        Users? user = userProvider.userData!;
         return Scaffold(
           body: SingleChildScrollView(
               child: Column(children: [
@@ -153,12 +154,26 @@ class Notifications extends StatelessWidget {
       String emptyMessage, String userEmail) {
     return notifications.isEmpty
         ? Center(
-            child: Text(
-              emptyMessage,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 40,
+                ),
+                Icon(
+                  Iconsax.message_notif,
+                  size: 80,
+                ),
+                SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  emptyMessage,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
             ),
           )
         : ListView.separated(

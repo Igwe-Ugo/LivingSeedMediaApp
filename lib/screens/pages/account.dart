@@ -28,7 +28,7 @@ class _AccountPageState extends State<AccountPage> {
               builder: (context, userProvider, themeChangeProvider,
                   child) {
         final themeChange = themeChangeProvider;
-        Users user = userProvider.userData!;
+        Users? user = userProvider.userData!;
         return SingleChildScrollView(
           child: Column(
             children: [
