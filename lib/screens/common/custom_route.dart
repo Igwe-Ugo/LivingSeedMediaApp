@@ -66,7 +66,6 @@ class LivingSeedAppRouter {
   static const String manageNotificationsPath = 'manage_notifications';
   static const String manageUsersPath = 'manage_users';
   static const String userProfilePath = 'user_profile';
-  static const String noticesPath = 'notice';
 
   LivingSeedAppRouter._internal() {
     final routes = <RouteBase>[
@@ -189,7 +188,7 @@ class LivingSeedAppRouter {
                       builder: (context, state) => Notifications(),
                       routes: [
                         GoRoute(
-                          path: noticesPath,
+                          path: anouncementsPath,
                           builder: (context, state) {
                             final anouncement = state.extra;
                             if (anouncement is NotificationItems) {
@@ -234,7 +233,7 @@ class LivingSeedAppRouter {
                                       const AdminNotifications(),
                                   routes: [
                                     GoRoute(
-                                      path: noticesPath,
+                                      path: anouncementsPath,
                                       builder: (context, state) {
                                         final anouncement = state.extra;
                                         if (anouncement is NotificationItems) {
