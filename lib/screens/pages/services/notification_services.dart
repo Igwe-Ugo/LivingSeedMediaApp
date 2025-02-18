@@ -221,12 +221,19 @@ class NotificationProvider extends ChangeNotifier {
     }
   }
 
-  // a function to mark all notifications as read...
   Future<bool> markAllAsRead() async {
     try {
+      // for general notification
       for (var notify in _generalNotifications) {
-        notify.isRead == false;
+        notify.isRead = true;
       }
+
+      // for personal notification
+      _personalNotifications.forEach((email, notification) {
+        for (var notify in notification) {
+          notify.isRead = true;
+        }
+      });
       await _saveReadStatus();
       await _saveNotificationsToLocal();
       notifyListeners();

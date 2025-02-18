@@ -263,17 +263,16 @@ class CustomUserTile extends StatelessWidget {
               ],
             ),
           ),
-          DropdownButton<String>(
+          PopupMenuButton<String>(
             elevation: 5,
-            onChanged: (value) {
+            onSelected: (value) {
               if (value != null) {
                 onOptionSelected(value);
               }
             },
             icon: const Icon(Icons.more_vert),
-            underline: const SizedBox(),
-            items: [
-              DropdownMenuItem(
+            itemBuilder: (context) => [
+              PopupMenuItem(
                 value: 'view',
                 child: Text('View Details'),
                 onTap: () {
@@ -283,7 +282,7 @@ class CustomUserTile extends StatelessWidget {
                 },
               ),
               if (isAdmin != 'Admin')
-                DropdownMenuItem(
+                PopupMenuItem(
                   onTap: () {
                     Provider.of<UsersAuthProvider>(context, listen: false)
                         .makeAdmin(email);
@@ -296,7 +295,7 @@ class CustomUserTile extends StatelessWidget {
                   ),
                 ),
               if (isAdmin == 'Admin')
-                DropdownMenuItem(
+                PopupMenuItem(
                   onTap: () {
                     Provider.of<UsersAuthProvider>(context, listen: false)
                         .removeAdmin(email);
@@ -309,7 +308,7 @@ class CustomUserTile extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              DropdownMenuItem(
+              PopupMenuItem(
                 onTap: () {
                   Provider.of<UsersAuthProvider>(context).deleteUser(name);
                   GoRouter.of(context).pop();

@@ -90,6 +90,10 @@ class _HomeState extends State<Home> {
     return Consumer2<NotificationProvider, UsersAuthProvider>(
         builder: (context, noticeProvider, userProvider, child) {
       Users user = userProvider.userData!;
+      // Ensure userData is not null before accessing it
+      if (userProvider.userData == null) {
+        return const SizedBox();
+      }
       return Scaffold(
           body: SingleChildScrollView(
         child: Padding(

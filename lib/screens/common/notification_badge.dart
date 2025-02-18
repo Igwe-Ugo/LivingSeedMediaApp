@@ -14,6 +14,10 @@ class NotificationBadge extends StatelessWidget {
     return Consumer2<NotificationProvider, UsersAuthProvider>(
         builder: (context, noticeProvider, userProvider, child) {
       Users user = userProvider.userData!;
+      // Ensure userData is not null before accessing it
+      if (userProvider.userData == null) {
+        return const SizedBox();
+      }
       var unreadCount = noticeProvider.getUnreadCount(user.emailAddress);
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -44,8 +48,7 @@ class NotificationBadge extends StatelessWidget {
                   ),
                 ),
               ),
-            if (unreadCount == 0)
-            SizedBox.shrink()
+            if (unreadCount == 0) SizedBox.shrink()
           ],
         ),
       );

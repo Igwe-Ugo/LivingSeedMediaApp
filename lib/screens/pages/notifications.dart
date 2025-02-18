@@ -15,6 +15,10 @@ class Notifications extends StatelessWidget {
     return Consumer2<UsersAuthProvider, NotificationProvider>(
       builder: (context, userProvider, notificationProvider, child) {
         Users? user = userProvider.userData!;
+        // Ensure userData is not null before accessing it
+        if (userProvider.userData == null) {
+          return const SizedBox();
+        }
         return Scaffold(
           body: SingleChildScrollView(
               child: Column(children: [
@@ -42,9 +46,25 @@ class Notifications extends StatelessWidget {
                       ),
                     ],
                   ),
-                  IconButton(
-                      onPressed: () => _markAsRead(),
-                      icon: Icon(Icons.more_vert_outlined))
+                  PopupMenuButton(
+                    icon: const Icon(Icons.more_vert),
+                    onSelected: (value) async {
+                      if (value == 'mark_all_read') {
+                        bool success =
+                            await notificationProvider.markAllAsRead();
+                        if (success) {
+                          showMessage(
+                              'All Notifications marked as read!', context);
+                        }
+                      }
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 'mark_all_read',
+                        child: Text('Mark all as read'),
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
@@ -127,26 +147,6 @@ class Notifications extends StatelessWidget {
           ])),
         );
       },
-    );
-  }
-
-  DropdownButton<String> _markAsRead() {
-    return DropdownButton<String>(
-      elevation: 5,
-      onChanged: (value) {
-        if (value != null) {
-          debugPrint(value);
-        }
-      },
-      icon: const Icon(Icons.more_vert),
-      underline: const SizedBox(),
-      items: [
-        DropdownMenuItem(
-          value: 'view',
-          child: Text('Mark all as read'),
-          onTap: () {},
-        ),
-      ],
     );
   }
 

@@ -23,12 +23,14 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.withOpacity(0.1),
-      body:
-          Consumer2<UsersAuthProvider, DarkThemeProvider>(
-              builder: (context, userProvider, themeChangeProvider,
-                  child) {
+      body: Consumer2<UsersAuthProvider, DarkThemeProvider>(
+          builder: (context, userProvider, themeChangeProvider, child) {
         final themeChange = themeChangeProvider;
         Users? user = userProvider.userData!;
+        // Ensure userData is not null before accessing it
+        if (userProvider.userData == null) {
+          return const SizedBox();
+        }
         return SingleChildScrollView(
           child: Column(
             children: [
