@@ -121,7 +121,7 @@ class Notifications extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.9,
+                    height: MediaQuery.of(context).size.height,
                     child: TabBarView(
                       children: [
                         // General Notifications Tab

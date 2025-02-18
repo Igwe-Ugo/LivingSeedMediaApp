@@ -34,7 +34,8 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder(
-            future: Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
+            future: Provider.of<AboutBookProvider>(context, listen: false)
+                .booksFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -80,12 +81,7 @@ class _CartState extends State<Cart> {
                         children: widget.user != null &&
                                 widget.user.cart.isNotEmpty
                             ? widget.user.cart
-                                .map((item) => _cartItems(
-                                    context,
-                                    item.coverImage,
-                                    item.bookTitle,
-                                    item.bookAuthor,
-                                    item.amount))
+                                .map((item) => _cartItems(context, item))
                                 .toList()
                             : [
                                 Column(
@@ -262,8 +258,7 @@ class _CartState extends State<Cart> {
             }));
   }
 
-  SizedBox _cartItems(BuildContext context, String coverImage, String bookName,
-      String bookAuthor, double amount) {
+  SizedBox _cartItems(BuildContext context, CartItems items) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -293,7 +288,7 @@ class _CartState extends State<Cart> {
                     child: Image.asset(
                       height: 100,
                       width: 100,
-                      coverImage,
+                      items.coverImage,
                     ),
                   ),
                   const SizedBox(
@@ -308,12 +303,12 @@ class _CartState extends State<Cart> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              bookName,
+                              items.bookTitle,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 16.0),
                             ),
                             Text(
-                              bookAuthor,
+                              items.bookAuthor,
                               style: TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 14.0),
                             ),
@@ -323,7 +318,7 @@ class _CartState extends State<Cart> {
                           height: 8,
                         ),
                         Text(
-                          'N $amount',
+                          'N ${items.amount}',
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
                         ),
@@ -333,7 +328,7 @@ class _CartState extends State<Cart> {
                 ],
               ),
               ListTile(
-                onTap: () => showRemoveItemDialog(context, bookName),
+                onTap: () => showRemoveItemDialog(context, items),
                 leading: const Icon(Iconsax.trash),
                 title: const Text('Remove from cart',
                     style: TextStyle(
@@ -349,7 +344,7 @@ class _CartState extends State<Cart> {
   }
 }
 
-Future<void> showRemoveItemDialog(BuildContext context, String bookTitle) {
+Future<void> showRemoveItemDialog(BuildContext context, CartItems items) {
   return showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -376,7 +371,21 @@ Future<void> showRemoveItemDialog(BuildContext context, String bookTitle) {
         TextButton(
           onPressed: () {
             Provider.of<UsersAuthProvider>(context, listen: false)
-                .removeFromCart(bookTitle);
+                .removeFromCart(items.bookTitle);
+            Users user =
+                Provider.of<UsersAuthProvider>(context, listen: false).userData!;
+            NotificationItems newNotification = NotificationItems(
+              notificationImage: items.coverImage,
+              notificationTitle: 'Book added to cart',
+              notificationMessage:
+                  'A book with the name: ${items.bookTitle} has been removed from your cart item. Will be a great pleasure to have you include that into your cart again, because information is power. You will not want to miss out the very information you can get from it!',
+              notificationDate:
+                  "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
+              notificationTime:
+                  "${DateTime.now().hour}:${DateTime.now().minute} ${DateTime.now().hour >= 12 ? 'PM' : 'AM'}",
+            );
+            Provider.of<NotificationProvider>(context, listen: false)
+                .sendPersonalNotification(user.emailAddress, newNotification);
             Navigator.of(context).pop();
             showMessage('One item removed from Cart', context);
           },
