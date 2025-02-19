@@ -66,6 +66,7 @@ class LivingSeedAppRouter {
   static const String manageNotificationsPath = 'manage_notifications';
   static const String manageUsersPath = 'manage_users';
   static const String userProfilePath = 'user_profile';
+  static const String addEventPath = 'add_event';
 
   LivingSeedAppRouter._internal() {
     final routes = <RouteBase>[
@@ -226,6 +227,11 @@ class LivingSeedAppRouter {
                                 path: uploadBibleStudyPath,
                                 builder: (context, state) =>
                                     const UploadBibleStudy(),
+                              ),
+                              GoRoute(
+                                path: addEventPath,
+                                builder: (context, state) =>
+                                    const AdminAddEvent(),
                               ),
                               GoRoute(
                                   path: manageNotificationsPath,

@@ -91,12 +91,12 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           border: Border.all(
                             color:
                                 Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.white
+                                    ? Colors.transparent
                                     : Theme.of(context)
                                         .disabledColor
                                         .withOpacity(0.15),
                           ),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextFormField(
                           keyboardType: TextInputType.emailAddress,
@@ -113,7 +113,10 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                             errorStyle: const TextStyle(
                                 fontSize: 15, fontWeight: FontWeight.w700),
                             hintText: 'Enter email',
-                            border: InputBorder.none,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
                             hintStyle: TextStyle(
                               color: Theme.of(context).brightness ==
                                       Brightness.dark
@@ -144,12 +147,12 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           border: Border.all(
                             color:
                                 Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.white
+                                    ? Colors.transparent
                                     : Theme.of(context)
                                         .disabledColor
                                         .withOpacity(0.15),
                           ),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextFormField(
                           obscureText: _obscureText,
@@ -162,7 +165,10 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                             prefixIcon:
                                 const Icon(Icons.lock_outline, size: 17),
                             hintText: 'Password',
-                            border: InputBorder.none,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
                             hintStyle: TextStyle(
                               color: Theme.of(context).brightness ==
                                       Brightness.dark

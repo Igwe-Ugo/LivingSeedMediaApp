@@ -207,10 +207,12 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
         Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
             border: Border.all(
-              color: Theme.of(context).disabledColor.withOpacity(0.15),
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.transparent
+                  : Theme.of(context).disabledColor.withOpacity(0.15),
             ),
-            borderRadius: BorderRadius.circular(8),
           ),
           child: TextFormField(
             controller: controller,
@@ -225,7 +227,10 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
               fillColor: Theme.of(context).disabledColor.withOpacity(0.15),
               prefixIcon: Icon(icon, size: 17),
               hintText: 'Enter $label',
-              border: InputBorder.none,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
               suffixIcon: isPassword
                   ? GestureDetector(
                       onTap: () {

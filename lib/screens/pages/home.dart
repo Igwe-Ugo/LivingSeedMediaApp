@@ -155,7 +155,7 @@ class _HomeState extends State<Home> {
                   borderRadius: const BorderRadius.all(Radius.circular(12)),
                   border: Border.all(
                     color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
+                        ? Colors.transparent
                         : Theme.of(context).disabledColor.withOpacity(0.15),
                   ),
                 ),
