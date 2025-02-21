@@ -122,75 +122,23 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                     const SizedBox(
                       height: 16,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                        border: Border.all(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Theme.of(context)
-                                  .disabledColor
-                                  .withOpacity(0.15),
-                        ),
-                      ),
-                      child: TextFormField(
+                    CommonTextInput(
+                        label: 'Message title...',
                         controller: _notificationTitleController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          filled: true,
-                          hintText: 'Message title...',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          fillColor:
-                              Theme.of(context).disabledColor.withOpacity(0.2),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the title of the notification';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(12)),
-                        border: Border.all(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Theme.of(context)
-                                  .disabledColor
-                                  .withOpacity(0.15),
-                        ),
-                      ),
-                      child: TextFormField(
-                        controller: _notificationMessageController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          hintText: "Message",
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide.none,
-                          ),
-                          fillColor:
-                              Theme.of(context).disabledColor.withOpacity(0.2),
-                        ),
-                        maxLines: 10,
-                        maxLength: 700,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please give details about the notification made';
-                          }
-                          return null;
-                        },
-                      ),
+                        icon: Icons.title,
+                        validator: () {}),
+                    CommonTextInput(
+                      label: "Message",
+                      controller: _notificationMessageController,
+                      isIcon: false,
+                      maxLine: 10,
+                      maxLength: 700,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please give details about the notification made';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -253,6 +201,10 @@ class _AdminNotificationsState extends State<AdminNotifications> {
   void _sendNotification() async {
     if (!_formKey.currentState!.validate()) {
       return showMessage('Please fill all available input spaces', context);
+    }
+    if (_coverImage!.path.isEmpty) {
+      return showMessage(
+          'Please share an image for this notification', context);
     }
 
     NotificationItems newNotification = NotificationItems(

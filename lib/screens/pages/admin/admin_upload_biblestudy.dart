@@ -154,120 +154,49 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Book Title...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the book title';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: 'BibleStudy Title',
+                  controller: _titleController,
+                  icon: Iconsax.book,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please write the book title';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
+                CommonTextInput(
+                    label: 'BibleStudy Subtitle',
                     controller: _subtitleController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Subtitle of bible study...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the subtitle of the bible study';
-                      }
-                      return null;
-                    },
-                  ),
+                    icon: Icons.subtitles,
+                    validator: () {}),
+                CommonTextInput(
+                  label: 'BibleStudy Price ... (#)',
+                  controller: _amountController,
+                  icon: Iconsax.money,
+                  isNumber: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please what is the price of the biblestudy?';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
+                DropdownButton(
+                  value: selectedChapterNum,
+                  items: List.generate(
+                    20,
+                    (index) => DropdownMenuItem(
+                      value: index + 1,
+                      child: Text(
+                          'How many chapters of book?... ${index + 1} Fields'),
                     ),
                   ),
-                  child: TextFormField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Bible Study Price... (#)',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the prize of the bible study material';
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.9,
-                  child: DropdownButton(
-                    value: selectedChapterNum,
-                    items: List.generate(
-                      20,
-                      (index) => DropdownMenuItem(
-                        value: index + 1,
-                        child: Text(
-                          'How many contents of bible study?... ${index + 1} Fields',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                      ),
-                    ),
-                    onChanged: (value) {
-                      if (value != null) {
-                        updateTextFields(value);
-                      }
-                    },
-                  ),
+                  onChanged: (value) {
+                    if (value != null) {
+                      updateTextFields(value);
+                    }
+                  },
                 ),
 
                 // display text field based on selected chapter numbers
@@ -276,42 +205,20 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: selectedChapterNum,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                            border: Border.all(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.15),
-                            ),
-                          ),
-                          child: TextFormField(
-                            controller: _bibleStudyChapterController[index],
-                            decoration: InputDecoration(
-                              filled: true,
-                              hintText: 'Content ${index + 1} title',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none,
-                              ),
-                              fillColor: Theme.of(context)
-                                  .disabledColor
-                                  .withOpacity(0.2),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the number of chapters of the book';
-                              }
-                              return null;
-                            },
-                          ),
+                        return CommonTextInput(
+                          label:
+                              'How many contents of bible study?... ${index + 1} field',
+                          controller: _bibleStudyChapterController[index],
+                          isTitleNecessary: true,
+                          isIcon: false,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the number of chapters of the biblestudy';
+                            }
+                            return null;
+                          },
                         );
                       }),
                 ),

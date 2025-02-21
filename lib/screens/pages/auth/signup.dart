@@ -61,26 +61,33 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
                 const SizedBox(height: 20),
                 CommonTextInput(
                     label: 'Fullname',
+                    validator: () {},
                     controller: fullnameController,
                     icon: Icons.person_outline),
                 CommonTextInput(
                     label: 'Email',
+                    validator: () {},
                     controller: emailController,
                     icon: Icons.email_outlined,
                     isEmail: true),
                 CommonTextInput(
                     label: 'Password',
+                    validator: () {},
                     controller: passwordController,
                     icon: Iconsax.password_check,
+                    maxLine: 1,
                     isPassword: true),
                 CommonTextInput(
                     label: 'Confirm Password',
+                    validator: () {},
+                    maxLine: 1,
                     controller: confirmPasswordController,
                     icon: Iconsax.password_check,
                     obscureText: _obscureText,
                     isPassword: true),
                 CommonTextInput(
                     label: 'Telephone',
+                    validator: () {},
                     controller: telephoneController,
                     icon: Icons.phone_android_outlined,
                     isPhone: true),

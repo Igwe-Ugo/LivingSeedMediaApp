@@ -92,31 +92,14 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
             const SizedBox(
               height: 20,
             ),
-            Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-                border: Border.all(
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.transparent
-                      : Theme.of(context).disabledColor.withOpacity(0.15),
-                ),
-              ),
-              child: TextField(
-                controller: _searchUserController,
-                decoration: InputDecoration(
-                  filled: true,
-                  hintText: 'Search for any user...',
-                  prefixIcon: const Icon(Iconsax.user_search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  fillColor: Theme.of(context).disabledColor.withOpacity(0.2),
-                ),
-              ),
+            CommonTextInput(
+              label: 'Search for any user...',
+              icon: Iconsax.user_search,
+              controller: _searchUserController,
+              isTitleNecessary: true,
+              maxLine: 1,
+              validator: () {},
             ),
-            const SizedBox(height: 10),
             if (_searchUserController.text.isEmpty) ...[
               Expanded(
                   child: Column(
@@ -266,9 +249,7 @@ class CustomUserTile extends StatelessWidget {
           PopupMenuButton<String>(
             elevation: 5,
             onSelected: (value) {
-              if (value != null) {
-                onOptionSelected(value);
-              }
+              debugPrint(value);
             },
             icon: const Icon(Icons.more_vert),
             itemBuilder: (context) => [

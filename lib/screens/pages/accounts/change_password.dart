@@ -13,9 +13,8 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-  bool _obscureText = true;
-  bool _obscureText2 = true;
-  final double _textFieldFont = 17.0;
+  final bool _obscureText = true;
+  final bool _obscureText2 = true;
   final _formKey = GlobalKey<FormState>();
   final _oldPasswordController = TextEditingController();
   final _newPasswordController = TextEditingController();
@@ -101,90 +100,23 @@ class _ChangePasswordState extends State<ChangePassword> {
                 const SizedBox(
                   height: 20,
                 ),
-                Text(
-                  'Enter old password',
-                  style: TextStyle(
-                    fontSize: _textFieldFont,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    obscureText: _obscureText,
+                CommonTextInput(
+                    label: 'Old password',
                     controller: _oldPasswordController,
+                    icon: Iconsax.password_check,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your old password';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.15),
-                      prefixIcon: const Icon(Icons.lock_outline, size: 17),
-                      hintText: 'Old Password',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Theme.of(context).disabledColor,
-                        fontSize: 17,
-                      ),
-                      errorStyle: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w700),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _obscureText = !_obscureText;
-                          });
-                        },
-                        child: Icon(
-                          _obscureText ? Iconsax.eye : Iconsax.eye_slash,
-                          size: 17,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  'Enter new password',
-                  style: TextStyle(
-                    fontSize: _textFieldFont,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
-                    obscureText: _obscureText2,
+                    obscureText: _obscureText,
+                    maxLine: 1,
+                    isPassword: true),
+                CommonTextInput(
+                    label: 'New password',
                     controller: _newPasswordController,
+                    icon: Iconsax.password_check,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a new password';
@@ -194,61 +126,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.15),
-                      prefixIcon: const Icon(Icons.lock_outline, size: 17),
-                      hintText: 'New Password',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Theme.of(context).disabledColor,
-                        fontSize: 17,
-                      ),
-                      errorStyle: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w700),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _obscureText2 = !_obscureText2;
-                          });
-                        },
-                        child: Icon(
-                          _obscureText2 ? Iconsax.eye : Iconsax.eye_slash,
-                          size: 17,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Text(
-                  'Confirm new password',
-                  style: TextStyle(
-                    fontSize: _textFieldFont,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: TextFormField(
                     obscureText: _obscureText2,
+                    maxLine: 1,
+                    isPassword: true),
+                CommonTextInput(
+                    label: 'Confirm password',
                     controller: _confirmNewPasswordController,
+                    icon: Iconsax.password_check,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please confirm your new password';
@@ -258,35 +142,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.15),
-                      prefixIcon: const Icon(Icons.lock_outline, size: 17),
-                      hintText: 'Confirm Password',
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(
-                        color: Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Theme.of(context).disabledColor,
-                        fontSize: 17,
-                      ),
-                      errorStyle: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w700),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _obscureText2 = !_obscureText2;
-                          });
-                        },
-                        child: Icon(
-                          _obscureText2 ? Iconsax.eye : Iconsax.eye_slash,
-                          size: 17,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                    obscureText: _obscureText2,
+                    maxLine: 1,
+                    isPassword: true),
               ],
             ),
           ),

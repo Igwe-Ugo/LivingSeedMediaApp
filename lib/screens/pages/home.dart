@@ -2,7 +2,7 @@ import 'package:choice/choice.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:livingseed_media/screens/common/custom_route.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:livingseed_media/screens/pages/home/home.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
@@ -149,32 +149,13 @@ class _HomeState extends State<Home> {
                 ],
               ),
               const SizedBox(height: 10),
-              Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(12)),
-                  border: Border.all(
-                    color: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.transparent
-                        : Theme.of(context).disabledColor.withOpacity(0.15),
-                  ),
-                ),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Search for title, authors, topics...',
-                    prefixIcon: const Icon(Iconsax.book_1),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    fillColor: Theme.of(context).disabledColor.withOpacity(0.2),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
+              CommonTextInput(
+                label: 'Search for title, authors, topics...',
+                controller: _searchController,
+                icon: Iconsax.book_1,
+                isTitleNecessary: true,
+                maxLine: 1,
+                validator: () {},
               ),
               if (_searchController.text.isEmpty) ...[
                 const Align(

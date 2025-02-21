@@ -162,100 +162,43 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _titleController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Book Title...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the book title';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: 'Book Title',
+                  controller: _titleController,
+                  icon: Iconsax.book,
+                  isTitleNecessary: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please write the book title';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _authorController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Author of book...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the author of the book';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: 'Author of book...',
+                  controller: _authorController,
+                  icon: Icons.person,
+                  isTitleNecessary: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please who is the author?';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: 'Book Price... (#)',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the prize of the book';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: 'Book Price ... (#)',
+                  controller: _amountController,
+                  icon: Iconsax.money,
+                  isTitleNecessary: true,
+                  isNumber: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please what is the price of the book?';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
                 DropdownButton(
                   value: selectedChapterNum,
                   items: List.generate(
@@ -279,178 +222,74 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                   child: ListView.builder(
                       shrinkWrap: true,
                       itemCount: selectedChapterNum,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 5),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(12)),
-                            border: Border.all(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Theme.of(context)
-                                      .disabledColor
-                                      .withOpacity(0.15),
-                            ),
-                          ),
-                          child: TextFormField(
-                            controller: _bookChapterController[index],
-                            decoration: InputDecoration(
-                              filled: true,
-                              hintText: 'Chapter ${index + 1} title',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: BorderSide.none,
-                              ),
-                              fillColor: Theme.of(context)
-                                  .disabledColor
-                                  .withOpacity(0.2),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the number of chapters of the book';
-                              }
-                              return null;
-                            },
-                          ),
+                        return CommonTextInput(
+                          label: 'Chapter ${index + 1} title',
+                          controller: _bookChapterController[index],
+                          icon: Iconsax.archive_book,
+                          isTitleNecessary: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the number of chapters of the book';
+                            }
+                            return null;
+                          },
                         );
                       }),
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _reviewController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: "Write preface...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    maxLines: 10,
-                    maxLength: 300,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please write about the preface of the book';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: 'Write Preface...',
+                  controller: _reviewController,
+                  isIcon: false,
+                  maxLine: 10,
+                  maxLength: 700,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please write about the preface of the book';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _descriptionController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: "What's it about...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    maxLines: 10,
-                    maxLength: 300,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please describe what the book is about!';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: "What's it about...",
+                  controller: _descriptionController,
+                  isIcon: false,
+                  maxLine: 10,
+                  maxLength: 700,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please describe what the book is about!';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _whoseAboutController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: "Who's it about...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    maxLines: 10,
-                    maxLength: 300,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter the target audience';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: "Who's it about...",
+                  controller: _whoseAboutController,
+                  isIcon: false,
+                  maxLine: 10,
+                  maxLength: 700,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the target audience!';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
-                Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
-                    border: Border.all(
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Theme.of(context).disabledColor.withOpacity(0.15),
-                    ),
-                  ),
-                  child: TextFormField(
-                    controller: _aboutAuthorController,
-                    decoration: InputDecoration(
-                      filled: true,
-                      hintText: "About the author...",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                      fillColor:
-                          Theme.of(context).disabledColor.withOpacity(0.2),
-                    ),
-                    maxLines: 10,
-                    maxLength: 300,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please tell us about the author';
-                      }
-                      return null;
-                    },
-                  ),
+                CommonTextInput(
+                  label: "About the author...",
+                  controller: _aboutAuthorController,
+                  isIcon: false,
+                  maxLine: 10,
+                  maxLength: 700,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please tell us about the author';
+                    }
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 16),
                 Row(
                   children: [
                     ElevatedButton(
@@ -524,9 +363,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
     for (int i = 0; i < _bookChapterController.length; i++) {
       String text = _bookChapterController[i].text.trim();
       if (text.isNotEmpty) {
-        chapters.add({
-          "chapter ${i + 1}": text
-        });
+        chapters.add({"chapter ${i + 1}": text});
       }
     }
 

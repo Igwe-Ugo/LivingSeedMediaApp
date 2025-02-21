@@ -4,19 +4,31 @@ import 'package:iconsax/iconsax.dart';
 class CommonTextInput extends StatefulWidget {
   final String label;
   final TextEditingController controller;
-  final IconData icon;
+  IconData? icon;
   bool isPassword;
   bool isEmail;
   bool isPhone;
   bool obscureText;
+  bool isTitleNecessary;
+  bool isNumber;
+  Function validator;
+  int? maxLine;
+  int? maxLength;
+  bool isIcon;
   CommonTextInput(
       {super.key,
       required this.label,
       required this.controller,
-      required this.icon,
+      this.icon,
+      this.maxLine,
       this.isEmail = false,
       this.isPassword = false,
       this.isPhone = false,
+      this.isTitleNecessary = false,
+      this.isNumber = false,
+      required this.validator,
+      this.maxLength,
+      this.isIcon = true,
       this.obscureText = true});
 
   @override
@@ -29,10 +41,13 @@ class _CommonTextInputState extends State<CommonTextInput> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.label,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
+        !widget.isTitleNecessary
+            ? Text(
+                widget.label,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              )
+            : SizedBox.shrink(),
         const SizedBox(height: 7),
         Container(
           alignment: Alignment.center,
@@ -47,16 +62,21 @@ class _CommonTextInputState extends State<CommonTextInput> {
           child: TextFormField(
             controller: widget.controller,
             obscureText: widget.isPassword ? widget.obscureText : false,
+            maxLines: widget.maxLine,
+            maxLength: widget.maxLength,
             keyboardType: widget.isEmail
                 ? TextInputType.emailAddress
                 : widget.isPhone
                     ? TextInputType.phone
-                    : TextInputType.text,
+                    : widget.isNumber
+                        ? TextInputType.number
+                        : TextInputType.text,
             decoration: InputDecoration(
               filled: true,
               fillColor: Theme.of(context).disabledColor.withOpacity(0.15),
-              prefixIcon: Icon(widget.icon, size: 17),
+              prefixIcon: widget.isIcon ? Icon(widget.icon, size: 17) : null,
               hintText: 'Enter ${widget.label}',
+              hintStyle: TextStyle(fontSize: 12),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,

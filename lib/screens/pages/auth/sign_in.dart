@@ -78,12 +78,15 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           label: 'Email',
                           controller: emailController,
                           icon: Icons.email_outlined,
+                          validator: () {},
                           isEmail: true),
                       CommonTextInput(
                           label: 'Password',
                           controller: passwordController,
                           icon: Iconsax.password_check,
+                          validator: () {},
                           obscureText: _obscureText,
+                          maxLine: 1,
                           isPassword: true),
                       const SizedBox(
                         height: 7,
