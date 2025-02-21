@@ -162,11 +162,11 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                CommonTextInput(
+                CustomTextInput(
                   label: 'Book Title',
                   controller: _titleController,
                   icon: Iconsax.book,
-                  isTitleNecessary: true,
+                  isTitleNotNecessary: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please write the book title';
@@ -174,11 +174,11 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     return null;
                   },
                 ),
-                CommonTextInput(
+                CustomTextInput(
                   label: 'Author of book...',
                   controller: _authorController,
                   icon: Icons.person,
-                  isTitleNecessary: true,
+                  isTitleNotNecessary: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please who is the author?';
@@ -186,11 +186,11 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     return null;
                   },
                 ),
-                CommonTextInput(
+                CustomTextInput(
                   label: 'Book Price ... (#)',
                   controller: _amountController,
                   icon: Iconsax.money,
-                  isTitleNecessary: true,
+                  isTitleNotNecessary: true,
                   isNumber: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -224,11 +224,11 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                       itemCount: selectedChapterNum,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return CommonTextInput(
+                        return CustomTextInput(
                           label: 'Chapter ${index + 1} title',
                           controller: _bookChapterController[index],
                           icon: Iconsax.archive_book,
-                          isTitleNecessary: true,
+                          isTitleNotNecessary: true,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter the number of chapters of the book';
@@ -238,7 +238,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                         );
                       }),
                 ),
-                CommonTextInput(
+                CustomTextInput(
                   label: 'Write Preface...',
                   controller: _reviewController,
                   isIcon: false,
@@ -251,7 +251,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     return null;
                   },
                 ),
-                CommonTextInput(
+                CustomTextInput(
                   label: "What's it about...",
                   controller: _descriptionController,
                   isIcon: false,
@@ -264,7 +264,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     return null;
                   },
                 ),
-                CommonTextInput(
+                CustomTextInput(
                   label: "Who's it about...",
                   controller: _whoseAboutController,
                   isIcon: false,
@@ -277,7 +277,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
                     return null;
                   },
                 ),
-                CommonTextInput(
+                CustomTextInput(
                   label: "About the author...",
                   controller: _aboutAuthorController,
                   isIcon: false,

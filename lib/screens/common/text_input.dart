@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class CommonTextInput extends StatefulWidget {
+class CustomTextInput extends StatefulWidget {
   final String label;
   final TextEditingController controller;
   IconData? icon;
@@ -9,13 +9,13 @@ class CommonTextInput extends StatefulWidget {
   bool isEmail;
   bool isPhone;
   bool obscureText;
-  bool isTitleNecessary;
+  bool isTitleNotNecessary;
   bool isNumber;
-  Function validator;
+  Function? validator;
   int? maxLine;
   int? maxLength;
   bool isIcon;
-  CommonTextInput(
+  CustomTextInput(
       {super.key,
       required this.label,
       required this.controller,
@@ -24,24 +24,24 @@ class CommonTextInput extends StatefulWidget {
       this.isEmail = false,
       this.isPassword = false,
       this.isPhone = false,
-      this.isTitleNecessary = false,
+      this.isTitleNotNecessary = false,
       this.isNumber = false,
-      required this.validator,
+      this.validator,
       this.maxLength,
       this.isIcon = true,
       this.obscureText = true});
 
   @override
-  State<CommonTextInput> createState() => _CommonTextInputState();
+  State<CustomTextInput> createState() => _CustomTextInputState();
 }
 
-class _CommonTextInputState extends State<CommonTextInput> {
+class _CustomTextInputState extends State<CustomTextInput> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        !widget.isTitleNecessary
+        !widget.isTitleNotNecessary
             ? Text(
                 widget.label,
                 style:

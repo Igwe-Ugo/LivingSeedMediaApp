@@ -122,12 +122,12 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                     const SizedBox(
                       height: 16,
                     ),
-                    CommonTextInput(
+                    CustomTextInput(
                         label: 'Message title...',
                         controller: _notificationTitleController,
                         icon: Icons.title,
                         validator: () {}),
-                    CommonTextInput(
+                    CustomTextInput(
                       label: "Message",
                       controller: _notificationMessageController,
                       isIcon: false,

@@ -59,25 +59,25 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Fullname',
                     validator: () {},
                     controller: fullnameController,
                     icon: Icons.person_outline),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Email',
                     validator: () {},
                     controller: emailController,
                     icon: Icons.email_outlined,
                     isEmail: true),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Password',
                     validator: () {},
                     controller: passwordController,
                     icon: Iconsax.password_check,
                     maxLine: 1,
                     isPassword: true),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Confirm Password',
                     validator: () {},
                     maxLine: 1,
@@ -85,7 +85,7 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
                     icon: Iconsax.password_check,
                     obscureText: _obscureText,
                     isPassword: true),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Telephone',
                     validator: () {},
                     controller: telephoneController,

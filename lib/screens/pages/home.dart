@@ -149,11 +149,11 @@ class _HomeState extends State<Home> {
                 ],
               ),
               const SizedBox(height: 10),
-              CommonTextInput(
+              CustomTextInput(
                 label: 'Search for title, authors, topics...',
                 controller: _searchController,
                 icon: Iconsax.book_1,
-                isTitleNecessary: true,
+                isTitleNotNecessary: true,
                 maxLine: 1,
                 validator: () {},
               ),

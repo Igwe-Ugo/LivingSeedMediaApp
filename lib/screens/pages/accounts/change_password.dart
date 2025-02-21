@@ -100,7 +100,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 const SizedBox(
                   height: 20,
                 ),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Old password',
                     controller: _oldPasswordController,
                     icon: Iconsax.password_check,
@@ -113,7 +113,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     obscureText: _obscureText,
                     maxLine: 1,
                     isPassword: true),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'New password',
                     controller: _newPasswordController,
                     icon: Iconsax.password_check,
@@ -129,7 +129,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     obscureText: _obscureText2,
                     maxLine: 1,
                     isPassword: true),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'Confirm password',
                     controller: _confirmNewPasswordController,
                     icon: Iconsax.password_check,

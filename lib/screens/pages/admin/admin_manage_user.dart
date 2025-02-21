@@ -92,11 +92,11 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
             const SizedBox(
               height: 20,
             ),
-            CommonTextInput(
+            CustomTextInput(
               label: 'Search for any user...',
               icon: Iconsax.user_search,
               controller: _searchUserController,
-              isTitleNecessary: true,
+              isTitleNotNecessary: true,
               maxLine: 1,
               validator: () {},
             ),

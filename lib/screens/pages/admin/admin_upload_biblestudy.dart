@@ -154,7 +154,7 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                CommonTextInput(
+                CustomTextInput(
                   label: 'BibleStudy Title',
                   controller: _titleController,
                   icon: Iconsax.book,
@@ -165,12 +165,12 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
                     return null;
                   },
                 ),
-                CommonTextInput(
+                CustomTextInput(
                     label: 'BibleStudy Subtitle',
                     controller: _subtitleController,
                     icon: Icons.subtitles,
                     validator: () {}),
-                CommonTextInput(
+                CustomTextInput(
                   label: 'BibleStudy Price ... (#)',
                   controller: _amountController,
                   icon: Iconsax.money,
@@ -207,11 +207,11 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
                       itemCount: selectedChapterNum,
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return CommonTextInput(
+                        return CustomTextInput(
                           label:
                               'How many contents of bible study?... ${index + 1} field',
                           controller: _bibleStudyChapterController[index],
-                          isTitleNecessary: true,
+                          isTitleNotNecessary: true,
                           isIcon: false,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
