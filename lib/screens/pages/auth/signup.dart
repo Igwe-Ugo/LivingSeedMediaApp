@@ -16,7 +16,7 @@ class LivingSeedSignUp extends StatefulWidget {
 
 class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
   final _formKey = GlobalKey<FormState>();
-  bool _obscureText = true;
+  final bool _obscureText = true;
   bool agreeToTerms = false;
   bool male = false;
   bool female = false;
@@ -59,18 +59,30 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                _buildTextField(
-                    'Fullname', fullnameController, Icons.person_outline),
-                _buildTextField('Email', emailController, Icons.email_outlined,
+                CommonTextInput(
+                    label: 'Fullname',
+                    controller: fullnameController,
+                    icon: Icons.person_outline),
+                CommonTextInput(
+                    label: 'Email',
+                    controller: emailController,
+                    icon: Icons.email_outlined,
                     isEmail: true),
-                _buildTextField(
-                    'Password', passwordController, Icons.lock_outline,
+                CommonTextInput(
+                    label: 'Password',
+                    controller: passwordController,
+                    icon: Iconsax.password_check,
                     isPassword: true),
-                _buildTextField('Confirm Password', confirmPasswordController,
-                    Icons.lock_outline,
+                CommonTextInput(
+                    label: 'Confirm Password',
+                    controller: confirmPasswordController,
+                    icon: Iconsax.password_check,
+                    obscureText: _obscureText,
                     isPassword: true),
-                _buildTextField('Telephone', telephoneController,
-                    Icons.phone_android_outlined,
+                CommonTextInput(
+                    label: 'Telephone',
+                    controller: telephoneController,
+                    icon: Icons.phone_android_outlined,
                     isPhone: true),
                 const SizedBox(height: 15),
 
@@ -193,65 +205,6 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
     );
   }
 
-  Widget _buildTextField(
-      String label, TextEditingController controller, IconData icon,
-      {bool isPassword = false, bool isEmail = false, bool isPhone = false}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 7),
-        Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(12)),
-            border: Border.all(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.transparent
-                  : Theme.of(context).disabledColor.withOpacity(0.15),
-            ),
-          ),
-          child: TextFormField(
-            controller: controller,
-            obscureText: isPassword ? _obscureText : false,
-            keyboardType: isEmail
-                ? TextInputType.emailAddress
-                : isPhone
-                    ? TextInputType.phone
-                    : TextInputType.text,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Theme.of(context).disabledColor.withOpacity(0.15),
-              prefixIcon: Icon(icon, size: 17),
-              hintText: 'Enter $label',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide.none,
-              ),
-              suffixIcon: isPassword
-                  ? GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText ? Iconsax.eye : Iconsax.eye_slash,
-                        size: 17,
-                      ),
-                    )
-                  : null,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-      ],
-    );
-  }
-
   Widget _buildGenderSelection() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -299,8 +252,19 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
   }
 
   void _signUpUser() async {
+    RegExp regExp = RegExp(
+        "^[a-zA-Z0-9.a-zA-Z0-9.!#%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
     if (!_formKey.currentState!.validate()) {
       return showMessage('Please fill all available input spaces', context);
+    }
+    if (passwordController.text != confirmPasswordController.text) {
+      showMessage(
+          'Password must be the same with your confirmed password', context);
+      return;
+    }
+    if (!regExp.hasMatch(emailController.text)) {
+      showMessage('Please put in a correct email Address', context);
+      return;
     }
 
     Users newUser = Users(

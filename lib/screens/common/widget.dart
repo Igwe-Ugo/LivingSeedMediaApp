@@ -5,3 +5,4 @@ export 'dark_theme.dart';
 export 'curve_edges.dart';
 export 'show_message.dart';
 export 'notification_badge.dart';
+export 'text_input.dart';

@@ -18,7 +18,7 @@ class LivingSeedSignIn extends StatefulWidget {
 }
 
 class _LivingSeedSignInState extends State<LivingSeedSignIn> {
-  bool _obscureText = true;
+  final bool _obscureText = true;
   final loginFormField = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -74,122 +74,17 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Email',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.transparent
-                                    : Theme.of(context)
-                                        .disabledColor
-                                        .withOpacity(0.15),
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextFormField(
-                          keyboardType: TextInputType.emailAddress,
+                      CommonTextInput(
+                          label: 'Email',
                           controller: emailController,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Theme.of(context)
-                                .disabledColor
-                                .withOpacity(0.15),
-                            prefixIcon: const Icon(
-                              Icons.email_outlined,
-                              size: 17,
-                            ),
-                            errorStyle: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w700),
-                            hintText: 'Enter email',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Theme.of(context).disabledColor,
-                              fontSize: 17,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'Password',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 7,
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color:
-                                Theme.of(context).brightness == Brightness.dark
-                                    ? Colors.transparent
-                                    : Theme.of(context)
-                                        .disabledColor
-                                        .withOpacity(0.15),
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextFormField(
-                          obscureText: _obscureText,
+                          icon: Icons.email_outlined,
+                          isEmail: true),
+                      CommonTextInput(
+                          label: 'Password',
                           controller: passwordController,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Theme.of(context)
-                                .disabledColor
-                                .withOpacity(0.15),
-                            prefixIcon:
-                                const Icon(Icons.lock_outline, size: 17),
-                            hintText: 'Password',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                            hintStyle: TextStyle(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white
-                                  : Theme.of(context).disabledColor,
-                              fontSize: 17,
-                            ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _obscureText = !_obscureText;
-                                });
-                              },
-                              child: Icon(
-                                _obscureText ? Iconsax.eye : Iconsax.eye_slash,
-                                size: 17,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                          icon: Iconsax.password_check,
+                          obscureText: _obscureText,
+                          isPassword: true),
                       const SizedBox(
                         height: 7,
                       ),
@@ -203,7 +98,7 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                             style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 17),
+                                fontSize: 15),
                           ),
                         ),
                       ),
@@ -215,6 +110,16 @@ class _LivingSeedSignInState extends State<LivingSeedSignIn> {
                           setState(() {
                             isLoading = true;
                           });
+                          RegExp regExp = RegExp(
+                              "^[a-zA-Z0-9.a-zA-Z0-9.!#%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+                          if (!regExp.hasMatch(emailController.text)) {
+                            showMessage('Please put in a correct email Address',
+                                context);
+                            setState(() {
+                              isLoading = false;
+                            });
+                            return;
+                          }
                           Users? authenticatedUser =
                               await Provider.of<UsersAuthProvider>(context,
                                       listen: false)
