@@ -12,9 +12,6 @@ class AdminAddEvent extends StatefulWidget {
 }
 
 class _AdminAddEventState extends State<AdminAddEvent> {
-  final TextEditingController _addTitleController = TextEditingController();
-  final TextEditingController _eventDetailsController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,6 +73,12 @@ class _AdminAddEventState extends State<AdminAddEvent> {
   }
 
   Future<dynamic> _showAddEvent(BuildContext context) {
+    final TextEditingController _addTitleController = TextEditingController();
+    final TextEditingController _eventDetailsController =
+        TextEditingController();
+    DateTime selectedDate = DateTime.now();
+    TimeOfDay selectedTime = TimeOfDay.now();
+
     return showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -88,13 +91,24 @@ class _AdminAddEventState extends State<AdminAddEvent> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      IconButton(onPressed: () {}, icon: Icon(Iconsax.trash)),
+                      IconButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          icon: Icon(Iconsax.trash)),
                       ElevatedButton.icon(
                         style: ButtonStyle(
                             elevation: WidgetStatePropertyAll(0),
                             backgroundColor: WidgetStatePropertyAll(
                                 Theme.of(context).primaryColor)),
-                        onPressed: () {},
+                        onPressed: () {
+                          final DateTime eventDateTime = DateTime(
+                            selectedDate.year,
+                            selectedDate.month,
+                            selectedDate.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                          Navigator.of(context).pop();
+                        },
                         label: Text(
                           'Save',
                           style: TextStyle(
@@ -128,24 +142,34 @@ class _AdminAddEventState extends State<AdminAddEvent> {
                     },
                   ),
                   ListTile(
-                    leading: Text(
-                      'All day?',
-                      style: TextStyle(
-                          fontSize: 13.0, fontWeight: FontWeight.w700),
-                    ),
-                    trailing: Switch(
-                      activeColor: Colors.white,
-                      activeTrackColor: Theme.of(context).primaryColor,
-                      inactiveTrackColor: Colors.grey.withOpacity(0.3),
-                      inactiveThumbColor: Colors.white,
-                      value: true,
-                      trackOutlineColor: WidgetStateProperty.resolveWith(
-                          (states) => Colors.transparent),
-                      onChanged: (value) {
-                        setState(() {});
-                      },
-                    ),
+                    title:
+                        Text("Date: ${selectedDate.toLocal()}".split(' ')[0]),
+                    trailing: const Icon(Iconsax.calendar),
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDate,
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2101),
+                      );
+                      if (picked != null) {
+                        setState(() => selectedDate = picked);
+                      }
+                    },
                   ),
+                  ListTile(
+                    title: Text("Time: ${selectedTime.format(context)}"),
+                    trailing: const Icon(Iconsax.timer),
+                    onTap: () async {
+                      TimeOfDay? picked = await showTimePicker(
+                        context: context,
+                        initialTime: selectedTime,
+                      );
+                      if (picked != null) {
+                        setState(() => selectedTime = picked);
+                      }
+                    },
+                  )
                 ],
               ),
             ),
