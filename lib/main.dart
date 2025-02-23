@@ -22,6 +22,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
   late NotificationProvider notificationProvider;
   late AboutBookProvider aboutBookProvider;
   late BibleStudyProvider bibleStudyProvider;
+  late AddEventProvider addEventProvider;
 
   @override
   void initState() {
@@ -32,6 +33,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
     notificationProvider = NotificationProvider();
     aboutBookProvider = AboutBookProvider();
     bibleStudyProvider = BibleStudyProvider();
+    addEventProvider = AddEventProvider();
 
     // Load necessary data AFTER the first frame to avoid context-related issues
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -39,6 +41,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
       notificationProvider.initializeNotifications();
       aboutBookProvider.initializeBooks();
       bibleStudyProvider.initializeBibleStudy();
+      addEventProvider.initializeEvents();
     });
 
     getCurrentAppTheme();
@@ -58,6 +61,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
         ChangeNotifierProvider(create: (_) => notificationProvider),
         ChangeNotifierProvider(create: (_) => aboutBookProvider),
         ChangeNotifierProvider(create: (_) => bibleStudyProvider),
+        ChangeNotifierProvider(create: (_) => addEventProvider),
       ],
       child: Consumer<DarkThemeProvider>(
         builder: (context, themeData, child) {

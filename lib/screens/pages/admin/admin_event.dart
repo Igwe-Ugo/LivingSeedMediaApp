@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:livingseed_media/screens/common/widget.dart';
+import 'package:livingseed_media/screens/models/events_model.dart';
+import 'package:livingseed_media/screens/pages/services/add_event_services.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AdminAddEvent extends StatefulWidget {
@@ -25,50 +28,62 @@ class _AdminAddEventState extends State<AdminAddEvent> {
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        GoRouter.of(context).pop();
-                      },
-                      icon: const Icon(
-                        Iconsax.arrow_left_2,
-                        size: 17,
-                      )),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  const Text(
-                    'Add Event',
-                    style: TextStyle(
-                      fontFamily: 'Playfair',
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+      body:
+          Consumer<AddEventProvider>(builder: (context, eventProvider, child) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          GoRouter.of(context).pop();
+                        },
+                        icon: const Icon(
+                          Iconsax.arrow_left_2,
+                          size: 17,
+                        )),
+                    const SizedBox(
+                      width: 15,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SfCalendar(
-                view: CalendarView.month,
-                todayHighlightColor: Theme.of(context).primaryColor,
-                todayTextStyle: TextStyle(
-                    fontFamily: 'Playfair', fontWeight: FontWeight.bold),
-                showDatePickerButton: true,
-                showTodayButton: true,
-                headerHeight: 50,
-              )
-            ],
+                    const Text(
+                      'Add Event',
+                      style: TextStyle(
+                        fontFamily: 'Playfair',
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                SfCalendar(
+                  view: CalendarView.month,
+                  todayHighlightColor: Theme.of(context).primaryColor,
+                  todayTextStyle: TextStyle(
+                      fontFamily: 'Playfair', fontWeight: FontWeight.bold),
+                  showDatePickerButton: true,
+                  showTodayButton: true,
+                  headerHeight: 50,
+                  dataSource: MeetingDataSource(eventProvider.events),
+                  onTap: (CalendarTapDetails details) {
+                    if (details.appointments != null &&
+                        details.appointments!.isNotEmpty) {
+                      UpcomingEvents selectedEvent =
+                          details.appointments!.first;
+                      eventProvider.deleteEvent(selectedEvent);
+                    }
+                  },
+                )
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -107,6 +122,13 @@ class _AdminAddEventState extends State<AdminAddEvent> {
                             selectedTime.hour,
                             selectedTime.minute,
                           );
+                          UpcomingEvents upcomingEvents = UpcomingEvents(
+                              eventName: _addTitleController.text,
+                              eventDetails: _eventDetailsController.text,
+                              from: eventDateTime,
+                              to: eventDateTime.add(const Duration(hours: 1)));
+                          Provider.of<AddEventProvider>(context, listen: false)
+                              .addEvent(upcomingEvents);
                           Navigator.of(context).pop();
                         },
                         label: Text(

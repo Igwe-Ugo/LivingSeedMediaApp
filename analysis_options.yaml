@@ -17,6 +17,7 @@ analyzer:
     non_constant_identifier_names: ignore
     prefer_conditional_assignment: ignore
     prefer_const_constructors: ignore
+    prefer_final_fields: ignore
     unnecessary_null_comparison: ignore
     unnecessary_string_escapes: ignore
     unrelated_type_equality_checks: ignore
