@@ -48,26 +48,41 @@ class _AdminAddEventState extends State<AdminAddEvent> {
               color: Theme.of(context).scaffoldBackgroundColor,
             ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-            child: SfCalendar(
-              view: CalendarView.month,
-              todayHighlightColor: Theme.of(context).primaryColor,
-              todayTextStyle: TextStyle(
-                  fontFamily: 'Playfair', fontWeight: FontWeight.bold),
-              showDatePickerButton: true,
-              showTodayButton: true,
-              headerHeight: 70,
-              dataSource: MeetingDataSource(eventProvider.events),
-              onTap: (CalendarTapDetails details) {
-                if (details.appointments != null &&
-                    details.appointments!.isNotEmpty) {
-                  UpcomingEventsModel selectedEvent =
-                      details.appointments!.first;
-                  eventProvider.deleteEvent(selectedEvent);
-                }
-              },
-            ),
+          body: Stack(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                child: SfCalendar(
+                  view: CalendarView.month,
+                  todayHighlightColor: Theme.of(context).primaryColor,
+                  todayTextStyle: TextStyle(
+                      fontFamily: 'Playfair', fontWeight: FontWeight.bold),
+                  showDatePickerButton: true,
+                  showTodayButton: true,
+                  headerHeight: 70,
+                  dataSource: MeetingDataSource(eventProvider.events),
+                  onTap: (CalendarTapDetails details) {
+                    if (details.appointments != null &&
+                        details.appointments!.isNotEmpty) {
+                      // Select the first tapped event
+                      eventProvider.selectEvent(details.appointments!.first);
+                    } else {
+                      eventProvider.selectEvent(null); // Hide tooltip
+                    }
+                  },
+                ),
+              ),
+              if (eventProvider.selectedEvent != null)
+                Positioned(
+                  top: 100, // Adjust based on your UI
+                  left: 50,
+                  child: CustomToolTip(
+                    content: Text(eventProvider.selectedEvent!.eventName),
+                    child: Icon(Iconsax.information),
+                  ),
+                ),
+            ],
           ));
     });
   }
