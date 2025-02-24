@@ -54,6 +54,7 @@ class LivingSeedAppRouter {
   static const String moreBibleStudyPath = 'more_bible_study';
   static const String aboutBibleStudyPath = 'about_bible_study';
   static const String reviewsBibleStudyPath = 'reviewBibleStudy';
+  static const String upcomingEventsPath = 'upcoming_events.dart';
 
   // notification pages
   static const String notificationPath = '/notifications';
@@ -276,6 +277,10 @@ class LivingSeedAppRouter {
                                     ),
                                   ]),
                             ]),
+                        GoRoute(
+                          path: upcomingEventsPath,
+                          builder: (context, state) => const UpcomingEvents(),
+                        ),
                         GoRoute(
                             path: cartPath,
                             builder: (context, state) {

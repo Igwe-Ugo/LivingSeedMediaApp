@@ -37,7 +37,7 @@ dependencies:
   pdf: ^3.11.1
   syncfusion_flutter_pdfviewer: ^28.1.33
   file_picker: ^8.1.6
-  syncfusion_flutter_calendar: ^28.2.3
+  syncfusion_flutter_calendar: ^28.2.6
   collection: ^1.19.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0

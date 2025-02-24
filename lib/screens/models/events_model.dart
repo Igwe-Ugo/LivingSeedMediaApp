@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class UpcomingEvents {
+class UpcomingEventsModel {
   String eventName;
   String eventDetails;
   DateTime from;
@@ -8,17 +8,17 @@ class UpcomingEvents {
   Color background;
   bool isAllDay;
 
-  UpcomingEvents({
+  UpcomingEventsModel({
     required this.eventName,
     required this.eventDetails,
     required this.from,
     required this.to,
-    this.background = Colors.blue,
+    this.background = Colors.deepOrangeAccent,
     this.isAllDay = false,
   });
 
-  factory UpcomingEvents.fromJson(Map<String, dynamic> json) {
-    return UpcomingEvents(
+  factory UpcomingEventsModel.fromJson(Map<String, dynamic> json) {
+    return UpcomingEventsModel(
       eventName: json['eventName'],
       eventDetails: json['eventDetails'],
       from: json['from'],

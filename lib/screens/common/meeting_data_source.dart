@@ -3,7 +3,7 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class MeetingDataSource extends CalendarDataSource {
-  MeetingDataSource(List<UpcomingEvents> event) {
+  MeetingDataSource(List<UpcomingEventsModel> event) {
     appointments = event;
   }
 
@@ -19,20 +19,20 @@ class MeetingDataSource extends CalendarDataSource {
 
   @override
   String getSubject(int index) {
-    return (appointments![index] as UpcomingEvents).eventName;
+    return (appointments![index] as UpcomingEventsModel).eventName;
   }
 
   @override
   Color getColor(int index) {
-    return (appointments![index] as UpcomingEvents).background;
+    return (appointments![index] as UpcomingEventsModel).background;
   }
 
   @override
   bool isAllDay(int index) {
-    return (appointments![index] as UpcomingEvents).isAllDay;
+    return (appointments![index] as UpcomingEventsModel).isAllDay;
   }
 
   String getDetails(int index) {
-    return (appointments![index] as UpcomingEvents).eventDetails;
+    return (appointments![index] as UpcomingEventsModel).eventDetails;
   }
 }

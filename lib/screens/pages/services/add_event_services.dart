@@ -6,29 +6,28 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AddEventProvider extends ChangeNotifier {
-  List<UpcomingEvents> _events = [];
-  List<UpcomingEvents> get events => _events;
+  List<UpcomingEventsModel> _events = [];
+  List<UpcomingEventsModel> get events => _events;
 
   Future<void> initializeEvents() async {
-    List<UpcomingEvents> assetEvents = await _loadEventsFromAssets();
-    List<UpcomingEvents> localEvents = await _loadEventsFromLocal();
+    List<UpcomingEventsModel> assetEvents = await _loadEventsFromAssets();
+    List<UpcomingEventsModel> localEvents = await _loadEventsFromLocal();
 
     // Merge asset and local events while preventing duplicates
-    Set<String> existingTitles =
-        localEvents.map((e) => e.eventName).toSet();
+    Set<String> existingTitles = localEvents.map((e) => e.eventName).toSet();
     assetEvents.removeWhere((e) => existingTitles.contains(e.eventName));
 
     _events = [...localEvents, ...assetEvents]; // Prioritize local events
     notifyListeners();
   }
 
-  Future<void> addEvent(UpcomingEvents event) async {
+  Future<void> addEvent(UpcomingEventsModel event) async {
     _events.add(event);
     await _saveEventsToLocal();
     notifyListeners();
   }
 
-  Future<void> deleteEvent(UpcomingEvents event) async {
+  Future<void> deleteEvent(UpcomingEventsModel event) async {
     _events.remove(event);
     await _saveEventsToLocal();
     notifyListeners();
@@ -50,13 +49,15 @@ class AddEventProvider extends ChangeNotifier {
     }
   }
 
-  Future<List<UpcomingEvents>> _loadEventsFromLocal() async {
+  Future<List<UpcomingEventsModel>> _loadEventsFromLocal() async {
     try {
       final file = await _getEventFile();
       if (file.existsSync()) {
         String data = await file.readAsString();
         List<dynamic> jsonList = json.decode(data);
-        return jsonList.map((json) => UpcomingEvents.fromJson(json)).toList();
+        return jsonList
+            .map((json) => UpcomingEventsModel.fromJson(json))
+            .toList();
       }
     } catch (e) {
       debugPrint('Error loading events from local: $e');
@@ -64,11 +65,14 @@ class AddEventProvider extends ChangeNotifier {
     return [];
   }
 
-  Future<List<UpcomingEvents>> _loadEventsFromAssets() async {
+  Future<List<UpcomingEventsModel>> _loadEventsFromAssets() async {
     try {
-      String jsonString = await rootBundle.loadString('assets/json/events.json');
+      String jsonString =
+          await rootBundle.loadString('assets/json/events.json');
       List<dynamic> jsonData = json.decode(jsonString);
-      return jsonData.map((item) => UpcomingEvents.fromJson(item)).toList();
+      return jsonData
+          .map((item) => UpcomingEventsModel.fromJson(item))
+          .toList();
     } catch (e) {
       debugPrint('Error loading events from assets: $e');
       return [];

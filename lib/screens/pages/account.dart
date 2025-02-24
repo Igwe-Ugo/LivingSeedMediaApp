@@ -16,7 +16,6 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  bool switchSavedCollectionPrivate = false;
   final double _fontSize = 13.0;
 
   @override
@@ -220,7 +219,8 @@ class _AccountPageState extends State<AccountPage> {
                       trailing: const Icon(Icons.keyboard_arrow_right_outlined),
                     ),
                     ListTile(
-                      onTap: () {},
+                      onTap: () => GoRouter.of(context).go(
+                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.upcomingEventsPath}'),
                       leading: const Icon(Iconsax.calendar),
                       title: Text(
                         'Upcoming meetings',

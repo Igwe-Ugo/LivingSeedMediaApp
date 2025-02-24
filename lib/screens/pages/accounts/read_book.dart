@@ -3,9 +3,16 @@ import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-class ReadBookPage extends StatelessWidget {
+class ReadBookPage extends StatefulWidget {
   final String readBookPath;
   const ReadBookPage({super.key, required this.readBookPath});
+
+  @override
+  State<ReadBookPage> createState() => _ReadBookPageState();
+}
+
+class _ReadBookPageState extends State<ReadBookPage> {
+  final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +34,24 @@ class ReadBookPage extends StatelessWidget {
                 const SizedBox(
                   width: 15,
                 ),
-                const Text(
-                  'Grace Abounding the Chiefest of sinners',
-                  style: TextStyle(
-                    fontFamily: 'Playfair',
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
+                Expanded(
+                  child: const Text(
+                    overflow: TextOverflow.ellipsis,
+                    'Grace Abounding the Chiefest of sinners',
+                    style: TextStyle(
+                      fontFamily: 'Playfair',
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-          SfPdfViewer.asset(readBookPath)
+          SfPdfViewer.asset(
+            widget.readBookPath,
+            key: _pdfViewerKey,
+          )
         ],
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class LivingSeedMediaPreferences {
+class LivingSeedBookstorePreferences {
   static const themeStatus = "THEMESTATUS";
 
   setDarkTheme(bool value) async {
@@ -16,8 +16,8 @@ class LivingSeedMediaPreferences {
 }
 
 class DarkThemeProvider with ChangeNotifier {
-  LivingSeedMediaPreferences livingSeedPreference =
-      LivingSeedMediaPreferences();
+  LivingSeedBookstorePreferences livingSeedPreference =
+      LivingSeedBookstorePreferences();
   bool _darkTheme = false;
   bool get darkTheme => _darkTheme;
   set darkTheme(bool value) {
