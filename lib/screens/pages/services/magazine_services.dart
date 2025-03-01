@@ -1,0 +1,75 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:livingseed_media/screens/models/models.dart';
+import 'package:path_provider/path_provider.dart';
+
+class MagazineProvider extends ChangeNotifier {
+  List<MagazineModel> _magazines = [];
+  List<MagazineModel> get magazines => _magazines;
+
+  Future<void> initializeMagazines() async {
+    _magazines = await _loadMagazines();
+    notifyListeners();
+  }
+
+  Future<List<MagazineModel>> _loadMagazines() async {
+    try {
+      List<MagazineModel> assetMagazines = await _loadMagazinesFromAssets();
+      List<MagazineModel> localMagazines = await _loadMagazinesFromLocal();
+      Set<String> existingTitles =
+          localMagazines.map((mag) => mag.magazineTitle).toSet();
+      assetMagazines
+          .removeWhere((mag) => existingTitles.contains(mag.magazineTitle));
+      return [...localMagazines, ...assetMagazines];
+    } catch (e) {
+      debugPrint('Error loading magazines: $e');
+      return [];
+    }
+  }
+
+  Future<List<MagazineModel>> _loadMagazinesFromAssets() async {
+    try {
+      String jsonString =
+          await rootBundle.loadString('assets/json/magazines.json');
+      List<dynamic> jsonData = json.decode(jsonString);
+      return jsonData.map((item) => MagazineModel.fromJson(item)).toList();
+    } catch (e, trace) {
+      debugPrint('Error loading magazines from assets: $e');
+      print(trace);
+      return [];
+    }
+  }
+
+  Future<List<MagazineModel>> _loadMagazinesFromLocal() async {
+    try {
+      final file = await _getMagazineFile();
+      if (file.existsSync()) {
+        String data = await file.readAsString();
+        List<dynamic> jsonList = json.decode(data);
+        return jsonList.map((json) => MagazineModel.fromJson(json)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error loading magazines from Local: $e');
+    }
+    return [];
+  }
+
+  Future<File> _getMagazineFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return File('${directory.path}/magazines.json');
+  }
+
+  Future<void> _saveMagazinesToLocal() async {
+    try {
+      final file = await _getMagazineFile();
+      String jsonData =
+          json.encode(_magazines.map((mag) => mag.toJson()).toList());
+      await file.writeAsString(jsonData);
+    } catch (e) {
+      debugPrint('Error saving magazines: $e');
+    }
+  }
+}

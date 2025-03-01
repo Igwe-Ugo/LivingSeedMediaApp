@@ -54,7 +54,8 @@ class LivingSeedAppRouter {
   static const String moreBibleStudyPath = 'more_bible_study';
   static const String aboutBibleStudyPath = 'about_bible_study';
   static const String reviewsBibleStudyPath = 'reviewBibleStudy';
-  static const String upcomingEventsPath = 'upcoming_events.dart';
+  static const String upcomingEventsPath = 'upcoming_events';
+  static const String aboutMagazinePath = 'about_magazine';
 
   // notification pages
   static const String notificationPath = '/notifications';
@@ -180,6 +181,20 @@ class LivingSeedAppRouter {
                                     ),
                                   ]),
                             ]),
+                        GoRoute(
+                            path: aboutMagazinePath,
+                            builder: (context, state) {
+                              final about_magazines = state.extra as MagazineModel?;
+                              if (about_magazines != null) {
+                                return AboutMagazine(
+                                  magazine: about_magazines,
+                                );
+                              } else {
+                                return const Center(
+                                    child: Text("No book data available"));
+                              }
+                            },
+                          ),
                       ]),
                 ]),
             StatefulShellBranch(

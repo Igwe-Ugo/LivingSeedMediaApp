@@ -28,14 +28,14 @@ class BibleStudy extends StatelessWidget {
         return Column(
           children: bibleStudy
               .map(
-                  (bible_study) => buildBooks(context, bibleStudy: bible_study))
+                  (bible_study) => buildBibleStudy(context, bibleStudy: bible_study))
               .toList(),
         );
       },
     );
   }
 
-  Widget buildBooks(BuildContext context,
+  Widget buildBibleStudy(BuildContext context,
       {required BibleStudyMaterial bibleStudy}) {
     return Column(
       children: [

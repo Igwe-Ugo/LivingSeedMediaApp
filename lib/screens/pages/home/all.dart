@@ -12,8 +12,9 @@ class AllPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<AboutBookProvider, BibleStudyProvider>(
-        builder: (context, bookProvider, bibleStudyProvider, child) {
+    return Consumer3<AboutBookProvider, BibleStudyProvider, MagazineProvider>(
+        builder: (context, bookProvider, bibleStudyProvider, magazineProvider,
+            child) {
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,8 +164,8 @@ class AllPage extends StatelessWidget {
             SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: bookProvider.allBooks
-                      .map((book) => BooksPage(about_books: book))
+                  children: magazineProvider.magazines
+                      .map((mag) => MagazinePage(about_magazine: mag))
                       .toList(),
                 )),
             const SizedBox(

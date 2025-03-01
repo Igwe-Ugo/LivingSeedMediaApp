@@ -206,6 +206,8 @@ class _HomeState extends State<Home> {
                   const Books()
                 else if (selectedValue == 'Bible study materials')
                   const BibleStudy()
+                else if (selectedValue == 'Seminar papers & Magazines')
+                  const Magazines()
                 else
                   const AllPage()
               ],
