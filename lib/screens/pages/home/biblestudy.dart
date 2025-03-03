@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 import '../../common/widget.dart';
 import '../../models/models.dart';
@@ -78,10 +77,15 @@ class BibleStudy extends StatelessWidget {
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16.0),
                         ),
+                        Text(
+                          bibleStudy.subTitle,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 14.0),
+                        ),
                         const SizedBox(
                           height: 8,
                         ),
-                        buildStarRating(bibleStudy.ratingReviews),
                         const SizedBox(
                           height: 8,
                         ),
@@ -101,61 +105,6 @@ class BibleStudy extends StatelessWidget {
         const Divider(
           thickness: 0.4,
         )
-      ],
-    );
-  }
-
-  Widget buildStarRating(List<ReviewRating> ratingReviews) {
-    if (ratingReviews.isEmpty) {
-      return Row(
-        children: List.generate(
-          5,
-          (index) =>
-              const Icon(Icons.star_border, color: Colors.grey, size: 16),
-        ),
-      );
-    }
-
-    // Compute average rating
-    double averageRating =
-        ratingReviews.map((r) => r.reviewRating).reduce((a, b) => a + b) /
-            ratingReviews.length;
-
-    int fullStars = averageRating.floor(); // Full stars
-    bool hasHalfStar =
-        (averageRating - fullStars) >= 0.5; // Check for half star
-    int emptyStars =
-        5 - fullStars - (hasHalfStar ? 1 : 0); // Remaining empty stars
-
-    return Row(
-      children: [
-        Text(
-          averageRating.toStringAsFixed(2).toString(),
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.bold,
-            color: Colors.orange,
-          ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        // Filled Stars
-        ...List.generate(
-          fullStars,
-          (index) => const Icon(Iconsax.star1, color: Colors.orange, size: 16),
-        ),
-
-        // Half Star (if applicable)
-        if (hasHalfStar)
-          const Icon(Icons.star_half, color: Colors.orange, size: 16),
-
-        // Empty Stars
-        ...List.generate(
-          emptyStars,
-          (index) =>
-              const Icon(Icons.star_border, color: Colors.grey, size: 16),
-        ),
       ],
     );
   }

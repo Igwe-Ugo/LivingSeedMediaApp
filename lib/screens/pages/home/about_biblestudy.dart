@@ -6,55 +6,9 @@ import 'package:livingseed_media/screens/models/models.dart';
 import 'package:provider/provider.dart';
 import '../services/services.dart';
 
-class AboutBibleStudy extends StatefulWidget {
+class AboutBibleStudy extends StatelessWidget {
   final BibleStudyMaterial about_biblestudy;
   const AboutBibleStudy({super.key, required this.about_biblestudy});
-
-  @override
-  State<AboutBibleStudy> createState() => _AboutBibleStudyState();
-}
-
-class _AboutBibleStudyState extends State<AboutBibleStudy> {
-  bool more = false;
-  late int allReviews;
-  Color filledColor = Colors.orange.withOpacity(0.7);
-  Color unfilledColor = Colors.grey;
-  double starSize = 30.0;
-  late Map<int, int> ratingCount;
-  late int totalReviews;
-  List<int>? ratings;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.about_biblestudy.ratingReviews.isNotEmpty) {
-      allReviews = widget.about_biblestudy.ratingReviews
-          .map((review) => review.reviewRating.toInt())
-          .reduce((a, b) => (a + b)); // sums all ratings
-      ratings = widget.about_biblestudy.ratingReviews
-          .map((rating) => rating.reviewRating.toInt())
-          .toList();
-    } else {
-      allReviews = 0;
-      ratings = [];
-    }
-    _calculateRatings();
-  }
-
-  void _calculateRatings() {
-    // Initialize map to store counts for each star (1-5)
-    ratingCount = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
-
-    if (ratings!.isNotEmpty) {
-      // Count occurrences of each rating
-      for (int rating in ratings!) {
-        ratingCount[rating] = (ratingCount[rating] ?? 0) + 1;
-      }
-    }
-
-    // Get total number of reviews
-    totalReviews = widget.about_biblestudy.ratingReviews.length;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +36,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                   alignment: Alignment.center,
                   child: Text(
                     overflow: TextOverflow.ellipsis,
-                    widget.about_biblestudy.title,
+                    about_biblestudy.title,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -105,7 +59,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                       borderRadius: BorderRadius.all(Radius.circular(7)),
                       image: DecorationImage(
                         fit: BoxFit.fill,
-                        image: AssetImage(widget.about_biblestudy.coverImage),
+                        image: AssetImage(about_biblestudy.coverImage),
                       )),
                 ),
               ),
@@ -113,15 +67,15 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
               ElevatedButton(
                 onPressed: () {
                   Provider.of<UsersAuthProvider>(context, listen: false)
-                      .addToBibleStudyCart(widget.about_biblestudy);
+                      .addToBibleStudyCart(about_biblestudy);
                   Users user =
                       Provider.of<UsersAuthProvider>(context, listen: false)
                           .userData!;
                   NotificationItems newNotification = NotificationItems(
-                    notificationImage: widget.about_biblestudy.coverImage,
+                    notificationImage: about_biblestudy.coverImage,
                     notificationTitle: 'Bible Study Material added to cart',
                     notificationMessage:
-                        'A bible study material with the name: ${widget.about_biblestudy.title} has been added to your cart item. You can view it in your cart session. You have done a great job by uplisting this in your purchases, do well to purchase!',
+                        'A bible study material with the name: ${about_biblestudy.title} has been added to your cart item. You can view it in your cart session. You have done a great job by uplisting this in your purchases, do well to purchase!',
                     notificationDate:
                         "${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}",
                     notificationTime:
@@ -145,7 +99,7 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '₦ ${widget.about_biblestudy.amount.toString()}',
+                      '₦ ${about_biblestudy.amount.toString()}',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 18.0,
@@ -186,14 +140,14 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.about_biblestudy.title,
+                    about_biblestudy.title,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                     ),
                   ),
                   Text(
-                    widget.about_biblestudy.subTitle,
+                    about_biblestudy.subTitle,
                     style: TextStyle(
                       fontWeight: FontWeight.w800,
                       fontSize: 16,
@@ -207,95 +161,11 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                     thickness: 1,
                     color: Theme.of(context).disabledColor.withOpacity(0.4),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(5, (index) {
-                            int averageRating =
-                                widget.about_biblestudy.ratingReviews.isNotEmpty
-                                    ? (allReviews /
-                                            widget.about_biblestudy
-                                                .ratingReviews.length)
-                                        .floor()
-                                    : 0; // Default to 0 if there are no reviews
-
-                            if (index < averageRating) {
-                              // filled
-                              return Icon(
-                                Iconsax.star1,
-                                color: filledColor,
-                                size: starSize,
-                              );
-                            } else if (index <
-                                (allReviews /
-                                    widget.about_biblestudy.ratingReviews
-                                        .length)) {
-                              // halffilled
-                              return Icon(
-                                Icons.star_half,
-                                color: filledColor,
-                                size: starSize,
-                              );
-                            } else {
-                              // unfilled
-                              return Icon(
-                                Iconsax.star1,
-                                color: unfilledColor,
-                                size: starSize,
-                              );
-                            }
-                          })),
-                      widget.about_biblestudy.ratingReviews.isNotEmpty
-                          ? Text(
-                              (allReviews /
-                                      widget.about_biblestudy.ratingReviews
-                                          .length)
-                                  .toStringAsFixed(2),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          : Text(
-                              '0',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                    ],
-                  ),
                   const SizedBox(
                     height: 10,
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () {
-                        if (widget.about_biblestudy != null) {
-                          GoRouter.of(context).go(
-                              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBibleStudyPath}/${LivingSeedAppRouter.reviewsBibleStudyPath}',
-                              extra: widget.about_biblestudy);
-                        }
-                      },
-                      child: Text(
-                        'See Reviews',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Divider(
-                    thickness: 1,
-                    color: Theme.of(context).disabledColor.withOpacity(0.4),
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
                   Text(
-                    'Have ${widget.about_biblestudy.chapterNum} Chapters',
+                    'Have ${about_biblestudy.chapterNum} Chapters',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -308,11 +178,11 @@ class _AboutBibleStudyState extends State<AboutBibleStudy> {
                     shrinkWrap: true,
                     physics:
                         NeverScrollableScrollPhysics(), // Prevents scrolling conflicts
-                    itemCount: widget.about_biblestudy.contents
+                    itemCount: about_biblestudy.contents
                         .length, // Loops through list of maps
                     itemBuilder: (context, index) {
                       Map<String, String> chapterMap =
-                          widget.about_biblestudy.contents[index]; // Get Map
+                          about_biblestudy.contents[index]; // Get Map
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

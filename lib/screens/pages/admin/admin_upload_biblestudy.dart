@@ -310,7 +310,7 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
         chapterNum: _bibleStudyChapterController.length,
         pdfLink: _bookFile!.path.toString(),
         contents: contents,
-        ratingReviews: []);
+      );
 
     bool success = await Provider.of<BibleStudyProvider>(context, listen: false)
         .uploadBibleStudy(newUpload);

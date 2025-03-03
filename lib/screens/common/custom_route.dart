@@ -53,7 +53,6 @@ class LivingSeedAppRouter {
   static const String moreBooksPath = 'more_books';
   static const String moreBibleStudyPath = 'more_bible_study';
   static const String aboutBibleStudyPath = 'about_bible_study';
-  static const String reviewsBibleStudyPath = 'reviewBibleStudy';
   static const String upcomingEventsPath = 'upcoming_events';
   static const String aboutMagazinePath = 'about_magazine';
   static const String moreMagazinePath = 'more_magazine';
@@ -132,23 +131,7 @@ class LivingSeedAppRouter {
                                     child: Text("No book data available"));
                               }
                             },
-                            routes: [
-                              GoRoute(
-                                path: reviewsBibleStudyPath,
-                                builder: (context, state) {
-                                  final about_biblestudy =
-                                      state.extra as BibleStudyMaterial?;
-                                  if (about_biblestudy != null) {
-                                    return BibleStudyReviews(
-                                      about_biblestudy: about_biblestudy,
-                                    );
-                                  } else {
-                                    return const Center(
-                                        child: Text("No book data available"));
-                                  }
-                                },
-                              ),
-                            ]),
+                          ),
                         GoRoute(
                             path: aboutBookPath,
                             builder: (context, state) {
