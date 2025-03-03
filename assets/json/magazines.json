@@ -4,7 +4,6 @@
         "issue": "October 2008",
         "coverImage": "assets/images/magazine.jpeg",
         "publisher": "Peace house publications",
-        "publicationDate": "October-2008",
         "price": 150,
         "subTitle": "Sanctify them through thy truth: thy word is truth. - John 17:17",
         "editorsDesk": {
@@ -40,7 +39,7 @@
           {
             "chapterNumber": 5,
             "chapterTitle": "The savor of His Name",
-            "chapterAuthor": "",
+            "chapterAuthor": "editorial team",
             "pageNumber": 26
           },
           {

@@ -11,8 +11,8 @@ class BibleStudyProvider extends ChangeNotifier {
   BibleStudyMaterial? _currentBibleStudy;
   BibleStudyMaterial? get bibleStudyData => _currentBibleStudy;
 
-  List<BibleStudyMaterial> _bibileStudies = [];
-  List<BibleStudyMaterial> get allBibleStudies => _bibileStudies;
+  List<BibleStudyMaterial> _bibleStudies = [];
+  List<BibleStudyMaterial> get allBibleStudies => _bibleStudies;
 
   Future<List<BibleStudyMaterial>>? bibleStudyFuture; // Cached future for reuse
 
@@ -34,8 +34,11 @@ class BibleStudyProvider extends ChangeNotifier {
     assetBibleStudy.removeWhere(
         (bible_study) => existingTitles.contains(bible_study.title));
 
-    _bibileStudies = [...localBibleStudy, ...assetBibleStudy]; // Prioritize local books
-    return _bibileStudies;
+    _bibleStudies = [
+      ...localBibleStudy,
+      ...assetBibleStudy
+    ]; // Prioritize local books
+    return _bibleStudies;
   }
 
   // Fetch books from assets (JSON)
@@ -79,7 +82,7 @@ class BibleStudyProvider extends ChangeNotifier {
     try {
       final file = await _getBibleStudyFile();
       String jsonData =
-          json.encode(_bibileStudies.map((book) => book.toJson()).toList());
+          json.encode(_bibleStudies.map((book) => book.toJson()).toList());
       await file.writeAsString(jsonData, mode: FileMode.write);
     } catch (e) {
       debugPrint('Error saving book data: $e');
@@ -88,10 +91,10 @@ class BibleStudyProvider extends ChangeNotifier {
 
   // Upload book and update local storage
   Future<bool> uploadBibleStudy(BibleStudyMaterial newBook) async {
-    if (_bibileStudies.any((book) => book.title == newBook.title)) {
+    if (_bibleStudies.any((book) => book.title == newBook.title)) {
       return false; // Prevent duplicates
     }
-    _bibileStudies.add(newBook);
+    _bibleStudies.add(newBook);
     _currentBibleStudy = newBook;
     await _saveBibleStudyToLocal();
     notifyListeners();

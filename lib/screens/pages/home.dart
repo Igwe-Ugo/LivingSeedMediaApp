@@ -21,6 +21,8 @@ class _HomeState extends State<Home> {
   List<AboutBooks> filteredBooks = [];
   List<BibleStudyMaterial> bible_study = [];
   List<BibleStudyMaterial> filteredBibleStudy = [];
+  List<MagazineModel> magazines = [];
+  List<MagazineModel> filteredMagazine = [];
   List<String> choices = [
     'All',
     'Books',
@@ -46,11 +48,11 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    _loadBooks();
-    _searchController.addListener(_filterBooks);
+    _loadMaterials();
+    _searchController.addListener(_filterMaterials);
   }
 
-  void _filterBooks() {
+  void _filterMaterials() {
     String query = _searchController.text.toLowerCase();
     setState(() {
       // Filter books
@@ -64,23 +66,31 @@ class _HomeState extends State<Home> {
       filteredBibleStudy = bible_study
           .where((biblestudy) => biblestudy.title.toLowerCase().contains(query))
           .toList();
+
+      // filter magazine
+      filteredMagazine = magazines
+          .where((mag) => mag.magazineTitle.toLowerCase().contains(query))
+          .toList();
     });
   }
 
-  Future<void> _loadBooks() async {
+  Future<void> _loadMaterials() async {
     books = await Provider.of<AboutBookProvider>(context, listen: false)
         .booksFuture!; // load books from json
     bible_study = await Provider.of<BibleStudyProvider>(context, listen: false)
         .bibleStudyFuture!;
+    magazines = await Provider.of<MagazineProvider>(context, listen: false)
+        .magazineFuture!;
     setState(() {
       filteredBooks = books; // initially, all books are displayed
       filteredBibleStudy = bible_study;
+      filteredMagazine = magazines;
     });
   }
 
   @override
   void dispose() {
-    _searchController.removeListener(_filterBooks);
+    _searchController.removeListener(_filterMaterials);
     _searchController.dispose();
     super.dispose();
   }
@@ -214,7 +224,9 @@ class _HomeState extends State<Home> {
               if (_searchController.text.isNotEmpty) ...[
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.9,
-                  child: filteredBooks.isEmpty && filteredBibleStudy.isEmpty
+                  child: filteredBooks.isEmpty &&
+                          filteredBibleStudy.isEmpty &&
+                          filteredMagazine.isEmpty
                       ? Column(
                           children: const [
                             SizedBox(height: 20),
@@ -235,6 +247,8 @@ class _HomeState extends State<Home> {
                                 .map((book) => _bookSearch(context, book)),
                             ...filteredBibleStudy.map(
                                 (study) => _bibleStudySearch(context, study)),
+                            ...filteredMagazine
+                                .map((mag) => _magazineSearch(context, mag))
                           ],
                         ),
                 ),
@@ -375,6 +389,75 @@ class _HomeState extends State<Home> {
                         ),
                         Text(
                           'N${study.amount.toString()}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 13.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const Divider(thickness: 0.4),
+      ],
+    );
+  }
+
+  Widget _magazineSearch(BuildContext context, MagazineModel magazine) {
+    return Column(
+      children: [
+        InkWell(
+          onTap: () => GoRouter.of(context).go(
+            '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutMagazinePath}',
+            extra: magazine,
+          ),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              child: Row(
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Container(
+                      height: 100,
+                      width: 100,
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.1),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                      ),
+                      child: Image.asset(
+                        magazine.coverImage,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          magazine.magazineTitle,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16.0),
+                        ),
+                        Text(
+                          magazine.subTitle,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w500, fontSize: 14.0),
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          'N${magazine.price.toString()}',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
                         ),

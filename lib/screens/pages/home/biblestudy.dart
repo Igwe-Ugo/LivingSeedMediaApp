@@ -27,8 +27,8 @@ class BibleStudy extends StatelessWidget {
         List<BibleStudyMaterial> bibleStudy = snapshot.data!;
         return Column(
           children: bibleStudy
-              .map(
-                  (bible_study) => buildBibleStudy(context, bibleStudy: bible_study))
+              .map((bible_study) =>
+                  buildBibleStudy(context, bibleStudy: bible_study))
               .toList(),
         );
       },

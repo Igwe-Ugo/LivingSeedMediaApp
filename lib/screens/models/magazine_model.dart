@@ -6,7 +6,6 @@ class MagazineModel {
   final String coverImage;
   final String publisher;
   final int price;
-  final String publicationDate;
   final String subTitle;
   final EditorsDesk editorsDesk;
   final List<Chapter> contents;
@@ -18,7 +17,6 @@ class MagazineModel {
     required this.price,
     required this.coverImage,
     required this.publisher,
-    required this.publicationDate,
     required this.editorsDesk,
     required this.contents,
     required this.bibleStudy,
@@ -32,7 +30,6 @@ class MagazineModel {
       'price': price,
       'coverImage': coverImage,
       'publisher': publisher,
-      'publicationDate': publicationDate,
       'subTitle': subTitle,
       'editorsDesk': editorsDesk.toJson(),
       'contents': contents.map((item) => item.toJson()).toList(),
@@ -51,7 +48,6 @@ class MagazineModel {
         issue: json['issue'],
         coverImage: json['coverImage'],
         publisher: json['publisher'],
-        publicationDate: json['publicationDate'],
         price: json['price'],
         subTitle: json['subTitle'],
         editorsDesk: EditorsDesk.fromJson(json['editorsDesk']),

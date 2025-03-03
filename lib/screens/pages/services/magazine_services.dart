@@ -9,9 +9,10 @@ import 'package:path_provider/path_provider.dart';
 class MagazineProvider extends ChangeNotifier {
   List<MagazineModel> _magazines = [];
   List<MagazineModel> get magazines => _magazines;
+  Future<List<MagazineModel>>? magazineFuture; // Cached future for reuse
 
   Future<void> initializeMagazines() async {
-    _magazines = await _loadMagazines();
+    magazineFuture = _loadMagazines();
     notifyListeners();
   }
 
@@ -23,7 +24,8 @@ class MagazineProvider extends ChangeNotifier {
           localMagazines.map((mag) => mag.magazineTitle).toSet();
       assetMagazines
           .removeWhere((mag) => existingTitles.contains(mag.magazineTitle));
-      return [...localMagazines, ...assetMagazines];
+      _magazines = [...localMagazines, ...assetMagazines];
+      return _magazines;
     } catch (e) {
       debugPrint('Error loading magazines: $e');
       return [];

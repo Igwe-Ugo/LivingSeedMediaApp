@@ -187,19 +187,20 @@ class LivingSeedAppRouter {
                                   ]),
                             ]),
                         GoRoute(
-                            path: aboutMagazinePath,
-                            builder: (context, state) {
-                              final about_magazines = state.extra as MagazineModel?;
-                              if (about_magazines != null) {
-                                return AboutMagazine(
-                                  magazine: about_magazines,
-                                );
-                              } else {
-                                return const Center(
-                                    child: Text("No book data available"));
-                              }
-                            },
-                          ),
+                          path: aboutMagazinePath,
+                          builder: (context, state) {
+                            final about_magazines =
+                                state.extra as MagazineModel?;
+                            if (about_magazines != null) {
+                              return AboutMagazine(
+                                magazine: about_magazines,
+                              );
+                            } else {
+                              return const Center(
+                                  child: Text("No book data available"));
+                            }
+                          },
+                        ),
                       ]),
                 ]),
             StatefulShellBranch(

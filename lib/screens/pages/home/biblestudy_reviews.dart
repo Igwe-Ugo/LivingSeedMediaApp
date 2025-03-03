@@ -22,7 +22,7 @@ class _BibleStudyReviewsState extends State<BibleStudyReviews> {
   late Map<int, int> ratingCount;
   late int totalReviews;
   List<int>? ratings;
-  
+
   @override
   void initState() {
     super.initState();

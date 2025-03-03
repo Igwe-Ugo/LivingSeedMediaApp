@@ -69,6 +69,7 @@ class MoreMagazine extends StatelessWidget {
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(10)),
                 child: Image.asset(
+                  height: 500,
                   magazine.coverImage,
                   width: double.infinity,
                   fit: BoxFit.cover,

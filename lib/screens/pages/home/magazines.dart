@@ -13,15 +13,13 @@ class Magazines extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<MagazineProvider>(
-      builder: (context, magazineProvider, child){
-        return Column(
-          children: magazineProvider.magazines
-              .map(
-                  (mag) => buildMagazine(context, magazine: mag))
-              .toList(),
-        );
-      }
-    );
+        builder: (context, magazineProvider, child) {
+      return Column(
+        children: magazineProvider.magazines
+            .map((mag) => buildMagazine(context, magazine: mag))
+            .toList(),
+      );
+    });
   }
 
   Widget buildMagazine(BuildContext context,
@@ -30,7 +28,7 @@ class Magazines extends StatelessWidget {
       children: [
         InkWell(
           onTap: () => GoRouter.of(context).go(
-              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutBibleStudyPath}',
+              '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutMagazinePath}',
               extra: magazine),
           child: Container(
             width: MediaQuery.of(context).size.width,
@@ -71,9 +69,14 @@ class Magazines extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          'N${magazine.price.toString()}',
+                          magazine.issue,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 13.0),
+                        ),
+                        Text(
+                          'N${magazine.price.toString()}',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 12.0),
                         ),
                       ],
                     ),
