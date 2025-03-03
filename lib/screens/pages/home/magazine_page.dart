@@ -46,7 +46,7 @@ class MagazinePage extends StatelessWidget {
                     about_magazine.magazineTitle,
                     maxLines: 2,
                     style: TextStyle(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.bold,
                       fontSize: 15.0,
                     ),
                   ),
@@ -54,7 +54,7 @@ class MagazinePage extends StatelessWidget {
                     about_magazine.issue,
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
-                      fontSize: 15.0,
+                      fontSize: 12.0,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),

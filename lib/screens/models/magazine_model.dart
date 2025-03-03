@@ -49,16 +49,17 @@ class MagazineModel {
     return MagazineModel(
         magazineTitle: json['magazineTitle'],
         issue: json['issue'],
-        price: json['price'],
         coverImage: json['coverImage'],
         publisher: json['publisher'],
         publicationDate: json['publicationDate'],
+        price: json['price'],
+        subTitle: json['subTitle'],
         editorsDesk: EditorsDesk.fromJson(json['editorsDesk']),
         contents: (json['contents'] as List)
             .map((item) => Chapter.fromJson(item))
             .toList(),
         bibleStudy: BibleStudyMagazine.fromJson(json['bibleStudy']),
-        subTitle: json['subTitle']);
+    );
   }
 }
 

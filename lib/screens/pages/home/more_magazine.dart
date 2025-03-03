@@ -1,71 +1,106 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:livingseed_media/screens/common/widget.dart';
 import 'package:livingseed_media/screens/pages/services/services.dart';
 import 'package:provider/provider.dart';
+import '../../models/models.dart';
+import 'package:go_router/go_router.dart';
 
-class MagazineListScreen extends StatelessWidget {
-  const MagazineListScreen({super.key});
+class MoreMagazine extends StatelessWidget {
+  const MoreMagazine({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Magazines")),
-      body: FutureBuilder(
-        future: Provider.of<MagazineProvider>(context, listen: false)
-            .initializeMagazines(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text("Error loading magazines"));
-          }
-
-          final magazineProvider = Provider.of<MagazineProvider>(context);
-          final magazines = magazineProvider.magazines;
-
-          return GridView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: magazines.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 0.7,
-            ),
-            itemBuilder: (context, index) {
-              final magazine = magazines[index];
-              return InkWell(
-                onTap: () {
-                  /* Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          MagazineDetailsScreen(magazine: magazine),
-                    ),
-                  ); */
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: Image.asset(magazine.coverImage,
-                            fit: BoxFit.cover),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(magazine.magazineTitle,
-                            style: const TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16)),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              GoRouter.of(context).pop();
             },
+            icon: const Icon(
+              Iconsax.arrow_left_2,
+              size: 17,
+            )),
+        title: const Text(
+          'All Magazines and Seminar Papers',
+          style: TextStyle(
+            fontFamily: 'Playfair',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+      body: Consumer<MagazineProvider>(
+        builder: (context, magazineProvider, child) {
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: GridView.builder(
+              itemCount: magazineProvider.magazines.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Two books per row
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.7, // Adjust book card size
+              ),
+              itemBuilder: (context, index) {
+                return _buildBookItem(
+                    context, magazineProvider.magazines[index]);
+              },
+            ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildBookItem(BuildContext context, MagazineModel magazine) {
+    return GestureDetector(
+      onTap: () => GoRouter.of(context).go(
+          '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.aboutMagazinePath}',
+          extra: magazine),
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(10)),
+                child: Image.asset(
+                  magazine.coverImage,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    magazine.magazineTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    magazine.subTitle,
+                    maxLines: 2,
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    '₦ ${magazine.price.toString()}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

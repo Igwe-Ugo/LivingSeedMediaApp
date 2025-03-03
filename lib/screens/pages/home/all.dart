@@ -149,7 +149,8 @@ class AllPage extends StatelessWidget {
                     ],
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => GoRouter.of(context).go(
+                        '${LivingSeedAppRouter.homePath}/${LivingSeedAppRouter.moreMagazinePath}'),
                     child: Text('More...',
                         style: TextStyle(
                             fontSize: _fontSize,

@@ -36,9 +36,8 @@ class MagazineProvider extends ChangeNotifier {
           await rootBundle.loadString('assets/json/magazines.json');
       List<dynamic> jsonData = json.decode(jsonString);
       return jsonData.map((item) => MagazineModel.fromJson(item)).toList();
-    } catch (e, trace) {
+    } catch (e) {
       debugPrint('Error loading magazines from assets: $e');
-      print(trace);
       return [];
     }
   }
