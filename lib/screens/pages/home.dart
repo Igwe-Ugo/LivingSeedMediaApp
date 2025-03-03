@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> _loadMaterials() async {
-    books = await Provider.of<AboutBookProvider>(context, listen: false)
+    books = await Provider.of<BookProvider>(context, listen: false)
         .booksFuture!; // load books from json
     bible_study = await Provider.of<BibleStudyProvider>(context, listen: false)
         .bibleStudyFuture!;

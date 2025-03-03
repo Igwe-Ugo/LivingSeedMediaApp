@@ -20,7 +20,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
   late DarkThemeProvider themeChangeProvider;
   late UsersAuthProvider usersAuthProvider;
   late NotificationProvider notificationProvider;
-  late AboutBookProvider aboutBookProvider;
+  late BookProvider aboutBookProvider;
   late BibleStudyProvider bibleStudyProvider;
   late AddEventProvider addEventProvider;
   late MagazineProvider magazineProvider;
@@ -32,7 +32,7 @@ class _LivingSeedAppState extends State<LivingSeedApp> {
     themeChangeProvider = DarkThemeProvider();
     usersAuthProvider = UsersAuthProvider();
     notificationProvider = NotificationProvider();
-    aboutBookProvider = AboutBookProvider();
+    aboutBookProvider = BookProvider();
     bibleStudyProvider = BibleStudyProvider();
     addEventProvider = AddEventProvider();
     magazineProvider = MagazineProvider();

@@ -176,42 +176,34 @@ class AboutBibleStudy extends StatelessWidget {
                   ),
                   ListView.builder(
                     shrinkWrap: true,
-                    physics:
-                        NeverScrollableScrollPhysics(), // Prevents scrolling conflicts
-                    itemCount: about_biblestudy.contents
-                        .length, // Loops through list of maps
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: about_biblestudy.contents.length,
                     itemBuilder: (context, index) {
-                      Map<String, String> chapterMap =
-                          about_biblestudy.contents[index]; // Get Map
-
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: chapterMap.entries.map((entry) {
-                          return Container(
-                            margin: const EdgeInsets.all(7),
-                            width: MediaQuery.of(context).size.width * 0.9,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Theme.of(context).brightness ==
-                                        Brightness.dark
+                      var chapters = about_biblestudy.contents[index];
+                      return Container(
+                        margin: const EdgeInsets.all(7),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 7.0, horizontal: 15),
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color:
+                                Theme.of(context).brightness == Brightness.dark
                                     ? Colors.white
                                     : Theme.of(context)
                                         .disabledColor
                                         .withOpacity(0.5),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 13.0, horizontal: 10),
-                              child: Text(
-                                "${entry.key}: ${entry.value}", // Displays "Chapter 1: God's Great Offer"
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500, fontSize: 14),
-                              ),
-                            ),
-                          );
-                        }).toList(),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: ListTile(
+                          horizontalTitleGap: 0,
+                          minLeadingWidth: 25,
+                          contentPadding: EdgeInsets.all(0),
+                          leading: Text(chapters.chapterNum.toString()),
+                          title: Text(chapters.chapterTitle,
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
                       );
                     },
                   ),

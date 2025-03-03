@@ -14,8 +14,7 @@ class Books extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future:
-          Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
+      future: Provider.of<BookProvider>(context, listen: false).booksFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());

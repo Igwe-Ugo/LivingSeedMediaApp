@@ -34,8 +34,8 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder(
-            future: Provider.of<AboutBookProvider>(context, listen: false)
-                .booksFuture,
+            future:
+                Provider.of<BookProvider>(context, listen: false).booksFuture,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(child: CircularProgressIndicator());
@@ -372,8 +372,8 @@ Future<void> showRemoveItemDialog(BuildContext context, CartItems items) {
           onPressed: () {
             Provider.of<UsersAuthProvider>(context, listen: false)
                 .removeFromCart(items.bookTitle);
-            Users user =
-                Provider.of<UsersAuthProvider>(context, listen: false).userData!;
+            Users user = Provider.of<UsersAuthProvider>(context, listen: false)
+                .userData!;
             NotificationItems newNotification = NotificationItems(
               notificationImage: items.coverImage,
               notificationTitle: 'Book added to cart',

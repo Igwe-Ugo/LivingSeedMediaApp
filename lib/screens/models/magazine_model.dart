@@ -8,7 +8,7 @@ class MagazineModel {
   final int price;
   final String subTitle;
   final EditorsDesk editorsDesk;
-  final List<Chapter> contents;
+  final List<Section> contents;
   final BibleStudyMagazine bibleStudy;
 
   MagazineModel({
@@ -52,7 +52,7 @@ class MagazineModel {
         subTitle: json['subTitle'],
         editorsDesk: EditorsDesk.fromJson(json['editorsDesk']),
         contents: (json['contents'] as List)
-            .map((item) => Chapter.fromJson(item))
+            .map((item) => Section.fromJson(item))
             .toList(),
         bibleStudy: BibleStudyMagazine.fromJson(json['bibleStudy']),
     );
@@ -83,21 +83,21 @@ class EditorsDesk {
   }
 }
 
-class Chapter {
+class Section {
   final int chapterNumber;
   final String chapterTitle;
   final String chapterAuthor;
   final int pageNumber;
 
-  Chapter({
+  Section({
     required this.chapterNumber,
     required this.chapterTitle,
     required this.chapterAuthor,
     required this.pageNumber,
   });
 
-  factory Chapter.fromJson(Map<String, dynamic> json) {
-    return Chapter(
+  factory Section.fromJson(Map<String, dynamic> json) {
+    return Section(
       chapterNumber: json['chapterNumber'],
       chapterTitle: json['chapterTitle'],
       chapterAuthor: json['chapterAuthor'],

@@ -8,25 +8,80 @@
         "chapterNum": 19,
         "contents": [
             {
-                "chapter 1": "On the mount with the Lord",
-                "chapter 2": "Who is a disciple",
-                "chapter 3": "Blessed are the poor in spirit",
-                "chapter 4": "Blessed are those who mourn",
-                "chapter 5": "Blessed are the meek",
-                "chapter 6": "They who hunger & thirst after righteousness",
-                "chapter 7": "Blessed are the meek",
-                "chapter 8": "Blessed are the pure in heart",
-                "chapter 9": "Blessed are the peacemakers",
-                "chapter 10": "Blessed are they which are persecuted",
-                "chapter 11": "You are the salt of the earth",
-                "chapter 12": "You are the light of the world",
-                "chapter 13": "The believer's righteousness",
-                "chapter 14": "The believer's acts of righteousness",
-                "chapter 15": "Necessary instructions for Kingdom living",
-                "chapter 16": "Further instructions for kingdom living",
-                "chapter 17": "The great warnings of the Master",
-                "chapter 18": "Further warnings from the Master",
-                "chapter 19": "Standing against the storms of life"
+                "chapterNum": 1,
+                "chapterTitle": "On the mount with the Lord"
+            },
+            {
+                "chapterNum": 2,
+                "chapterTitle": "Who is a disciple"
+            },
+            {
+                "chapterNum": 3,
+                "chapterTitle": "Blessed are the poor in spirit"
+            },
+            {
+                "chapterNum": 4,
+                "chapterTitle": "Blessed are those who mourn"
+            },
+            {
+                "chapterNum": 5,
+                "chapterTitle": "Blessed are the meek"
+            },
+            {
+                "chapterNum": 6,
+                "chapterTitle": "They who hunger & thirst after righteousness"
+            },
+            {
+                "chapterNum": 7,
+                "chapterTitle": "Blessed are the meek"
+            },
+            {
+                "chapterNum": 8,
+                "chapterTitle": "Blessed are the pure in heart"
+            },
+            {
+                "chapterNum": 9,
+                "chapterTitle": "Blessed are the peacemakers"
+            },
+            {
+                "chapterNum": 10,
+                "chapterTitle": "Blessed are they which are persecuted"
+            },
+            {
+                "chapterNum": 11,
+                "chapterTitle": "You are the salt of the earth"
+            },
+            {
+                "chapterNum": 12,
+                "chapterTitle": "You are the light of the world"
+            },
+            {
+                "chapterNum": 13,
+                "chapterTitle": "The believer's righteousness"
+            },
+            {
+                "chapterNum": 14,
+                "chapterTitle": "The believer's acts of righteousness"
+            },
+            {
+                "chapterNum": 15,
+                "chapterTitle": "Necessary instructions for Kingdom living"
+            },
+            {
+                "chapterNum": 16,
+                "chapterTitle": "Further instructions for kingdom living"
+            },
+            {
+                "chapterNum": 17,
+                "chapterTitle": "The great warnings of the Master"
+            },
+            {
+                "chapterNum": 18,
+                "chapterTitle": "Further warnings from the Master"
+            },
+            {
+                "chapterNum": 19,
+                "chapterTitle": "Standing against the storms of life"
             }
         ]
     },
@@ -39,18 +94,52 @@
         "chapterNum": 12,
         "contents": [
             {
-                "Chapter 1": "God's great offer",
-                "chapter 2": " Definition, concept and basis of discipleship",
-                "chapter 3": "Understanding the conditions for discipleship",
-                "chapter 4": "Let him deny himself",
-                "chapter 5": "Victory over Self",
-                "chapter 6": "Not I but Christ",
-                "chapter 7": "Take up your cross daily",
-                "chapter 8": "...And follow Me",
-                "chapter 9": "Steps unto following Jesus",
-                "chapter 10": "Following in His steps",
-                "chapter 11": "Examples of discipleship relationships in the Bible",
-                "chapter 12": "Examples of discipleship relationships with human disciplers"
+                "chapterNum": 1,
+                "chapterTitle": "God's great offer"
+            },
+            {
+                "chapterNum": 2,
+                "chapterTitle": "Definition, concept and basis of discipleship"
+            },
+            {
+                "chapterNum": 3,
+                "chapterTitle": "Understanding the conditions for discipleship"
+            },
+            {
+                "chapterNum": 4,
+                "chapterTitle": "Let him deny himself"
+            },
+            {
+                "chapterNum": 5,
+                "chapterTitle": "Victory over Self"
+            },
+            {
+                "chapterNum": 6,
+                "chapterTitle": "Not I but Christ"
+            },
+            {
+                "chapterNum": 7,
+                "chapterTitle": "Take up your cross daily"
+            },
+            {
+                "chapterNum": 8,
+                "chapterTitle": "...And follow Me"
+            },
+            {
+                "chapterNum": 9,
+                "chapterTitle": "Steps unto following Jesus"
+            },
+            {
+                "chapterNum": 10,
+                "chapterTitle": "Following in His steps"
+            },
+            {
+                "chapterNum": 11,
+                "chapterTitle": "Examples of discipleship relationships in the Bible"
+            },
+            {
+                "chapterNum": 12,
+                "chapterTitle": "Examples of discipleship relationships with human disciplers"
             }
         ]
     }

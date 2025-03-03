@@ -12,7 +12,7 @@ class AllPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<AboutBookProvider, BibleStudyProvider, MagazineProvider>(
+    return Consumer3<BookProvider, BibleStudyProvider, MagazineProvider>(
         builder: (context, bookProvider, bibleStudyProvider, magazineProvider,
             child) {
       return SingleChildScrollView(

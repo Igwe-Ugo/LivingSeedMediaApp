@@ -1,5 +1,29 @@
 import 'dart:convert';
 
+class Chapter {
+  final int chapterNum;
+  final String chapterTitle;
+
+  Chapter({
+    required this.chapterNum,
+    required this.chapterTitle,
+  });
+
+  factory Chapter.fromJson(Map<String, dynamic> json) {
+    return Chapter(
+      chapterNum: json['chapterNum'],
+      chapterTitle: json['chapterTitle'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'chapterNum': chapterNum,
+      'chapterTitle': chapterTitle,
+    };
+  }
+}
+
 class BibleStudyMaterial {
   final String title;
   final double amount;
@@ -7,7 +31,7 @@ class BibleStudyMaterial {
   final String coverImage;
   final String pdfLink;
   final int chapterNum;
-  final List<Map<String, String>> contents;
+  final List<Chapter> contents;
 
   BibleStudyMaterial(
       {required this.title,
@@ -19,13 +43,6 @@ class BibleStudyMaterial {
       required this.subTitle});
 
   factory BibleStudyMaterial.fromJson(Map<String, dynamic> json) {
-    List<Map<String, String>> extractedContents = [];
-    if (json['contents'] != null && json['contents'] is List) {
-      extractedContents = (json['contents'] as List)
-          .map((chapter) => Map<String, String>.from(chapter as Map))
-          .toList();
-    }
-
     return BibleStudyMaterial(
         subTitle: json['subTitle'],
         coverImage: json['coverImage'],
@@ -33,7 +50,7 @@ class BibleStudyMaterial {
         chapterNum: json['chapterNum'],
         amount: (json['amount'] as num).toDouble(),
         pdfLink: json['pdfLink'],
-        contents: extractedContents);
+        contents: (json['contents'] as List).map((item) => Chapter.fromJson(item)).toList());
   }
 
   Map<String, dynamic> toJson() {
@@ -44,7 +61,7 @@ class BibleStudyMaterial {
       "amount": amount,
       "pdfLink": pdfLink,
       "chapterNum": chapterNum,
-      "contents": contents
+      "contents": contents.map((item) => item.toJson()).toList()
     };
   }
 

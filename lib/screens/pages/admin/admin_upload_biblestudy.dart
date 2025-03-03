@@ -293,12 +293,12 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
       return showMessage('Please fill all available input spaces', context);
     }
 
-    List<Map<String, String>> contents = [];
+    List<Chapter> contents = [];
 
     for (int i = 0; i < _bibleStudyChapterController.length; i++) {
       String text = _bibleStudyChapterController[i].text.trim();
       if (text.isNotEmpty) {
-        contents.add({"chapter ${i + 1}": text});
+        contents.add(Chapter(chapterNum: i+1, chapterTitle: text));
       }
     }
 

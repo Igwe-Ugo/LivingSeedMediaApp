@@ -31,8 +31,7 @@ class MoreBooks extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<List<AboutBooks>>(
-        future:
-            Provider.of<AboutBookProvider>(context, listen: false).booksFuture,
+        future: Provider.of<BookProvider>(context, listen: false).booksFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

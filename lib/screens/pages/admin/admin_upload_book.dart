@@ -381,7 +381,7 @@ class _UploadBookScreenState extends State<UploadBookScreen> {
         chapters: chapters,
         ratingReviews: []);
 
-    bool success = await Provider.of<AboutBookProvider>(context, listen: false)
+    bool success = await Provider.of<BookProvider>(context, listen: false)
         .uploadBook(newUpload);
     if (success) {
       showMessage('Book uploaded successfully!', context);

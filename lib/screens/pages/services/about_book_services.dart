@@ -7,7 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
 
-class AboutBookProvider extends ChangeNotifier {
+class BookProvider extends ChangeNotifier {
   AboutBooks? _currentBook;
   AboutBooks? get bookData => _currentBook;
 
