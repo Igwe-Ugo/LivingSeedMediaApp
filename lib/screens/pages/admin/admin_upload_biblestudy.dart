@@ -189,7 +189,7 @@ class _UploadBibleStudyState extends State<UploadBibleStudy> {
                     (index) => DropdownMenuItem(
                       value: index + 1,
                       child: Text(
-                          'How many chapters of book?... ${index + 1} Fields'),
+                          'Chapters of book?... ${index + 1} Fields'),
                     ),
                   ),
                   onChanged: (value) {

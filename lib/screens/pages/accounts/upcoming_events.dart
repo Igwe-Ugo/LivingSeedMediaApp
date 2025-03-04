@@ -94,9 +94,9 @@ class _UpcomingEventsState extends State<UpcomingEvents> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: upcomingEvents.length,
             itemBuilder: (context, index) {
-              final notification = upcomingEvents[index];
+              final events = upcomingEvents[index];
               return EventsCard(
-                upcomingEvents: notification,
+                upcomingEvents: events,
               );
             },
           );

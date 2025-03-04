@@ -27,7 +27,7 @@ class _HomeState extends State<Home> {
     'All',
     'Books',
     'Bible study materials',
-    'Seminar papers & Magazines',
+    'Magazines',
   ];
 
   List<IconData> iconChoices = [
@@ -216,7 +216,7 @@ class _HomeState extends State<Home> {
                   const Books()
                 else if (selectedValue == 'Bible study materials')
                   const BibleStudy()
-                else if (selectedValue == 'Seminar papers & Magazines')
+                else if (selectedValue == 'Magazines')
                   const Magazines()
                 else
                   const AllPage()

@@ -53,18 +53,10 @@ class AdminDashboard extends StatelessWidget {
                 children: [
                   _buildDashboardCard(context, 'Books', Iconsax.book,
                       Colors.blue, bookProvider.allBooks.length),
-                  _buildDashboardCard(
-                      context,
-                      'Bible Study\nMaterials',
-                      Iconsax.book_1,
-                      Colors.green,
-                      bibleStudyProvider.allBibleStudies.length),
-                  _buildDashboardCard(
-                      context,
-                      'Seminar Papers\n& Magazines',
-                      Iconsax.book_saved,
-                      Colors.orange,
-                      magazineProvider.magazines.length),
+                  _buildDashboardCard(context, 'Bible Study', Iconsax.book_1,
+                      Colors.green, bibleStudyProvider.allBibleStudies.length),
+                  _buildDashboardCard(context, 'Magazines', Iconsax.book_saved,
+                      Colors.orange, magazineProvider.magazines.length),
                 ],
               ),
               const SizedBox(height: 20),

@@ -130,7 +130,7 @@ class AllPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        'Seminar Papers & Magazines',
+                        'Magazines',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
