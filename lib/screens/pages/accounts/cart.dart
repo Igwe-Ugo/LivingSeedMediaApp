@@ -32,20 +32,133 @@ class _CartState extends State<Cart> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: FutureBuilder(
-            future:
-                Provider.of<BookProvider>(context, listen: false).booksFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error loading books"));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(child: Text("No books found"));
-              }
-
-              return SingleChildScrollView(
+    return FutureBuilder(
+        future: Provider.of<BookProvider>(context, listen: false).booksFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text("Error loading books"));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No books found"));
+          }
+          return Scaffold(
+              persistentFooterButtons: [
+                widget.user.cart.isNotEmpty && widget.user.cart != null
+                    ? Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 7),
+                        child: Column(
+                          children: [
+                            const Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text('Cart Summary',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  )),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text('Total order cost:',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    )),
+                                Text('₦ $totalCost',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16,
+                                    )),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Column(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      GoRouter.of(context).go(
+                                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}/${LivingSeedAppRouter.makePaymentPath}',
+                                          extra: snapshot.data!);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 0,
+                                      backgroundColor:
+                                          Theme.of(context).primaryColor,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      minimumSize: const Size(10, 50),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10.0),
+                                      child: Text(
+                                        'Make Payment (₦ $totalCost)',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 20.0,
+                                            color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Payment secured by',
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    SvgPicture.asset(
+                                        'assets/icons/paystack.svg',
+                                        width: 10,
+                                        height: 10),
+                                    const SizedBox(
+                                      width: 5,
+                                    ),
+                                    Text(
+                                      'PayStack',
+                                      style: TextStyle(
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.dark
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox.shrink(),
+              ],
+              body: SingleChildScrollView(
                 child: Padding(
                   padding:
                       const EdgeInsets.symmetric(vertical: 25, horizontal: 10),
@@ -132,216 +245,97 @@ class _CartState extends State<Cart> {
                       SizedBox(
                         height: 100,
                       ),
-                      widget.user.cart.isNotEmpty && widget.user.cart != null
-                          ? Container(
-                              width: MediaQuery.of(context).size.width,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 7),
-                              child: Column(
-                                children: [
-                                  const Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text('Cart Summary',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
-                                        )),
-                                  ),
-                                  const SizedBox(
-                                    height: 15,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text('Total order cost:',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          )),
-                                      Text('₦ $totalCost',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16,
-                                          )),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 8,
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            GoRouter.of(context).go(
-                                                '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.cartPath}/${LivingSeedAppRouter.makePaymentPath}',
-                                                extra: snapshot.data!);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            elevation: 0,
-                                            backgroundColor:
-                                                Theme.of(context).primaryColor,
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            minimumSize: const Size(10, 50),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Text(
-                                              'Make Payment (₦ $totalCost)',
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 20.0,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Payment secured by',
-                                            style: TextStyle(
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.dark
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          SvgPicture.asset(
-                                              'assets/icons/paystack.svg',
-                                              width: 10,
-                                              height: 10),
-                                          const SizedBox(
-                                            width: 5,
-                                          ),
-                                          Text(
-                                            'PayStack',
-                                            style: TextStyle(
-                                              fontSize: 15.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                          .brightness ==
-                                                      Brightness.dark
-                                                  ? Colors.white
-                                                  : Colors.black,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            )
-                          : SizedBox.shrink(),
                     ],
                   ),
                 ),
-              );
-            }));
+              ));
+        });
   }
+}
 
-  SizedBox _cartItems(BuildContext context, CartItems items) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : Theme.of(context).disabledColor.withOpacity(0.5),
-            ),
-            borderRadius: BorderRadius.circular(10),
+SizedBox _cartItems(BuildContext context, CartItems items) {
+  return SizedBox(
+    width: MediaQuery.of(context).size.width,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Theme.of(context).disabledColor.withOpacity(0.5),
           ),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Container(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.withOpacity(0.1),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Image.asset(
                     height: 100,
                     width: 100,
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    ),
-                    child: Image.asset(
-                      height: 100,
-                      width: 100,
-                      items.coverImage,
-                    ),
+                    items.coverImage,
                   ),
-                  const SizedBox(
-                    width: 16,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            items.bookTitle,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16.0),
+                          ),
+                          Text(
+                            items.bookAuthor,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w500, fontSize: 14.0),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        'N ${items.amount}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 13.0),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              items.bookTitle,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16.0),
-                            ),
-                            Text(
-                              items.bookAuthor,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 14.0),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          'N ${items.amount}',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 13.0),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              ListTile(
-                onTap: () => showRemoveItemDialog(context, items),
-                leading: const Icon(Iconsax.trash),
-                title: const Text('Remove from cart',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    )),
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            ListTile(
+              onTap: () => showRemoveItemDialog(context, items),
+              leading: const Icon(Iconsax.trash),
+              title: const Text('Remove from cart',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                  )),
+            ),
+          ],
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 Future<void> showRemoveItemDialog(BuildContext context, CartItems items) {

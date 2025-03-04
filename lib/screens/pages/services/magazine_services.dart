@@ -63,7 +63,7 @@ class MagazineProvider extends ChangeNotifier {
     return File('${directory.path}/magazines.json');
   }
 
-  Future<void> _saveMagazinesToLocal() async {
+  /* Future<void> _saveMagazinesToLocal() async {
     try {
       final file = await _getMagazineFile();
       String jsonData =
@@ -72,5 +72,5 @@ class MagazineProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error saving magazines: $e');
     }
-  }
+  } */
 }
