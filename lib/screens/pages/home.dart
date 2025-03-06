@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
   List<String> choices = [
     'All',
     'Books',
-    'Bible study materials',
+    'Bible study guide',
     'Magazines',
   ];
 
@@ -214,7 +214,7 @@ class _HomeState extends State<Home> {
                   const AllPage()
                 else if (selectedValue == 'Books')
                   const Books()
-                else if (selectedValue == 'Bible study materials')
+                else if (selectedValue == 'Bible study guide')
                   const BibleStudy()
                 else if (selectedValue == 'Magazines')
                   const Magazines()

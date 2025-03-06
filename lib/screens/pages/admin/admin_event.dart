@@ -67,21 +67,14 @@ class _AdminAddEventState extends State<AdminAddEvent> {
                         details.appointments!.isNotEmpty) {
                       // Select the first tapped event
                       eventProvider.selectEvent(details.appointments!.first);
+                      showEventDialog(
+                          context, eventProvider.selectedEvent!.eventName);
                     } else {
                       eventProvider.selectEvent(null); // Hide tooltip
                     }
                   },
                 ),
               ),
-              if (eventProvider.selectedEvent != null)
-                Positioned(
-                  top: 100, // Adjust based on your UI
-                  left: 50,
-                  child: CustomToolTip(
-                    content: Text(eventProvider.selectedEvent!.eventName),
-                    child: Icon(Iconsax.information),
-                  ),
-                ),
             ],
           ));
     });
@@ -355,5 +348,51 @@ class _AdminAddEventState extends State<AdminAddEvent> {
           .addEvent(upcomingEventsTrue);
     }
     Navigator.of(context).pop();
+  }
+
+  Future<void> showEventDialog(BuildContext context, String eventName) {
+    double _fontSize = 13.0;
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text(
+          'Event',
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: SizedBox(
+          height: 40,
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              eventName,
+              style: TextStyle(
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: (){}, // Meant to navigate to the event's screen to be displayed.
+            child: Text(
+              'view event'.toUpperCase(),
+              style: TextStyle(
+                  fontSize: _fontSize, color: Theme.of(context).primaryColor),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'cancel'.toUpperCase(),
+              style: TextStyle(
+                  fontSize: _fontSize, color: Theme.of(context).primaryColor),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

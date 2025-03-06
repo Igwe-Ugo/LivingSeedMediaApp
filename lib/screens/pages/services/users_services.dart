@@ -192,10 +192,4 @@ class UsersAuthProvider extends ChangeNotifier {
       _saveUserToLocal();
     }
   }
-
-  void addToDownloads(MediaItems media) {
-    _currentUser?.downloads.add(media);
-    notifyListeners();
-    _saveUserToLocal();
-  }
 }

@@ -22,7 +22,7 @@ class MoreMagazine extends StatelessWidget {
               size: 17,
             )),
         title: const Text(
-          'All Magazines and Seminar Papers',
+          'All Magazines',
           style: TextStyle(
             fontFamily: 'Playfair',
             fontSize: 20,

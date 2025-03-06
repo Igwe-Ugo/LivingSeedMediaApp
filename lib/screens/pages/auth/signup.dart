@@ -285,7 +285,6 @@ class _LivingSeedSignUpState extends State<LivingSeedSignUp> {
       dateOfBirth: '',
       cart: [],
       bookPurchased: [],
-      downloads: [],
     );
 
     bool success = await Provider.of<UsersAuthProvider>(context, listen: false)

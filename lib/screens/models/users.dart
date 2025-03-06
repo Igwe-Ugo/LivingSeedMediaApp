@@ -119,7 +119,6 @@ class Users {
   String role;
   final List<CartItems> cart;
   final List<PurchasedBooksItems> bookPurchased;
-  final List<MediaItems> downloads;
 
   Users(
       {required this.fullname,
@@ -132,7 +131,7 @@ class Users {
       required this.role,
       required this.cart,
       required this.bookPurchased,
-      required this.downloads});
+    });
 
   factory Users.fromJson(Map<String, dynamic> json) {
     List<CartItems> extractedCart = [];
@@ -149,13 +148,6 @@ class Users {
           .toList();
     }
 
-    List<MediaItems> extractedDownloads = [];
-    if (json['downloads'] != null && json['downloads'] is List) {
-      extractedDownloads = (json['downloads'] as List)
-          .map((item) => MediaItems.fromJson(item as Map<String, dynamic>))
-          .toList();
-    }
-
     return Users(
         fullname: json['fullname'],
         emailAddress: json['emailAddress'],
@@ -166,7 +158,6 @@ class Users {
         dateOfBirth: json['dateOfBirth'],
         role: json['role'],
         cart: extractedCart,
-        downloads: extractedDownloads,
         bookPurchased: extractedBookPurchased);
   }
 
@@ -181,7 +172,6 @@ class Users {
       'dateOfBirth': dateOfBirth,
       'role': role,
       'cart': cart.map((e) => e.toJson()).toList(),
-      'downloads': downloads.map((e) => e.toJson()).toList(),
       'bookPurchased': bookPurchased.map((e) => e.toJson()).toList(),
     };
   }
