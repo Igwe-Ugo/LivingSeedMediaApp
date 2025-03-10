@@ -21,8 +21,8 @@ class UpcomingEventsModel {
     return UpcomingEventsModel(
       eventName: json['eventName'],
       eventDetails: json['eventDetails'],
-      from: json['from'],
-      to: json['to'],
+      from: DateTime.parse(json['from']),
+      to: DateTime.parse(json['to']),
       background: Color(json['background']),
       isAllDay: json['isAllDay'],
     );

@@ -125,7 +125,7 @@ class _AdminUserManagementState extends State<AdminUserManagement> {
                             height: 20,
                           ),
                           Icon(
-                            Icons.not_interested_rounded,
+                            Icons.person_off_outlined,
                             size: 70,
                           ),
                           SizedBox(

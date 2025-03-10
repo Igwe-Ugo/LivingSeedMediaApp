@@ -102,7 +102,7 @@ class AboutBibleStudy extends StatelessWidget {
                       '₦ ${about_biblestudy.amount.toString()}',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
-                          fontSize: 18.0,
+                          fontSize: 17.0,
                           color: Colors.white),
                     ),
                     SizedBox(
@@ -112,14 +112,14 @@ class AboutBibleStudy extends StatelessWidget {
                       '|',
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
-                          fontSize: 18.0,
+                          fontSize: 17.0,
                           color: Colors.white),
                     ),
                     SizedBox(width: 20),
                     Icon(
                       Icons.shopping_cart_outlined,
                       color: Colors.white,
-                      size: 18,
+                      size: 17,
                     ),
                     SizedBox(
                       width: 10,
@@ -127,7 +127,7 @@ class AboutBibleStudy extends StatelessWidget {
                     Text('Add to Cart',
                         style: TextStyle(
                             fontWeight: FontWeight.w300,
-                            fontSize: 18.0,
+                            fontSize: 17.0,
                             color: Colors.white),
                         textAlign: TextAlign.start),
                   ],

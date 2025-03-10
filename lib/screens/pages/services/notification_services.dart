@@ -52,7 +52,8 @@ class NotificationProvider extends ChangeNotifier {
           .removeWhere((n) => existingTitles.contains(n.notificationTitle));
 
       _generalNotifications = [...localNotifications, ...assetNotifications];
-    } catch (e) {
+    } catch (e, trace) {
+      print(trace);
       debugPrint('Error loading general notifications: $e');
       _generalNotifications = [];
     }
@@ -71,7 +72,8 @@ class NotificationProvider extends ChangeNotifier {
           _personalNotifications[email] = notifications;
         }
       });
-    } catch (e) {
+    } catch (e, trace) {
+      print(trace);
       debugPrint('Error loading personal notifications: $e');
       _personalNotifications = {};
     }

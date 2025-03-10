@@ -24,8 +24,7 @@ class AddEventProvider extends ChangeNotifier {
     List<UpcomingEventsModel> localEvents = await _loadEventsFromLocal();
 
     // Merge events while preventing duplicates
-    Set<String> existingTitles =
-        localEvents.map((e) => e.eventName).toSet();
+    Set<String> existingTitles = localEvents.map((e) => e.eventName).toSet();
     assetEvents.removeWhere((e) => existingTitles.contains(e.eventName));
 
     _events = [...localEvents, ...assetEvents]; // Prioritize local storage
@@ -49,11 +48,15 @@ class AddEventProvider extends ChangeNotifier {
   /// Load events from assets (initial setup)
   Future<List<UpcomingEventsModel>> _loadEventsFromAssets() async {
     try {
-      String jsonString = await rootBundle.loadString('assets/json/events.json');
+      String jsonString =
+          await rootBundle.loadString('assets/json/events.json');
       List<dynamic> jsonData = json.decode(jsonString);
-      return jsonData.map((item) => UpcomingEventsModel.fromJson(item)).toList();
-    } catch (e) {
+      return jsonData
+          .map((item) => UpcomingEventsModel.fromJson(item))
+          .toList();
+    } catch (e, trace) {
       debugPrint('Error loading events from assets: $e');
+      print(trace);
       return [];
     }
   }
@@ -65,10 +68,13 @@ class AddEventProvider extends ChangeNotifier {
       if (file.existsSync()) {
         String data = await file.readAsString();
         List<dynamic> jsonList = json.decode(data);
-        return jsonList.map((json) => UpcomingEventsModel.fromJson(json)).toList();
+        return jsonList
+            .map((json) => UpcomingEventsModel.fromJson(json))
+            .toList();
       }
-    } catch (e) {
+    } catch (e, trace) {
       debugPrint('Error loading events from local storage: $e');
+      print(trace);
     }
     return [];
   }
@@ -77,7 +83,8 @@ class AddEventProvider extends ChangeNotifier {
   Future<void> _saveEventsToLocal() async {
     try {
       final file = await _getEventFile();
-      String jsonData = json.encode(_events.map((event) => event.toJson()).toList());
+      String jsonData =
+          json.encode(_events.map((event) => event.toJson()).toList());
       await file.writeAsString(jsonData);
     } catch (e) {
       debugPrint('Error saving events: $e');
