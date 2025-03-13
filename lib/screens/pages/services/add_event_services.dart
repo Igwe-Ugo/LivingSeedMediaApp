@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:livingseed_media/screens/models/models.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart' show rootBundle;
 
 class AddEventProvider extends ChangeNotifier {
   List<UpcomingEventsModel> _events = [];
@@ -20,14 +19,9 @@ class AddEventProvider extends ChangeNotifier {
 
   /// Initialize events by loading from assets & local storage
   Future<void> initializeEvents() async {
-    List<UpcomingEventsModel> assetEvents = await _loadEventsFromAssets();
     List<UpcomingEventsModel> localEvents = await _loadEventsFromLocal();
 
-    // Merge events while preventing duplicates
-    Set<String> existingTitles = localEvents.map((e) => e.eventName).toSet();
-    assetEvents.removeWhere((e) => existingTitles.contains(e.eventName));
-
-    _events = [...localEvents, ...assetEvents]; // Prioritize local storage
+    _events = [...localEvents]; // Prioritize local storage
     notifyListeners();
   }
 
@@ -45,22 +39,6 @@ class AddEventProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Load events from assets (initial setup)
-  Future<List<UpcomingEventsModel>> _loadEventsFromAssets() async {
-    try {
-      String jsonString =
-          await rootBundle.loadString('assets/json/events.json');
-      List<dynamic> jsonData = json.decode(jsonString);
-      return jsonData
-          .map((item) => UpcomingEventsModel.fromJson(item))
-          .toList();
-    } catch (e, trace) {
-      debugPrint('Error loading events from assets: $e');
-      print(trace);
-      return [];
-    }
-  }
-
   /// Load events from local storage
   Future<List<UpcomingEventsModel>> _loadEventsFromLocal() async {
     try {
@@ -72,9 +50,8 @@ class AddEventProvider extends ChangeNotifier {
             .map((json) => UpcomingEventsModel.fromJson(json))
             .toList();
       }
-    } catch (e, trace) {
+    } catch (e) {
       debugPrint('Error loading events from local storage: $e');
-      print(trace);
     }
     return [];
   }

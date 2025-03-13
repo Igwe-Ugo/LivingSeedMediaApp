@@ -25,7 +25,7 @@ class _AccountPageState extends State<AccountPage> {
       body: Consumer2<UsersAuthProvider, DarkThemeProvider>(
           builder: (context, userProvider, themeChangeProvider, child) {
         final themeChange = themeChangeProvider;
-        Users? user = userProvider.userData!;
+        Users user = userProvider.userData!;
         // Ensure userData is not null before accessing it
         if (userProvider.userData == null) {
           return const SizedBox();
@@ -64,7 +64,16 @@ class _AccountPageState extends State<AccountPage> {
                   ],
                 ),
               ),
-              ListTile(
+              Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                decoration: BoxDecoration(
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    borderRadius: const BorderRadius.all(Radius.circular(15))),
+                child: ListTile(
+                  onTap: () => GoRouter.of(context).go(
+                      '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.profilePath}'),
                   leading: CircleAvatar(
                     radius: 30,
                     child: user != null && user.userImage.isNotEmpty
@@ -93,16 +102,8 @@ class _AccountPageState extends State<AccountPage> {
                             ? Colors.white
                             : Colors.black),
                   ),
-                  trailing: IconButton(
-                      onPressed: () => GoRouter.of(context).go(
-                          '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.profilePath}'),
-                      icon: const Icon(
-                        Iconsax.edit,
-                        size: 20,
-                      ),
-                      color: Theme.of(context).brightness == Brightness.dark
-                          ? Colors.white
-                          : Colors.black)),
+                ),
+              ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.all(10),
@@ -139,7 +140,7 @@ class _AccountPageState extends State<AccountPage> {
                       onTap: () => GoRouter.of(context).go(
                           '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.booksPurchasedPath}',
                           extra: user),
-                      leading: const Icon(Iconsax.archive_book),
+                      leading: const Icon(Iconsax.document_download),
                       title: Text(
                         'Books Purchased',
                         style: TextStyle(

@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import '../../common/widget.dart';
 import '../../models/models.dart';
 import '../services/services.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
   @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final fullnameController = TextEditingController();
+  final emailController = TextEditingController();
+  XFile? _profileImage;
+
+  Future<void> _pickProfileImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedImage =
+        await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      setState(() {
+        _profileImage = pickedImage;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    Users? user = Provider.of<UsersAuthProvider>(context).userData;
+    Users? user = Provider.of<UsersAuthProvider>(context).userData!;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -51,13 +72,13 @@ class Profile extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      child: Image.asset(user!.userImage),
+                      child: _profileImage == null ? Image.asset(user.userImage) : Image.asset(_profileImage!.path.toString()),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () => _pickProfileImage(),
                         child: Text(
                           'Change Profile Picture',
                           style:
@@ -79,6 +100,7 @@ class Profile extends StatelessWidget {
                 ),
               ),
               ListTile(
+                onTap: () => showEditDetails(context, fullnameController, fullname: true),
                 title: Text(
                   'Name',
                   style: TextStyle(
@@ -102,22 +124,8 @@ class Profile extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 ),
               ),
-              const ListTile(
-                title: Text(
-                  'PH Code',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                  'EBE20-M250482',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                trailing: Icon(Iconsax.copy),
-              ),
               ListTile(
+                onTap: () => showEditDetails(context, fullnameController, emailAddress: true),
                 title: Text(
                   'E-mail',
                   style: TextStyle(
@@ -147,6 +155,8 @@ class Profile extends StatelessWidget {
                 ),
               ),
               ListTile(
+                onTap: () => showEditDetails(context, fullnameController, dateOfBirth: true),
+                leading: Icon(Iconsax.calendar),
                 title: Text(
                   'Date of Birth',
                   style: TextStyle(
@@ -167,7 +177,7 @@ class Profile extends StatelessWidget {
               ),
               Center(
                   child: TextButton(
-                      onPressed: () => showDeleteDialog(context),
+                      onPressed: () => showDeleteDialog(context, user.fullname),
                       child: const Text(
                         'Delete Account',
                         style: TextStyle(
@@ -183,7 +193,7 @@ class Profile extends StatelessWidget {
   }
 }
 
-Future<void> showDeleteDialog(BuildContext context) {
+Future<void> showDeleteDialog(BuildContext context, String fullname) {
   return showDialog(
     context: context,
     builder: (BuildContext context) => AlertDialog(
@@ -210,6 +220,8 @@ Future<void> showDeleteDialog(BuildContext context) {
       actions: [
         TextButton(
           onPressed: () async {
+            Provider.of<UsersAuthProvider>(context, listen: false)
+                .deleteUser(fullname);
             Navigator.of(context).pop();
             GoRouter.of(context).go(LivingSeedAppRouter.signUpPath);
             showMessage('Account has been deleted!', context);
@@ -229,5 +241,82 @@ Future<void> showDeleteDialog(BuildContext context) {
         ),
       ],
     ),
+  );
+}
+
+Future<void> showEditDetails(BuildContext context, TextEditingController controller,
+    {bool fullname = false, bool emailAddress = false, bool dateOfBirth = false}) {
+  
+  DateTime selectedDateOfBirth = DateTime.utc(1999, 7, 20);
+
+  return showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: Text(
+            fullname
+                ? 'Edit Fullname'
+                : emailAddress
+                    ? 'Edit Email Address'
+                    : 'Edit Date of Birth',
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          content: fullname || emailAddress
+              ? CustomTextInput(
+                  label: fullname ? 'Fullname' : 'Email Address',
+                  controller: controller,
+                  isEmail: emailAddress,
+                  icon: fullname ? Icons.person_outline : Icons.email_outlined,
+                )
+              : ListTile(
+                  title: Text(
+                    "Date: ${selectedDateOfBirth.toLocal().day}-${selectedDateOfBirth.toLocal().month}-${selectedDateOfBirth.toLocal().year}",
+                  ),
+                  trailing: const Icon(Iconsax.calendar),
+                  onTap: () async {
+                    DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: selectedDateOfBirth,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2101),
+                    );
+                    if (picked != null) {
+                      setState(() => selectedDateOfBirth = picked);
+                    }
+                  },
+                ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (fullname) {
+                  showMessage('Fullname has been edited!', context);
+                } else if (emailAddress) {
+                  showMessage('Email Address has been edited!', context);
+                } else {
+                  showMessage('Date of Birth has been edited!', context);
+                }
+              },
+              child: Text(
+                'Apply Change'.toUpperCase(),
+                style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text(
+                'Cancel'.toUpperCase(),
+                style: TextStyle(fontSize: 13, color: Theme.of(context).disabledColor),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
   );
 }

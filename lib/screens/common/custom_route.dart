@@ -56,6 +56,7 @@ class LivingSeedAppRouter {
   static const String upcomingEventsPath = 'upcoming_events';
   static const String aboutMagazinePath = 'about_magazine';
   static const String moreMagazinePath = 'more_magazine';
+  static const String viewUpcomingEventsPath = 'view_upcoming_events';
 
   // notification pages
   static const String notificationPath = '/notifications';
@@ -118,20 +119,20 @@ class LivingSeedAppRouter {
                           builder: (context, state) => const MoreMagazine(),
                         ),
                         GoRoute(
-                            path: aboutBibleStudyPath,
-                            builder: (context, state) {
-                              final about_biblestudy =
-                                  state.extra as BibleStudyMaterial?;
-                              if (about_biblestudy != null) {
-                                return AboutBibleStudy(
-                                  about_biblestudy: about_biblestudy,
-                                );
-                              } else {
-                                return const Center(
-                                    child: Text("No book data available"));
-                              }
-                            },
-                          ),
+                          path: aboutBibleStudyPath,
+                          builder: (context, state) {
+                            final about_biblestudy =
+                                state.extra as BibleStudyMaterial?;
+                            if (about_biblestudy != null) {
+                              return AboutBibleStudy(
+                                about_biblestudy: about_biblestudy,
+                              );
+                            } else {
+                              return const Center(
+                                  child: Text("No book data available"));
+                            }
+                          },
+                        ),
                         GoRoute(
                             path: aboutBookPath,
                             builder: (context, state) {
@@ -282,9 +283,23 @@ class LivingSeedAppRouter {
                                   ]),
                             ]),
                         GoRoute(
-                          path: upcomingEventsPath,
-                          builder: (context, state) => const UpcomingEvents(),
-                        ),
+                            path: upcomingEventsPath,
+                            builder: (context, state) => const UpcomingEvents(),
+                            routes: [
+                              GoRoute(
+                                  path: viewUpcomingEventsPath,
+                                  builder: (context, state) {
+                                    final upcomingEvents = state.extra;
+                                    if (upcomingEvents is UpcomingEventsModel) {
+                                      return ViewUpcomingEvents(
+                                          upcomingEvents: upcomingEvents);
+                                    } else {
+                                      return Center(
+                                        child:  Text('Upcoming event details cannot be displayed'),
+                                      );
+                                    }
+                                  }),
+                            ]),
                         GoRoute(
                             path: cartPath,
                             builder: (context, state) {

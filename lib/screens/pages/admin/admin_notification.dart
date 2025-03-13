@@ -180,17 +180,44 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                 ),
               ),
               const SizedBox(height: 10),
-              Column(
-                children: generalNotices
-                    .map((notice) => recentNotifications(context,
-                        notificationImage: notice.notificationImage,
-                        notificationTitle: notice.notificationTitle,
-                        notificationMessage: notice.notificationMessage,
-                        notificationDate: notice.notificationDate,
-                        notificationTime: notice.notificationTime,
-                        notificationData: notice))
-                    .toList(),
-              ),
+              generalNotices.isNotEmpty
+                  ? Column(
+                      children: generalNotices
+                          .map((notice) => recentNotifications(context,
+                              notificationImage: notice.notificationImage,
+                              notificationTitle: notice.notificationTitle,
+                              notificationMessage: notice.notificationMessage,
+                              notificationDate: notice.notificationDate,
+                              notificationTime: notice.notificationTime,
+                              notificationData: notice))
+                          .toList(),
+                    )
+                  : Center(
+                      child: Column(
+                        children: const [
+                          SizedBox(
+                            height: 40,
+                          ),
+                          Icon(
+                            Iconsax.message_notif,
+                            size: 80,
+                          ),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          Text(
+                            'No Recent Notifications Uploaded',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 40,
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           ),
         ),
@@ -306,8 +333,8 @@ class _AdminNotificationsState extends State<AdminNotifications> {
                   ),
                   IconButton(
                     onPressed: () {
-                      /* Provider.of<AdminAuthProvider>(context, listen: false)
-                          .deleteGeneralNotification(notificationTitle); */
+                      Provider.of<NotificationProvider>(context, listen: false)
+                          .deleteGeneralNotification(notificationTitle);
                       showMessage('Notification Deleted!', context);
                     },
                     icon: Icon(

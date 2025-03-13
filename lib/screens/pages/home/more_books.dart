@@ -49,8 +49,8 @@ class MoreBooks extends StatelessWidget {
               itemCount: books.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Two books per row
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
                 childAspectRatio: 0.7, // Adjust book card size
               ),
               itemBuilder: (context, index) {

@@ -104,6 +104,20 @@ class AdminDashboard extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       ElevatedButton.icon(
+                        style: ButtonStyle(
+                          elevation: WidgetStatePropertyAll(0),
+                        ),
+                        onPressed: () {},
+                        /* GoRouter.of(context).go(
+                            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.dashboardPath}/${LivingSeedAppRouter.uploadBibleStudyPath}'), */
+                        icon: const Icon(Iconsax.document_code),
+                        label: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: const Text('Upload Magazine'),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      ElevatedButton.icon(
                         style:
                             ButtonStyle(elevation: WidgetStatePropertyAll(0)),
                         onPressed: () => GoRouter.of(context).go(

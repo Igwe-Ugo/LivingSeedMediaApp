@@ -113,7 +113,7 @@ class EventsCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         GoRouter.of(context).go(
-            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.upcomingEventsPath}/$LivingSeedAppRouter',
+            '${LivingSeedAppRouter.accountPath}/${LivingSeedAppRouter.upcomingEventsPath}/${LivingSeedAppRouter.viewUpcomingEventsPath}',
             extra: upcomingEvents);
       },
       child: Card(
@@ -158,6 +158,16 @@ class EventsCard extends StatelessWidget {
                 upcomingEvents.eventDetails,
                 maxLines: 3,
               ),
+              SizedBox(
+                height: 15,
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: CircleAvatar(
+                  radius: 5,
+                  backgroundColor: upcomingEvents.background,
+                ),
+              )
             ],
           ),
         ),

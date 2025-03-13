@@ -22,7 +22,7 @@ class MagazinePage extends StatelessWidget {
         }
       },
       child: Container(
-        margin: const EdgeInsets.all(2),
+        margin: const EdgeInsets.all(5),
         width: 130,
         decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(8))),
