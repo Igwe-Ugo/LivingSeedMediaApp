@@ -110,12 +110,12 @@ class MediaItems {
 
 class Users {
   final String fullname;
-  final String emailAddress;
+  String emailAddress;
   final String telephone;
   final String userImage;
   String password;
   final String gender;
-  final String dateOfBirth;
+  String dateOfBirth;
   String role;
   final List<CartItems> cart;
   final List<PurchasedBooksItems> bookPurchased;

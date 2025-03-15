@@ -260,22 +260,23 @@ Future<void> showEditDetails(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
-        builder: (context, setState) => SizedBox(
-          height: 20,
-          child: AlertDialog(
-            title: Text(
-              fullname
-                  ? 'Edit Fullname'
-                  : emailAddress
-                      ? 'Edit Email Address'
-                      : 'Edit Date of Birth',
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-              ),
+        builder: (context, setState) => SimpleDialog(
+          title: Text(
+            fullname
+                ? 'Edit Fullname'
+                : emailAddress
+                    ? 'Edit Email Address'
+                    : 'Edit Date of Birth',
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
             ),
-            content: fullname || emailAddress
+          ),
+          titlePadding: EdgeInsets.fromLTRB(15, 20, 15, 0),
+          contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          children: [
+            fullname || emailAddress
                 ? CustomTextInput(
                     label: fullname ? 'Fullname' : 'Email Address',
                     controller: controller,
@@ -300,34 +301,44 @@ Future<void> showEditDetails(
                       }
                     },
                   ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  if (fullname) {
-                    showMessage('Fullname has been edited!', context);
-                  } else if (emailAddress) {
-                    showMessage('Email Address has been edited!', context);
-                  } else {
-                    showMessage('Date of Birth has been edited!', context);
-                  }
-                },
-                child: Text(
-                  'Apply Change'.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 13, color: Theme.of(context).primaryColor),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () async {
+                    Navigator.of(context).pop();
+                    if (fullname) {
+                      Provider.of<UsersAuthProvider>(context, listen: false)
+                          .changeFullname(controller.text);
+                      showMessage('Fullname has been edited!', context);
+                    } else if (emailAddress) {
+                      Provider.of<UsersAuthProvider>(context, listen: false)
+                          .changeEmail(controller.text);
+                      showMessage('Email Address has been edited!', context);
+                    } else {
+                      Provider.of<UsersAuthProvider>(context, listen: false)
+                          .changeDateOfBirth(
+                              selectedDateOfBirth.toIso8601String());
+                      showMessage('Date of Birth has been edited!', context);
+                    }
+                  },
+                  child: Text(
+                    'Apply Change'.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 13, color: Theme.of(context).primaryColor),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(
-                  'Cancel'.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 13, color: Theme.of(context).disabledColor),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    'Cancel'.toUpperCase(),
+                    style: TextStyle(
+                        fontSize: 13, color: Theme.of(context).disabledColor),
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            ),
+          ],
         ),
       );
     },

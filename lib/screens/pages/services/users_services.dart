@@ -96,6 +96,45 @@ class UsersAuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> changeEmail(String emailAddress) async {
+    Users? userEmail =
+        _users.firstWhereOrNull((u) => u.emailAddress == emailAddress);
+    if (userEmail != null) {
+      userEmail.emailAddress = emailAddress;
+      await _saveUserToLocal();
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> changeFullname(String fullname) async {
+    Users? userFullname =
+        _users.firstWhereOrNull((u) => u.fullname == fullname);
+    if (userFullname != null) {
+      userFullname.emailAddress = fullname;
+      await _saveUserToLocal();
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<bool> changeDateOfBirth(String dateOfBirth) async {
+    Users? userDateOfBirth =
+        _users.firstWhereOrNull((u) => u.dateOfBirth == dateOfBirth);
+    if (userDateOfBirth != null) {
+      userDateOfBirth.dateOfBirth = dateOfBirth;
+      await _saveUserToLocal();
+      notifyListeners();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   void deleteUser(String fullname) {
     if (_users != null) {
       _users.removeWhere((item) => item.fullname == fullname);
