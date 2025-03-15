@@ -72,7 +72,9 @@ class _ProfileState extends State<Profile> {
                   children: [
                     CircleAvatar(
                       radius: 35,
-                      child: _profileImage == null ? Image.asset(user.userImage) : Image.asset(_profileImage!.path.toString()),
+                      child: _profileImage == null
+                          ? Image.asset(user.userImage)
+                          : Image.asset(_profileImage!.path.toString()),
                     ),
                     const SizedBox(
                       height: 20,
@@ -100,7 +102,8 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               ListTile(
-                onTap: () => showEditDetails(context, fullnameController, fullname: true),
+                onTap: () => showEditDetails(context, fullnameController,
+                    fullname: true),
                 title: Text(
                   'Name',
                   style: TextStyle(
@@ -125,7 +128,8 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               ListTile(
-                onTap: () => showEditDetails(context, fullnameController, emailAddress: true),
+                onTap: () => showEditDetails(context, fullnameController,
+                    emailAddress: true),
                 title: Text(
                   'E-mail',
                   style: TextStyle(
@@ -155,7 +159,8 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
               ListTile(
-                onTap: () => showEditDetails(context, fullnameController, dateOfBirth: true),
+                onTap: () => showEditDetails(context, fullnameController,
+                    dateOfBirth: true),
                 leading: Icon(Iconsax.calendar),
                 title: Text(
                   'Date of Birth',
@@ -244,77 +249,85 @@ Future<void> showDeleteDialog(BuildContext context, String fullname) {
   );
 }
 
-Future<void> showEditDetails(BuildContext context, TextEditingController controller,
-    {bool fullname = false, bool emailAddress = false, bool dateOfBirth = false}) {
-  
+Future<void> showEditDetails(
+    BuildContext context, TextEditingController controller,
+    {bool fullname = false,
+    bool emailAddress = false,
+    bool dateOfBirth = false}) {
   DateTime selectedDateOfBirth = DateTime.utc(1999, 7, 20);
 
   return showDialog(
     context: context,
     builder: (BuildContext context) {
       return StatefulBuilder(
-        builder: (context, setState) => AlertDialog(
-          title: Text(
-            fullname
-                ? 'Edit Fullname'
-                : emailAddress
-                    ? 'Edit Email Address'
-                    : 'Edit Date of Birth',
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).primaryColor,
+        builder: (context, setState) => SizedBox(
+          height: 20,
+          child: AlertDialog(
+            title: Text(
+              fullname
+                  ? 'Edit Fullname'
+                  : emailAddress
+                      ? 'Edit Email Address'
+                      : 'Edit Date of Birth',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
-          ),
-          content: fullname || emailAddress
-              ? CustomTextInput(
-                  label: fullname ? 'Fullname' : 'Email Address',
-                  controller: controller,
-                  isEmail: emailAddress,
-                  icon: fullname ? Icons.person_outline : Icons.email_outlined,
-                )
-              : ListTile(
-                  title: Text(
-                    "Date: ${selectedDateOfBirth.toLocal().day}-${selectedDateOfBirth.toLocal().month}-${selectedDateOfBirth.toLocal().year}",
+            content: fullname || emailAddress
+                ? CustomTextInput(
+                    label: fullname ? 'Fullname' : 'Email Address',
+                    controller: controller,
+                    isEmail: emailAddress,
+                    icon:
+                        fullname ? Icons.person_outline : Icons.email_outlined,
+                  )
+                : ListTile(
+                    title: Text(
+                      "Date: ${selectedDateOfBirth.toLocal().day}-${selectedDateOfBirth.toLocal().month}-${selectedDateOfBirth.toLocal().year}",
+                    ),
+                    trailing: const Icon(Iconsax.calendar),
+                    onTap: () async {
+                      DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: selectedDateOfBirth,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2101),
+                      );
+                      if (picked != null) {
+                        setState(() => selectedDateOfBirth = picked);
+                      }
+                    },
                   ),
-                  trailing: const Icon(Iconsax.calendar),
-                  onTap: () async {
-                    DateTime? picked = await showDatePicker(
-                      context: context,
-                      initialDate: selectedDateOfBirth,
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(2101),
-                    );
-                    if (picked != null) {
-                      setState(() => selectedDateOfBirth = picked);
-                    }
-                  },
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  if (fullname) {
+                    showMessage('Fullname has been edited!', context);
+                  } else if (emailAddress) {
+                    showMessage('Email Address has been edited!', context);
+                  } else {
+                    showMessage('Date of Birth has been edited!', context);
+                  }
+                },
+                child: Text(
+                  'Apply Change'.toUpperCase(),
+                  style: TextStyle(
+                      fontSize: 13, color: Theme.of(context).primaryColor),
                 ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                if (fullname) {
-                  showMessage('Fullname has been edited!', context);
-                } else if (emailAddress) {
-                  showMessage('Email Address has been edited!', context);
-                } else {
-                  showMessage('Date of Birth has been edited!', context);
-                }
-              },
-              child: Text(
-                'Apply Change'.toUpperCase(),
-                style: TextStyle(fontSize: 13, color: Theme.of(context).primaryColor),
               ),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(
-                'Cancel'.toUpperCase(),
-                style: TextStyle(fontSize: 13, color: Theme.of(context).disabledColor),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(
+                  'Cancel'.toUpperCase(),
+                  style: TextStyle(
+                      fontSize: 13, color: Theme.of(context).disabledColor),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     },
